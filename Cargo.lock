@@ -129,6 +129,7 @@ name = "rapl-rust-test"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "rapl-rust-lib",
 ]
 
 [[package]]
