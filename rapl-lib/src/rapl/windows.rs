@@ -20,6 +20,7 @@ use windows::{
 // Read MSR on Windows: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/WinRing0/OpenLibSys.c#L313
 // Windows RAPL Driver: https://github.com/hubblo-org/windows-rapl-driver/tree/master
 
+// TODO: Install driver ourselves: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/LibreHardwareMonitorLib/Hardware/KernelDriver.cs#L40
 /*
 Sample with making driver service and starting it:
 
