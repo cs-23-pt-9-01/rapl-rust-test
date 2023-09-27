@@ -114,6 +114,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "rapl-bin"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "rapl-rust-lib",
+]
+
+[[package]]
 name = "rapl-rust-lib"
 version = "0.1.0"
 dependencies = [
@@ -122,14 +130,6 @@ dependencies = [
  "sysinfo",
  "thiserror",
  "windows",
-]
-
-[[package]]
-name = "rapl-rust-test"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "rapl-rust-lib",
 ]
 
 [[package]]
