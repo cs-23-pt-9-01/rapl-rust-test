@@ -15,6 +15,44 @@ use windows::{
     },
 };
 
+// RAPL Intel: https://github.com/tfett/RAPL/blob/master/rapwl-read.c
+// RAPL AMD: https://me.sakana.moe/2023/09/06/measuring-cpu-power-consumption/
+// Read MSR on Windows: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/WinRing0/OpenLibSys.c#L313
+// Windows RAPL Driver: https://github.com/hubblo-org/windows-rapl-driver/tree/master
+
+/*
+Sample with making driver service and starting it:
+
+#include <windows.h>
+
+int main() {
+    SC_HANDLE scm, service;
+
+    scm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    if (scm == NULL) {
+        // Handle error
+        return 1;
+    }
+
+    service = CreateService(scm, L"YourDriverName", L"Your Driver Display Name",
+        SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
+        L"Path to your driver file", NULL, NULL, NULL, NULL, NULL);
+
+    if (service == NULL) {
+        // Handle error
+        CloseServiceHandle(scm);
+        return 2;
+    }
+
+    StartService(service, 0, NULL);
+
+    CloseServiceHandle(service);
+    CloseServiceHandle(scm);
+
+    return 0;
+}
+*/
+
 #[derive(Error, Debug)]
 pub enum RaplError {
     #[error("windows error")]
