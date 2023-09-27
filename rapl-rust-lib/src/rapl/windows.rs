@@ -1,8 +1,9 @@
 use std::{
     ffi::CString,
-    thread,
+    io, thread,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
+use thiserror::Error;
 use windows::{
     core::PCSTR,
     Win32::{
@@ -15,6 +16,12 @@ use windows::{
         },
     },
 };
+
+#[derive(Error, Debug)]
+pub enum RaplError {
+    #[error("windows error")]
+    Windows(#[from] windows::core::Error),
+}
 
 /*
 #define IOCTL_OLS_READ_MSR \
@@ -49,7 +56,7 @@ fn is_admin() -> bool {
     token_elevation.TokenIsElevated != 0
 }
 
-fn open_driver() -> Result<HANDLE> {
+fn open_driver() -> Result<HANDLE, RaplError> {
     let driver_name = CString::new("\\\\.\\WinRing0_1_2_0").expect("failed to create driver name");
     Ok(unsafe {
         CreateFileA(
@@ -64,7 +71,7 @@ fn open_driver() -> Result<HANDLE> {
     }?)
 }
 
-fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64> {
+fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64, RaplError> {
     let input_data: [u8; 4] = msr.to_le_bytes();
 
     let output_data: [u8; 8] = [0; 8];
