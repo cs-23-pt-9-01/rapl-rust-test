@@ -1,5 +1,11 @@
 use once_cell::sync::OnceCell;
-use std::{ffi::CString, sync::Once};
+use std::{
+    ffi::CString,
+    sync::{
+        atomic::{AtomicU64, Ordering},
+        Once,
+    },
+};
 use sysinfo::{CpuExt, System, SystemExt};
 use thiserror::Error;
 use windows::{
@@ -94,6 +100,9 @@ const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
 const INTEL_POWER_UNIT_OFFSET: u64 = 0;
 */
 
+static RAPL_START: AtomicU64 = AtomicU64::new(0);
+static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
+
 static RAPL_INIT: Once = Once::new();
 static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
 
@@ -105,7 +114,7 @@ enum ProcessorType {
 }
 
 // TODO: CloseHandle on driver handle
-pub fn start_rapl_impl() -> u64 {
+pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
         if !is_admin() {
@@ -127,12 +136,14 @@ pub fn start_rapl_impl() -> u64 {
     });
 
     // Read MSR based on the processor type
-    match PROCESSOR_TYPE.get().unwrap() {
+    let msr_val = match PROCESSOR_TYPE.get().unwrap() {
         ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
             .expect("failed to read MSR_RAPL_POWER_UNIT"),
         ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
             .expect("failed to read AMD_MSR_PWR_UNIT"),
-    }
+    };
+
+    RAPL_START.store(msr_val, Ordering::Relaxed);
 }
 
 // check if running as admin using the windows crate

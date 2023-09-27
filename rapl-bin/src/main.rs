@@ -37,7 +37,7 @@ fn main() -> Result<()> {
 
     for i in 0..100 {
         let output_number = start_rapl_impl();
-        println!("output_number {}: {}", i, output_number);
+        //println!("output_number {}: {}", i, output_number);
     }
 
     /*
