@@ -6,36 +6,6 @@ use rapl_rust_lib::rapl::windows::start_rapl_impl;
 // Read MSR on Windows: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/WinRing0/OpenLibSys.c#L313
 // Windows RAPL Driver: https://github.com/hubblo-org/windows-rapl-driver/tree/master
 
-// AMD
-const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
-const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
-const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
-
-const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
-const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
-const AMD_POWER_UNIT_MASK: u64 = 0xF;
-
-// Intel
-const MSR_RAPL_POWER_UNIT: u32 = 0x606;
-const MSR_RAPL_PKG: u32 = 0x611;
-const MSR_RAPL_PP0: u32 = 0x639;
-const MSR_RAPL_PP1: u32 = 0x641;
-const MSR_RAPL_DRAM: u32 = 0x619;
-
-const INTEL_TIME_UNIT_MASK: u64 = 0xF000;
-const INTEL_ENGERY_UNIT_MASK: u64 = 0x1F00;
-const INTEL_POWER_UNIT_MASK: u64 = 0x0F;
-
-const INTEL_TIME_UNIT_OFFSET: u64 = 0x10;
-const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
-const INTEL_POWER_UNIT_OFFSET: u64 = 0;
-
-/*
-#define IOCTL_OLS_READ_MSR \
-    CTL_CODE(OLS_TYPE, 0x821, METHOD_BUFFERED, FILE_ANY_ACCESS)
-*/
-const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
-
 /*
 Sample with making driver service and starting it:
 
