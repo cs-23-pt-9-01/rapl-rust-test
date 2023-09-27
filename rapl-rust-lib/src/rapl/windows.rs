@@ -1,6 +1,8 @@
 use std::{
     ffi::CString,
-    io, thread,
+    io,
+    sync::Once,
+    thread,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 use thiserror::Error;
@@ -29,8 +31,22 @@ pub enum RaplError {
 */
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
-pub fn start_rapl_impl() -> usize {
-    123
+const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
+const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
+const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
+
+static RAPL_INIT: Once = Once::new();
+
+pub fn start_rapl_impl() -> u64 {
+    // Initialize RAPL driver on first call
+    RAPL_INIT.call_once(|| {
+        if !is_admin() {
+            panic!("not running as admin");
+        }
+    });
+
+    let h_device = open_driver().expect("failed to open driver handle");
+    read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT")
 }
 
 // check if running as admin using the windows crate

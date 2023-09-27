@@ -5,11 +5,11 @@ use crate::rapl::linux::start_rapl_impl;
 use crate::rapl::windows::start_rapl_impl;
 
 #[no_mangle]
-pub extern "C" fn start_rapl() -> usize {
+pub extern "C" fn start_rapl() -> u64 {
     start_rapl_impl()
 }
 
 #[no_mangle]
-pub extern "C" fn end_rapl() -> usize {
+pub extern "C" fn end_rapl() -> u64 {
     456
 }
