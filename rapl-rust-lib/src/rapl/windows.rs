@@ -1,3 +1,4 @@
+use once_cell::sync::OnceCell;
 use std::{
     ffi::CString,
     io,
@@ -5,6 +6,7 @@ use std::{
     thread,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
+use sysinfo::{CpuExt, System, SystemExt};
 use thiserror::Error;
 use windows::{
     core::PCSTR,
@@ -31,11 +33,38 @@ pub enum RaplError {
 */
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
+// AMD
 const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
 const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
 const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
 
+const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
+const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
+const AMD_POWER_UNIT_MASK: u64 = 0xF;
+
+// Intel
+const MSR_RAPL_POWER_UNIT: u32 = 0x606;
+const MSR_RAPL_PKG: u32 = 0x611;
+const MSR_RAPL_PP0: u32 = 0x639;
+const MSR_RAPL_PP1: u32 = 0x641;
+const MSR_RAPL_DRAM: u32 = 0x619;
+
+const INTEL_TIME_UNIT_MASK: u64 = 0xF000;
+const INTEL_ENGERY_UNIT_MASK: u64 = 0x1F00;
+const INTEL_POWER_UNIT_MASK: u64 = 0x0F;
+
+const INTEL_TIME_UNIT_OFFSET: u64 = 0x10;
+const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
+const INTEL_POWER_UNIT_OFFSET: u64 = 0;
+
 static RAPL_INIT: Once = Once::new();
+static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
+
+static PROCESSOR_TYPE: OnceCell<ProcessorType> = OnceCell::new();
+enum ProcessorType {
+    Intel,
+    AMD,
+}
 
 pub fn start_rapl_impl() -> u64 {
     // Initialize RAPL driver on first call
@@ -43,10 +72,27 @@ pub fn start_rapl_impl() -> u64 {
         if !is_admin() {
             panic!("not running as admin");
         }
+
+        let h_device = open_driver().expect("failed to open driver handle");
+        RAPL_DRIVER.get_or_init(|| h_device);
+
+        let sys = System::new_all();
+        match sys.cpus().first().expect("failed getting CPU").vendor_id() {
+            "GenuineIntel" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::Intel),
+            "AuthenticAMD" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::AMD),
+            _ => {
+                panic!("unknown CPU detected");
+            }
+        };
     });
 
-    let h_device = open_driver().expect("failed to open driver handle");
-    read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT")
+    // Read MSR based on the processor type
+    match PROCESSOR_TYPE.get().unwrap() {
+        ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
+            .expect("failed to read AMD_MSR_PWR_UNIT"),
+        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
+            .expect("failed to read AMD_MSR_PWR_UNIT"),
+    }
 }
 
 // check if running as admin using the windows crate
