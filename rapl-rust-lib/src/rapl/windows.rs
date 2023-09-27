@@ -89,7 +89,7 @@ pub fn start_rapl_impl() -> u64 {
     // Read MSR based on the processor type
     match PROCESSOR_TYPE.get().unwrap() {
         ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
-            .expect("failed to read AMD_MSR_PWR_UNIT"),
+            .expect("failed to read MSR_RAPL_POWER_UNIT"),
         ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
             .expect("failed to read AMD_MSR_PWR_UNIT"),
     }
