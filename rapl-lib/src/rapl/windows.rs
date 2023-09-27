@@ -113,7 +113,6 @@ enum ProcessorType {
     AMD,
 }
 
-// TODO: CloseHandle on driver handle
 pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
@@ -144,6 +143,11 @@ pub fn start_rapl_impl() {
     };
 
     RAPL_START.store(msr_val, Ordering::Relaxed);
+}
+
+pub fn stop_rapl_impl() {
+    // TODO: CloseHandle on driver handle in stop func
+    // print csv etc
 }
 
 // check if running as admin using the windows crate
