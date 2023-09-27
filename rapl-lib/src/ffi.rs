@@ -5,11 +5,9 @@ use crate::rapl::linux::start_rapl_impl;
 use crate::rapl::windows::start_rapl_impl;
 
 #[no_mangle]
-pub extern "C" fn start_rapl() -> u64 {
-    start_rapl_impl()
+pub extern "C" fn start_rapl() {
+    start_rapl_impl();
 }
 
 #[no_mangle]
-pub extern "C" fn stop_rapl() -> u64 {
-    456
-}
+pub extern "C" fn stop_rapl() {}
