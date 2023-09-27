@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-rapl-rust-lib = { path = "../rapl-lib" }
+rapl-lib = { path = "../rapl-lib" }

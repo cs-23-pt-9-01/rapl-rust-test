@@ -118,11 +118,11 @@ name = "rapl-bin"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "rapl-rust-lib",
+ "rapl-lib",
 ]
 
 [[package]]
-name = "rapl-rust-lib"
+name = "rapl-lib"
 version = "0.1.0"
 dependencies = [
  "libc",

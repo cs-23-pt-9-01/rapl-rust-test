@@ -1,5 +1,5 @@
 use anyhow::Result;
-use rapl_rust_lib::rapl::windows::start_rapl_impl;
+use rapl_lib::rapl::windows::start_rapl_impl;
 
 pub fn bench_test(n: i32) -> i32 {
     let mut val: i32 = 0;
