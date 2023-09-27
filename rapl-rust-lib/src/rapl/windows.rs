@@ -1,17 +1,11 @@
 use once_cell::sync::OnceCell;
-use std::{
-    ffi::CString,
-    io,
-    sync::Once,
-    thread,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::{ffi::CString, sync::Once};
 use sysinfo::{CpuExt, System, SystemExt};
 use thiserror::Error;
 use windows::{
     core::PCSTR,
     Win32::{
-        Foundation::{CloseHandle, GENERIC_READ, HANDLE},
+        Foundation::{GENERIC_READ, HANDLE},
         Security::{GetTokenInformation, TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY},
         Storage::FileSystem::{CreateFileA, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING},
         System::{
@@ -35,15 +29,18 @@ const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
 // AMD
 const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
+/*
 const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
 const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
 
 const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
 const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
 const AMD_POWER_UNIT_MASK: u64 = 0xF;
+*/
 
 // Intel
 const MSR_RAPL_POWER_UNIT: u32 = 0x606;
+/*
 const MSR_RAPL_PKG: u32 = 0x611;
 const MSR_RAPL_PP0: u32 = 0x639;
 const MSR_RAPL_PP1: u32 = 0x641;
@@ -56,15 +53,19 @@ const INTEL_POWER_UNIT_MASK: u64 = 0x0F;
 const INTEL_TIME_UNIT_OFFSET: u64 = 0x10;
 const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
 const INTEL_POWER_UNIT_OFFSET: u64 = 0;
+*/
 
 static RAPL_INIT: Once = Once::new();
 static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
 
 static PROCESSOR_TYPE: OnceCell<ProcessorType> = OnceCell::new();
+#[allow(clippy::upper_case_acronyms)]
 enum ProcessorType {
     Intel,
     AMD,
 }
+
+// TODO: CloseHandle on driver
 
 pub fn start_rapl_impl() -> u64 {
     // Initialize RAPL driver on first call
