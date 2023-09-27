@@ -35,8 +35,8 @@ fn main() -> Result<()> {
     /*let output_number =
     read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");*/
 
-    for i in 0..100 {
-        let output_number = start_rapl_impl();
+    for _ in 0..100 {
+        start_rapl_impl();
         //println!("output_number {}: {}", i, output_number);
     }
 

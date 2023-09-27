@@ -101,7 +101,7 @@ const INTEL_POWER_UNIT_OFFSET: u64 = 0;
 */
 
 static RAPL_START: AtomicU64 = AtomicU64::new(0);
-static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
+//static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
 
 static RAPL_INIT: Once = Once::new();
 static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
