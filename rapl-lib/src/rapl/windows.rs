@@ -115,11 +115,12 @@ pub fn start_rapl_impl() -> u64 {
         RAPL_DRIVER.get_or_init(|| h_device);
 
         let sys = System::new_all();
-        match sys.cpus().first().expect("failed getting CPU").vendor_id() {
+        let cpu = sys.cpus().first().expect("failed getting CPU").vendor_id();
+        match cpu {
             "GenuineIntel" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::Intel),
             "AuthenticAMD" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::AMD),
             _ => {
-                panic!("unknown CPU detected");
+                panic!("unknown CPU detected: {}", cpu);
             }
         };
     });
