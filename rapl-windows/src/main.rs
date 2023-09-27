@@ -49,7 +49,6 @@ pub fn bench_test(n: i32) -> i32 {
 
 fn main() -> Result<()> {
     // TODO: Logging, multiple cores (maybe only possible to read all cores at once, although Linux seems to have multiple since MSR for each CPU), multiple CPU support (Intel)
-    start_rapl_impl();
 
     //println!("Fibonacci: {}", fibonacci(900));
     //println!("Bench test: {}", bench_test(1000000000));
@@ -70,8 +69,11 @@ fn main() -> Result<()> {
 
     /*let output_number =
     read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");*/
-    let output_number = 1324;
-    println!("output_number: {}", output_number);
+    let output_number = start_rapl_impl();
+    println!("output_number 1: {}", output_number);
+
+    let output_number = start_rapl_impl();
+    println!("output_number 2: {}", output_number);
 
     /*
     let time_unit = ((output_number & AMD_TIME_UNIT_MASK) >> 16) as f64;
