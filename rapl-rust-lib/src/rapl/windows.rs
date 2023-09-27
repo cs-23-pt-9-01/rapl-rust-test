@@ -65,8 +65,7 @@ enum ProcessorType {
     AMD,
 }
 
-// TODO: CloseHandle on driver
-
+// TODO: CloseHandle on driver handle
 pub fn start_rapl_impl() -> u64 {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
