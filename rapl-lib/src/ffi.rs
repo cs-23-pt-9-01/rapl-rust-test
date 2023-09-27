@@ -10,6 +10,6 @@ pub extern "C" fn start_rapl() -> u64 {
 }
 
 #[no_mangle]
-pub extern "C" fn end_rapl() -> u64 {
+pub extern "C" fn stop_rapl() -> u64 {
     456
 }
