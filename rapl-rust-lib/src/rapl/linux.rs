@@ -4,7 +4,7 @@ use std::{ffi::CString, mem::size_of};
 // Impl this:
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 
-pub fn start_rapl_linux() -> usize {
+pub fn start_rapl_impl() -> usize {
     unsafe { getpid() };
 
     123

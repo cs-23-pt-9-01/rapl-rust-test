@@ -1,8 +1,8 @@
-use crate::rapl::windows::start_rapl_windows;
+use crate::rapl::windows::start_rapl_impl;
 
 #[no_mangle]
 pub extern "C" fn start_rapl() -> usize {
-    start_rapl_windows()
+    start_rapl_impl()
 }
 
 #[no_mangle]

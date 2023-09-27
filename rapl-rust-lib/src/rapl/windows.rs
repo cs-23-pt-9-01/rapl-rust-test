@@ -1,3 +1,3 @@
-pub fn start_rapl_windows() -> usize {
+pub fn start_rapl_impl() -> usize {
     123
 }
