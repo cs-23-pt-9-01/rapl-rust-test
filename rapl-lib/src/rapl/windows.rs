@@ -127,7 +127,8 @@ pub fn start_rapl_impl() {
             panic!("not running as admin");
         }
 
-        let h_device = open_driver().expect("failed to open driver handle");
+        let h_device = open_driver()
+            .expect("failed to open driver handle, make sure the driver is installed and running");
         RAPL_DRIVER.get_or_init(|| h_device);
 
         let sys = System::new_all();
@@ -197,6 +198,46 @@ fn is_admin() -> bool {
     token_elevation.TokenIsElevated != 0
 }
 
+fn open_driver() -> Result<HANDLE, RaplError> {
+    let driver_name = CString::new("\\\\.\\WinRing0_1_2_0").expect("failed to create driver name");
+    Ok(unsafe {
+        CreateFileA(
+            PCSTR(driver_name.as_ptr() as *const u8), // File path
+            GENERIC_READ.0,                           // Access mode (read-only in this example)
+            FILE_SHARE_READ,                          // Share mode (0 for exclusive access)
+            None,                                     // Security attributes (can be None)
+            OPEN_EXISTING,                            // Creation disposition
+            FILE_ATTRIBUTE_NORMAL,                    // File attributes (normal for regular files)
+            None,                                     // Template file (not used here)
+        )
+    }?)
+}
+
+fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64, RaplError> {
+    let input_data: [u8; 4] = msr.to_le_bytes();
+
+    let output_data: [u8; 8] = [0; 8];
+    let mut lp_bytes_returned: u32 = 0;
+    unsafe {
+        DeviceIoControl(
+            h_device,
+            IOCTL_OLS_READ_MSR,
+            Some(input_data.as_ptr() as _),
+            input_data.len() as u32,
+            Some(output_data.as_ptr() as _),
+            output_data.len() as u32,
+            Some(&mut lp_bytes_returned as _),
+            None,
+        )
+    }?;
+
+    //println!("lp_bytes_returned: {}", lp_bytes_returned);
+    Ok(u64::from_le_bytes(output_data))
+}
+
+/*
+// Experimental. This was not a great success because Windows takes too long deleting + recreating the driver
+
 fn install_driver() -> Result<(), RaplError> {
     let scm =
         unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
@@ -262,40 +303,4 @@ fn stop_and_delete_driver() -> Result<(), RaplError> {
 
     Ok(())
 }
-
-fn open_driver() -> Result<HANDLE, RaplError> {
-    let driver_name = CString::new("\\\\.\\WinRing0_1_2_0").expect("failed to create driver name");
-    Ok(unsafe {
-        CreateFileA(
-            PCSTR(driver_name.as_ptr() as *const u8), // File path
-            GENERIC_READ.0,                           // Access mode (read-only in this example)
-            FILE_SHARE_READ,                          // Share mode (0 for exclusive access)
-            None,                                     // Security attributes (can be None)
-            OPEN_EXISTING,                            // Creation disposition
-            FILE_ATTRIBUTE_NORMAL,                    // File attributes (normal for regular files)
-            None,                                     // Template file (not used here)
-        )
-    }?)
-}
-
-fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64, RaplError> {
-    let input_data: [u8; 4] = msr.to_le_bytes();
-
-    let output_data: [u8; 8] = [0; 8];
-    let mut lp_bytes_returned: u32 = 0;
-    unsafe {
-        DeviceIoControl(
-            h_device,
-            IOCTL_OLS_READ_MSR,
-            Some(input_data.as_ptr() as _),
-            input_data.len() as u32,
-            Some(output_data.as_ptr() as _),
-            output_data.len() as u32,
-            Some(&mut lp_bytes_returned as _),
-            None,
-        )
-    }?;
-
-    //println!("lp_bytes_returned: {}", lp_bytes_returned);
-    Ok(u64::from_le_bytes(output_data))
-}
+*/
