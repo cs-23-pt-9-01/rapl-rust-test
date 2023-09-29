@@ -2,9 +2,12 @@ use anyhow::Result;
 
 #[cfg(target_os = "linux")]
 use rapl_lib::rapl::linux::start_rapl_impl;
+#[cfg(target_os = "linux")]
+use rapl_lib::rapl::linux::stop_rapl_impl;
 
 #[cfg(target_os = "windows")]
 use rapl_lib::rapl::windows::start_rapl_impl;
+#[cfg(target_os = "windows")]
 use rapl_lib::rapl::windows::stop_rapl_impl;
 
 pub fn bench_test(n: i32) -> i32 {
