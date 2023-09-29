@@ -5,6 +5,7 @@ use rapl_lib::rapl::linux::start_rapl_impl;
 
 #[cfg(target_os = "windows")]
 use rapl_lib::rapl::windows::start_rapl_impl;
+use rapl_lib::rapl::windows::stop_rapl_impl;
 
 pub fn bench_test(n: i32) -> i32 {
     let mut val: i32 = 0;
@@ -37,6 +38,8 @@ fn main() -> Result<()> {
 
     for _ in 0..100 {
         start_rapl_impl();
+
+        stop_rapl_impl();
         //println!("output_number {}: {}", i, output_number);
     }
 

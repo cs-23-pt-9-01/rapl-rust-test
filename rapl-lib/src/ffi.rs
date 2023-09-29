@@ -1,6 +1,9 @@
 #[cfg(target_os = "linux")]
 use crate::rapl::linux::start_rapl_impl;
 
+#[cfg(target_os = "linux")]
+use crate::rapl::linux::stop_rapl_impl;
+
 #[cfg(target_os = "windows")]
 use crate::rapl::windows::start_rapl_impl;
 

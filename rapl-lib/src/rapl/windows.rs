@@ -146,6 +146,9 @@ pub fn start_rapl_impl() {
 }
 
 pub fn stop_rapl_impl() {
+    let val = RAPL_START.load(Ordering::Relaxed);
+    println!("Val: {}", val);
+
     // TODO: CloseHandle on driver handle in stop func
     // print csv etc
 }
