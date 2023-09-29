@@ -31,3 +31,23 @@ List the CPU's MSR's on Linux.
 Enable MSR.
 
 `sudo modprobe msr`
+
+## Install driver on Windows
+
+Use command prompt as administrator.
+
+Create:
+
+`sc create rapl type= kernel binPath= "C:\\Users\\Jakob\\Documents\\GitHub\\cs-23-pt-9-01\\rapl-rust-test\\LibreHardwareMonitor.sys"`
+
+Start:
+
+`sc start rapl`
+
+Stop:
+
+`sc stop rapl`
+
+Delete:
+
+`sc delete rapl`
