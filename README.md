@@ -38,6 +38,10 @@ Enable MSR.
 
 Use command prompt as administrator.
 
+Query for all drivers:
+
+`sc query type= driver`
+
 Create:
 
 `sc create rapl type= kernel binPath= "full path to driver here"`

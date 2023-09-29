@@ -127,7 +127,6 @@ pub fn start_rapl_impl() {
             panic!("not running as admin");
         }
 
-        install_driver().expect("failed to install driver");
         let h_device = open_driver().expect("failed to open driver handle");
         RAPL_DRIVER.get_or_init(|| h_device);
 
@@ -159,33 +158,6 @@ pub fn start_rapl_impl() {
 
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
-
-    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
-    let scm =
-        unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
-
-    if let Ok(driverr) = unsafe {
-        OpenServiceA(
-            scm,
-            PCSTR(driver_name.as_ptr() as *const u8),
-            SERVICE_ALL_ACCESS,
-        )
-    } {
-        // Stop the driver
-        let mut service_status: SERVICE_STATUS = Default::default();
-        unsafe {
-            ControlService(
-                driverr,
-                SERVICE_CONTROL_STOP,
-                &mut service_status as *mut SERVICE_STATUS,
-            )
-        }
-        .unwrap();
-
-        unsafe { DeleteService(driverr) }.unwrap();
-        unsafe { CloseServiceHandle(driverr) }.unwrap();
-    }
-    unsafe { CloseServiceHandle(scm) }.unwrap();
 
     let mut wtr = WriterBuilder::new().from_writer(vec![]);
     wtr.write_record(&["a", "b", "c"]).unwrap();
@@ -255,6 +227,37 @@ fn install_driver() -> Result<(), RaplError> {
     unsafe { StartServiceA(created_driver_service, None) }.unwrap();
 
     unsafe { CloseServiceHandle(created_driver_service) }.unwrap();
+    unsafe { CloseServiceHandle(scm) }.unwrap();
+
+    Ok(())
+}
+
+fn stop_and_delete_driver() -> Result<(), RaplError> {
+    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
+    let scm =
+        unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
+
+    if let Ok(driverr) = unsafe {
+        OpenServiceA(
+            scm,
+            PCSTR(driver_name.as_ptr() as *const u8),
+            SERVICE_ALL_ACCESS,
+        )
+    } {
+        // Stop the driver
+        let mut service_status: SERVICE_STATUS = Default::default();
+        unsafe {
+            ControlService(
+                driverr,
+                SERVICE_CONTROL_STOP,
+                &mut service_status as *mut SERVICE_STATUS,
+            )
+        }
+        .unwrap();
+
+        unsafe { DeleteService(driverr) }.unwrap();
+        unsafe { CloseServiceHandle(driverr) }.unwrap();
+    }
     unsafe { CloseServiceHandle(scm) }.unwrap();
 
     Ok(())
