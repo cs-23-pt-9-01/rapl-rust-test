@@ -14,9 +14,7 @@ use windows::{
     Win32::{
         Foundation::{GENERIC_READ, HANDLE},
         Security::{GetTokenInformation, TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY},
-        Storage::FileSystem::{
-            CreateFileA, DELETE, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING,
-        },
+        Storage::FileSystem::{CreateFileA, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING},
         System::{
             Services::{
                 CloseServiceHandle, ControlService, CreateServiceA, DeleteService, OpenSCManagerA,
@@ -166,11 +164,26 @@ pub fn stop_rapl_impl() {
     let scm =
         unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
 
-    if let Ok(awer) =
-        unsafe { OpenServiceA(scm, PCSTR(driver_name.as_ptr() as *const u8), DELETE.0) }
-    {
-        unsafe { DeleteService(awer) }.unwrap();
-        unsafe { CloseServiceHandle(awer) }.unwrap();
+    if let Ok(driverr) = unsafe {
+        OpenServiceA(
+            scm,
+            PCSTR(driver_name.as_ptr() as *const u8),
+            SERVICE_ALL_ACCESS,
+        )
+    } {
+        // Stop the driver
+        let mut service_status: SERVICE_STATUS = Default::default();
+        unsafe {
+            ControlService(
+                driverr,
+                SERVICE_CONTROL_STOP,
+                &mut service_status as *mut SERVICE_STATUS,
+            )
+        }
+        .unwrap();
+
+        unsafe { DeleteService(driverr) }.unwrap();
+        unsafe { CloseServiceHandle(driverr) }.unwrap();
     }
     unsafe { CloseServiceHandle(scm) }.unwrap();
 
@@ -220,17 +233,6 @@ fn install_driver() -> Result<(), RaplError> {
     let driver_path =
         CString::new("C:\\Users\\Jakob\\Documents\\GitHub\\cs-23-pt-9-01\\rapl-rust-test\\LibreHardwareMonitor.sys").expect("failed to create driver path");
 
-    if let Ok(awer) =
-        unsafe { OpenServiceA(scm, PCSTR(driver_name.as_ptr() as *const u8), DELETE.0) }
-    {
-        // Stop the driver
-        //let mut ayy: SERVICE_STATUS = Default::default();
-        //unsafe { ControlService(awer, SERVICE_CONTROL_STOP, &mut ayy as *mut SERVICE_STATUS) }
-        //   .unwrap();
-
-        //unsafe { DeleteService(awer) }.unwrap();
-    }
-
     let created_driver_service = unsafe {
         CreateServiceA(
             scm,
@@ -252,8 +254,8 @@ fn install_driver() -> Result<(), RaplError> {
 
     unsafe { StartServiceA(created_driver_service, None) }.unwrap();
 
-    //CloseServiceHandle(hService);
-    //unsafe { CloseServiceHandle(scm) }.unwrap();
+    unsafe { CloseServiceHandle(created_driver_service) }.unwrap();
+    unsafe { CloseServiceHandle(scm) }.unwrap();
 
     Ok(())
 }
