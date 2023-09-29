@@ -1,3 +1,4 @@
+use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
 use std::{
     ffi::CString,
@@ -147,6 +148,14 @@ pub fn start_rapl_impl() {
 
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
+
+    let mut wtr = WriterBuilder::new().from_writer(vec![]);
+    wtr.write_record(&["a", "b", "c"]).unwrap();
+    wtr.write_record(&["x", "y", "z"]).unwrap();
+
+    let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+    assert_eq!(data, "a,b,c\nx,y,z\n");
+
     println!("Val: {}", val);
 
     // TODO: Decide if the driver should be closed here or not (maybe we want to keep it open for multiple calls)
