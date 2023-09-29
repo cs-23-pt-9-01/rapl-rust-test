@@ -155,10 +155,13 @@ pub fn start_rapl_impl() {
     RAPL_START.store(msr_val, Ordering::Relaxed);
 }
 
+// Get all drivers: sc query type=driver
+// Delete manually in CMD: sc stop R0LibreHardwareMonitor
+
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
 
-    let driver_name = CString::new("WinRing0_1_2_0").expect("failed to create driver name");
+    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
     let scm =
         unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
 
@@ -212,7 +215,7 @@ fn install_driver() -> Result<(), RaplError> {
     let scm =
         unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
 
-    let driver_name = CString::new("WinRing0_1_2_0").expect("failed to create driver name");
+    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
     let driver_path =
         CString::new("C:\\Users\\Jakob\\Documents\\GitHub\\cs-23-pt-9-01\\rapl-rust-test\\LibreHardwareMonitor.sys").expect("failed to create driver path");
 
@@ -220,11 +223,11 @@ fn install_driver() -> Result<(), RaplError> {
         unsafe { OpenServiceA(scm, PCSTR(driver_name.as_ptr() as *const u8), DELETE.0) }
     {
         // Stop the driver
-        let mut ayy: SERVICE_STATUS = Default::default();
-        unsafe { ControlService(awer, SERVICE_CONTROL_STOP, &mut ayy as *mut SERVICE_STATUS) }
-            .unwrap();
+        //let mut ayy: SERVICE_STATUS = Default::default();
+        //unsafe { ControlService(awer, SERVICE_CONTROL_STOP, &mut ayy as *mut SERVICE_STATUS) }
+        //   .unwrap();
 
-        unsafe { DeleteService(awer) }.unwrap();
+        //unsafe { DeleteService(awer) }.unwrap();
     }
 
     if let Ok(service) = unsafe {
