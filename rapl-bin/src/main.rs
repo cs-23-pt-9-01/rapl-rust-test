@@ -38,12 +38,14 @@ fn main() -> Result<()> {
     /*let output_number =
     read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");*/
 
-    for _ in 0..100 {
-        rapl_impl::start_rapl_impl();
+    rapl_impl::start_rapl_impl();
 
-        rapl_impl::stop_rapl_impl();
-        //println!("output_number {}: {}", i, output_number);
+    for _i in 0..10 {
+        println!("waddup");
     }
+
+    rapl_impl::stop_rapl_impl();
+    //println!("output_number {}: {}", i, output_number);
 
     /*
     let time_unit = ((output_number & AMD_TIME_UNIT_MASK) >> 16) as f64;

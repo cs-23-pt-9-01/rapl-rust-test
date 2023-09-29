@@ -28,40 +28,6 @@ use windows::{
 // Read MSR on Windows: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/WinRing0/OpenLibSys.c#L313
 // Windows RAPL Driver: https://github.com/hubblo-org/windows-rapl-driver/tree/master
 
-// TODO: Install driver ourselves: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/LibreHardwareMonitorLib/Hardware/KernelDriver.cs#L40
-/*
-Sample with making driver service and starting it:
-
-#include <windows.h>
-
-int main() {
-    SC_HANDLE scm, service;
-
-    scm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-    if (scm == NULL) {
-        // Handle error
-        return 1;
-    }
-
-    service = CreateService(scm, L"YourDriverName", L"Your Driver Display Name",
-        SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
-        L"Path to your driver file", NULL, NULL, NULL, NULL, NULL);
-
-    if (service == NULL) {
-        // Handle error
-        CloseServiceHandle(scm);
-        return 2;
-    }
-
-    StartService(service, 0, NULL);
-
-    CloseServiceHandle(service);
-    CloseServiceHandle(scm);
-
-    return 0;
-}
-*/
-
 #[derive(Error, Debug)]
 pub enum RaplError {
     #[error("windows error")]
@@ -75,11 +41,11 @@ pub enum RaplError {
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
 // AMD
-const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
-/*
-const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
+//const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
+//const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
 const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
 
+/*
 const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
 const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
 const AMD_POWER_UNIT_MASK: u64 = 0xF;
@@ -141,8 +107,8 @@ pub fn start_rapl_impl() {
     let msr_val = match PROCESSOR_TYPE.get().unwrap() {
         ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
             .expect("failed to read MSR_RAPL_POWER_UNIT"),
-        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
-            .expect("failed to read AMD_MSR_PWR_UNIT"),
+        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
+            .expect("failed to read AMD_MSR_PACKAGE_ENERGY"),
     };
 
     RAPL_START.store(msr_val, Ordering::Relaxed);
@@ -153,7 +119,14 @@ pub fn start_rapl_impl() {
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
-    let val = RAPL_START.load(Ordering::Relaxed);
+    let rapl_end_val = match PROCESSOR_TYPE.get().unwrap() {
+        ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
+            .expect("failed to read MSR_RAPL_POWER_UNIT"),
+        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
+            .expect("failed to read AMD_MSR_PACKAGE_ENERGY"),
+    };
+
+    let rapl_start_val = RAPL_START.load(Ordering::Relaxed);
 
     let file = OpenOptions::new()
         .append(true)
@@ -161,17 +134,19 @@ pub fn stop_rapl_impl() {
         .open("test.csv")
         .unwrap();
 
+    /*
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp = duration_since_epoch.as_millis();
+    */
+
     let mut wtr = WriterBuilder::new().from_writer(file);
-    wtr.write_record(["Name", "Place", "ID"]).unwrap();
-    wtr.serialize(("Mark", "Sydney", val)).unwrap();
+    wtr.write_record(["Energy"]).unwrap();
+    wtr.serialize(rapl_start_val).unwrap();
+    wtr.serialize(rapl_end_val).unwrap();
     wtr.flush().unwrap();
-
-    //file.write_all(format!("{}\n", val).as_bytes()).unwrap();
-
-    // TODO: Decide if the driver should be closed here or not (maybe we want to keep it open for multiple calls)
-    // unsafe { CloseHandle(*RAPL_DRIVER.get().unwrap()) }.expect("failed to close driver handle");
-
-    // print csv etc
 }
 
 // check if running as admin using the windows crate
@@ -301,5 +276,39 @@ fn stop_and_delete_driver() -> Result<(), RaplError> {
     unsafe { CloseServiceHandle(scm) }.unwrap();
 
     Ok(())
+}
+*/
+
+// TODO: Install driver ourselves: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/LibreHardwareMonitorLib/Hardware/KernelDriver.cs#L40
+/*
+Sample with making driver service and starting it:
+
+#include <windows.h>
+
+int main() {
+    SC_HANDLE scm, service;
+
+    scm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    if (scm == NULL) {
+        // Handle error
+        return 1;
+    }
+
+    service = CreateService(scm, L"YourDriverName", L"Your Driver Display Name",
+        SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
+        L"Path to your driver file", NULL, NULL, NULL, NULL, NULL);
+
+    if (service == NULL) {
+        // Handle error
+        CloseServiceHandle(scm);
+        return 2;
+    }
+
+    StartService(service, 0, NULL);
+
+    CloseServiceHandle(service);
+    CloseServiceHandle(scm);
+
+    return 0;
 }
 */
