@@ -149,7 +149,9 @@ pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
     println!("Val: {}", val);
 
-    // TODO: CloseHandle on driver handle in stop func
+    // TODO: Decide if the driver should be closed here or not (maybe we want to keep it open for multiple calls)
+    // unsafe { CloseHandle(*RAPL_DRIVER.get().unwrap()) }.expect("failed to close driver handle");
+
     // print csv etc
 }
 
