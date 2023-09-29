@@ -173,6 +173,7 @@ pub fn stop_rapl_impl() {
     } {
         // Stop the driver
         let mut service_status: SERVICE_STATUS = Default::default();
+        /*
         unsafe {
             ControlService(
                 driverr,
@@ -181,6 +182,7 @@ pub fn stop_rapl_impl() {
             )
         }
         .unwrap();
+        */
 
         unsafe { DeleteService(driverr) }.unwrap();
         unsafe { CloseServiceHandle(driverr) }.unwrap();
