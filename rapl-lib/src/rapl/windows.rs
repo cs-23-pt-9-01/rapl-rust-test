@@ -251,7 +251,7 @@ fn install_driver() -> Result<(), RaplError> {
     }
 
     //CloseServiceHandle(hService);
-    unsafe { CloseServiceHandle(scm) }.unwrap();
+    //unsafe { CloseServiceHandle(scm) }.unwrap();
 
     Ok(())
 }
