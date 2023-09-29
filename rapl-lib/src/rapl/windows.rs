@@ -157,6 +157,17 @@ pub fn start_rapl_impl() {
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
 
+    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
+
+    let scm =
+        unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
+
+    if let Ok(awer) =
+        unsafe { OpenServiceA(scm, PCSTR(driver_name.as_ptr() as *const u8), DELETE.0) }
+    {
+        unsafe { StartServiceA(awer, None) }.unwrap();
+    }
+
     let mut wtr = WriterBuilder::new().from_writer(vec![]);
     wtr.write_record(&["a", "b", "c"]).unwrap();
     wtr.write_record(&["x", "y", "z"]).unwrap();
