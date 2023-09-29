@@ -230,7 +230,7 @@ fn install_driver() -> Result<(), RaplError> {
         //unsafe { DeleteService(awer) }.unwrap();
     }
 
-    if let Ok(service) = unsafe {
+    let created_driver_service = unsafe {
         CreateServiceA(
             scm,
             PCSTR(driver_name.as_ptr() as *const u8),
@@ -246,9 +246,10 @@ fn install_driver() -> Result<(), RaplError> {
             None,
             None,
         )
-    } {
-        unsafe { StartServiceA(service, None) }.unwrap();
     }
+    .unwrap();
+
+    unsafe { StartServiceA(created_driver_service, None) }.unwrap();
 
     //CloseServiceHandle(hService);
     //unsafe { CloseServiceHandle(scm) }.unwrap();
