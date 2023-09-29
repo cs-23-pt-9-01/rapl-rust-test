@@ -2,6 +2,8 @@ use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
 use std::{
     ffi::CString,
+    fs::OpenOptions,
+    io::Write,
     sync::{
         atomic::{AtomicU64, Ordering},
         Once,
@@ -16,12 +18,6 @@ use windows::{
         Security::{GetTokenInformation, TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY},
         Storage::FileSystem::{CreateFileA, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING},
         System::{
-            Services::{
-                CloseServiceHandle, ControlService, CreateServiceA, DeleteService, OpenSCManagerA,
-                OpenServiceA, StartServiceA, SC_MANAGER_ALL_ACCESS, SERVICE_ALL_ACCESS,
-                SERVICE_CONTROL_STOP, SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
-                SERVICE_KERNEL_DRIVER, SERVICE_STATUS,
-            },
             Threading::{GetCurrentProcess, OpenProcessToken},
             IO::DeviceIoControl,
         },
@@ -161,13 +157,17 @@ pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
 
     let mut wtr = WriterBuilder::new().from_writer(vec![]);
-    wtr.write_record(&["a", "b", "c"]).unwrap();
-    wtr.write_record(&["x", "y", "z"]).unwrap();
+    wtr.write_record(["a", "b", "c"]).unwrap();
+    wtr.write_record(["x", "y", "z"]).unwrap();
+    wtr.flush().unwrap();
 
-    let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
-    assert_eq!(data, "a,b,c\nx,y,z\n");
+    let mut file = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open("test.csv")
+        .unwrap();
 
-    println!("Val: {}", val);
+    file.write_all(format!("{}\n", val).as_bytes()).unwrap();
 
     // TODO: Decide if the driver should be closed here or not (maybe we want to keep it open for multiple calls)
     // unsafe { CloseHandle(*RAPL_DRIVER.get().unwrap()) }.expect("failed to close driver handle");
