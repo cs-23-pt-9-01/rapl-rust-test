@@ -1,14 +1,13 @@
 use anyhow::Result;
 
 #[cfg(target_os = "linux")]
-use rapl_lib::rapl::linux::start_rapl_impl;
-#[cfg(target_os = "linux")]
-use rapl_lib::rapl::linux::stop_rapl_impl;
-
+mod rapl_impl {
+    pub use rapl_lib::rapl::linux::{start_rapl_impl, stop_rapl_impl};
+}
 #[cfg(target_os = "windows")]
-use rapl_lib::rapl::windows::start_rapl_impl;
-#[cfg(target_os = "windows")]
-use rapl_lib::rapl::windows::stop_rapl_impl;
+mod rapl_impl {
+    pub use rapl_lib::rapl::windows::{start_rapl_impl, stop_rapl_impl};
+}
 
 pub fn bench_test(n: i32) -> i32 {
     let mut val: i32 = 0;
@@ -40,9 +39,9 @@ fn main() -> Result<()> {
     read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");*/
 
     for _ in 0..100 {
-        start_rapl_impl();
+        rapl_impl::start_rapl_impl();
 
-        stop_rapl_impl();
+        rapl_impl::stop_rapl_impl();
         //println!("output_number {}: {}", i, output_number);
     }
 
