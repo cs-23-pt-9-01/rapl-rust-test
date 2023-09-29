@@ -14,8 +14,15 @@ use windows::{
     Win32::{
         Foundation::{GENERIC_READ, HANDLE},
         Security::{GetTokenInformation, TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY},
-        Storage::FileSystem::{CreateFileA, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING},
+        Storage::FileSystem::{
+            CreateFileA, DELETE, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, OPEN_EXISTING,
+        },
         System::{
+            Services::{
+                CreateServiceA, DeleteService, OpenSCManagerA, OpenServiceA, StartServiceA,
+                SC_MANAGER_ALL_ACCESS, SERVICE_ALL_ACCESS, SERVICE_DEMAND_START,
+                SERVICE_ERROR_NORMAL, SERVICE_KERNEL_DRIVER,
+            },
             Threading::{GetCurrentProcess, OpenProcessToken},
             IO::DeviceIoControl,
         },
@@ -121,6 +128,7 @@ pub fn start_rapl_impl() {
             panic!("not running as admin");
         }
 
+        install_driver().expect("failed to install driver");
         let h_device = open_driver().expect("failed to open driver handle");
         RAPL_DRIVER.get_or_init(|| h_device);
 
@@ -185,6 +193,43 @@ fn is_admin() -> bool {
     }
 
     token_elevation.TokenIsElevated != 0
+}
+
+fn install_driver() -> Result<(), RaplError> {
+    let scm =
+        unsafe { OpenSCManagerA(PCSTR::null(), PCSTR::null(), SC_MANAGER_ALL_ACCESS) }.unwrap();
+
+    let driver_name = CString::new("R0LibreHardwareMonitor").expect("failed to create driver name");
+    let driver_path =
+        CString::new("C:\\Users\\Jakob\\Documents\\GitHub\\cs-23-pt-9-01\\rapl-rust-test\\LibreHardwareMonitor.sys").expect("failed to create driver path");
+
+    if let Ok(awer) =
+        unsafe { OpenServiceA(scm, PCSTR(driver_name.as_ptr() as *const u8), DELETE.0) }
+    {
+        //unsafe { DeleteService(awer) }.unwrap();
+    }
+
+    if let Ok(service) = unsafe {
+        CreateServiceA(
+            scm,
+            PCSTR(driver_name.as_ptr() as *const u8),
+            PCSTR(driver_name.as_ptr() as *const u8),
+            SERVICE_ALL_ACCESS,
+            SERVICE_KERNEL_DRIVER,
+            SERVICE_DEMAND_START,
+            SERVICE_ERROR_NORMAL,
+            PCSTR(driver_path.as_ptr() as *const u8),
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
+    } {
+        unsafe { StartServiceA(service, None) }.unwrap();
+    }
+
+    Ok(())
 }
 
 fn open_driver() -> Result<HANDLE, RaplError> {
