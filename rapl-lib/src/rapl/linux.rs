@@ -10,6 +10,12 @@ pub fn start_rapl_impl() -> u64 {
     123
 }
 
+pub fn stop_rapl_impl() -> u64 {
+    unsafe { getpid() };
+
+    123
+}
+
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
 fn rapl_init() {}
 
