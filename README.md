@@ -40,7 +40,7 @@ Use command prompt as administrator.
 
 Create:
 
-`sc create rapl type= kernel binPath= "path to driver here"`
+`sc create rapl type= kernel binPath= "full path to driver here"`
 
 Start:
 
