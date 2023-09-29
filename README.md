@@ -38,7 +38,7 @@ Use command prompt as administrator.
 
 Create:
 
-`sc create rapl type= kernel binPath= "C:\\Users\\Jakob\\Documents\\GitHub\\cs-23-pt-9-01\\rapl-rust-test\\LibreHardwareMonitor.sys"`
+`sc create rapl type= kernel binPath= "path to driver here"`
 
 Start:
 
