@@ -3,7 +3,6 @@ use once_cell::sync::OnceCell;
 use std::{
     ffi::CString,
     fs::OpenOptions,
-    io::Write,
     sync::{
         atomic::{AtomicU64, Ordering},
         Once,
@@ -156,18 +155,18 @@ pub fn start_rapl_impl() {
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
 
-    let mut wtr = WriterBuilder::new().from_writer(vec![]);
-    wtr.write_record(["a", "b", "c"]).unwrap();
-    wtr.write_record(["x", "y", "z"]).unwrap();
-    wtr.flush().unwrap();
-
-    let mut file = OpenOptions::new()
+    let file = OpenOptions::new()
         .append(true)
         .create(true)
         .open("test.csv")
         .unwrap();
 
-    file.write_all(format!("{}\n", val).as_bytes()).unwrap();
+    let mut wtr = WriterBuilder::new().from_writer(file);
+    wtr.write_record(["Name", "Place", "ID"]).unwrap();
+    wtr.serialize(("Mark", "Sydney", val)).unwrap();
+    wtr.flush().unwrap();
+
+    //file.write_all(format!("{}\n", val).as_bytes()).unwrap();
 
     // TODO: Decide if the driver should be closed here or not (maybe we want to keep it open for multiple calls)
     // unsafe { CloseHandle(*RAPL_DRIVER.get().unwrap()) }.expect("failed to close driver handle");
