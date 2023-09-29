@@ -156,7 +156,8 @@ pub fn start_rapl_impl() {
 }
 
 // Get all drivers: sc query type=driver
-// Delete manually in CMD: sc stop R0LibreHardwareMonitor
+// Stop manually in CMD: sc stop R0LibreHardwareMonitor
+// Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
     let val = RAPL_START.load(Ordering::Relaxed);
