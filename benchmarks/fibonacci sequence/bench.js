@@ -12,10 +12,10 @@ function fib(n) {
   }
 
 const koffi = require('koffi');
-const lib = koffi.load('target\\debug\\rapl_rust_lib.dll');
+const lib = koffi.load('target\\debug\\rapl_lib.dll');
 
 const start = lib.func('int start_rapl()');
-const stop = lib.func('void end_rapl()');
+const stop = lib.func('void stop_rapl()');
 
 
 for (let i = 0; i < runCount; i++){
@@ -26,4 +26,4 @@ for (let i = 0; i < runCount; i++){
     stop();
 }
 
-console.log("job done");
+console.log("job done");  
