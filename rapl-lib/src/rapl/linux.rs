@@ -1,5 +1,5 @@
-#[cfg(target_os = "linux")]
-pub mod linux;
+use libc::{c_void, getpid, open, perror, pread, EIO, ENXIO, O_RDONLY};
+use std::{ffi::CString, mem::size_of};
 
 // Impl this:
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
