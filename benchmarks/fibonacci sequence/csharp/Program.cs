@@ -3,14 +3,14 @@ using System.Runtime.InteropServices;
 
 const int count = 100;
 const int fibVal = 47;
-const string pathToLib = @"target\debug\rapl_rust_lib.dll";
+const string pathToLib = @"target\debug\rapl_lib.dll";
 
 // DLL imports
 [DllImport(pathToLib)]
 static extern int start_rapl();
 
 [DllImport(pathToLib)]
-static extern void end_rapl();
+static extern void stop_rapl();
 
 // test method
 static ulong Fib(uint x)
@@ -35,6 +35,6 @@ for (int i = 0; i < count; i++)
 
     Fib(fibVal);
 
-    end_rapl();
+    stop_rapl();
 }
 Console.WriteLine("job done");
