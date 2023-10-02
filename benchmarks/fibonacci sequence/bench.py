@@ -16,7 +16,7 @@ def fibIter(n):
     return fib
 
 # start lib
-dll = cdll.LoadLibrary("target\\debug\\rapl_rust_lib.dll")
+dll = cdll.LoadLibrary("target\\debug\\rapl_lib.dll")
 
 for i in range(test_count):
     # start recording
@@ -26,6 +26,6 @@ for i in range(test_count):
     fibIter(47)
 
     # stop recording
-    dll.end_rapl()
+    dll.stop_rapl()
 
 print("job done")
