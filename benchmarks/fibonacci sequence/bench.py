@@ -23,7 +23,7 @@ for i in range(test_count):
     dll.start_rapl()
 
     # run test
-    fibIter(47)
+    fibIter(fib_param)
 
     # stop recording
     dll.stop_rapl()
