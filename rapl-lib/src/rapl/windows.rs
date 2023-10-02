@@ -119,6 +119,7 @@ pub fn start_rapl_impl() {
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
+    // Read the RAPL value
     let rapl_end_val = match PROCESSOR_TYPE.get().unwrap() {
         ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
             .expect("failed to read MSR_RAPL_POWER_UNIT"),
@@ -126,8 +127,10 @@ pub fn stop_rapl_impl() {
             .expect("failed to read AMD_MSR_PACKAGE_ENERGY"),
     };
 
+    // Load in the atomic value
     let rapl_start_val = RAPL_START.load(Ordering::Relaxed);
 
+    // Open the file to write to CSV
     let file = OpenOptions::new()
         .append(true)
         .create(true)
@@ -135,6 +138,8 @@ pub fn stop_rapl_impl() {
         .unwrap();
 
     /*
+    TODO: Revise if we can even use timestamps
+
     let current_time = SystemTime::now();
     let duration_since_epoch = current_time
         .duration_since(UNIX_EPOCH)
