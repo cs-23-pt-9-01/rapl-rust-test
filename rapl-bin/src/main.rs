@@ -20,23 +20,12 @@ pub fn bench_test(n: i32) -> i32 {
 fn main() -> Result<()> {
     // TODO: Logging, multiple cores (maybe only possible to read all cores at once, although Linux seems to have multiple since MSR for each CPU), multiple CPU support (Intel)
 
-    //println!("Fibonacci: {}", fibonacci(900));
     //println!("Bench test: {}", bench_test(1000000000));
 
     /*
-    let sys = System::new_all();
-    match sys.cpus().first().expect("failed getting CPU").vendor_id() {
-        "GenuineIntel" => println!("Intel CPU detected"),
-        "AuthenticAMD" => println!("AMD CPU detected"),
-        _ => {
-            println!("unknown CPU detected");
-            return Ok(());
-        }
-    }
+    let output_number =
+    read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");
     */
-
-    /*let output_number =
-    read_msr(h_device, AMD_MSR_PWR_UNIT).expect("failed to read AMD_MSR_PWR_UNIT");*/
 
     rapl_impl::start_rapl_impl();
 
@@ -45,7 +34,6 @@ fn main() -> Result<()> {
     }
 
     rapl_impl::stop_rapl_impl();
-    //println!("output_number {}: {}", i, output_number);
 
     /*
     let time_unit = ((output_number & AMD_TIME_UNIT_MASK) >> 16) as f64;

@@ -210,12 +210,14 @@ fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64, RaplError> {
         )
     }?;
 
+    // TODO: Consider using lp_bytes_returned for error handling or logging it, it is supposed to return 8 bytes on success
     //println!("lp_bytes_returned: {}", lp_bytes_returned);
     Ok(u64::from_le_bytes(output_data))
 }
 
 /*
 // Experimental. This was not a great success because Windows takes too long deleting + recreating the driver
+// TODO: Consider documenting this or revisiting it later
 
 fn install_driver() -> Result<(), RaplError> {
     let scm =
