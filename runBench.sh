@@ -29,6 +29,6 @@ cd ../../..
 
 # running
 ./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib
-append_to_lastest_csv "C#Fib"
+append_to_lastest_csv "CsharpFib"
 
 # TODO start services again
