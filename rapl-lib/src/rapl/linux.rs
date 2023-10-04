@@ -29,7 +29,7 @@ pub fn test_rapl() {
     let data: u64 = 0;
     let data_ptr = data as *mut c_void;
 
-    if unsafe { pread(fd, data_ptr, size_of::<u64>(), 0x606) } != size_of::<u64>() as isize {
+    if unsafe { pread(fd, data_ptr, 8, 0x606) } != 8 {
         let pread_err = CString::new("rdmsr:pread").unwrap();
         unsafe { perror(pread_err.as_ptr()) };
     }
