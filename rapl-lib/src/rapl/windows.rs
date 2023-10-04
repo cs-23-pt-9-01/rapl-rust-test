@@ -4,9 +4,13 @@ use crate::rapl::windows::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
 #[cfg(intel)]
 use crate::rapl::windows::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
 
-use csv::WriterBuilder;
+use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
-use std::{ffi::CString, fs::OpenOptions, sync::Once};
+use std::{
+    ffi::CString,
+    fs::{File, OpenOptions},
+    sync::Once,
+};
 use thiserror::Error;
 use windows::{
     core::PCSTR,
@@ -76,6 +80,8 @@ static mut RAPL_START: u64 = 0;
 static RAPL_INIT: Once = Once::new();
 static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
 static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
+
+static mut CSV_WRITER: Option<Writer<File>> = None;
 
 fn read_rapl_power_unit() -> Result<u64, RaplError> {
     #[cfg(intel)]
@@ -153,15 +159,6 @@ pub fn stop_rapl_impl() {
     let cpu_type = get_cpu_type();
 
     // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
-    let file = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(format!(
-            "{}_{}.csv",
-            cpu_type,
-            RAPL_POWER_UNITS.get().unwrap()
-        ))
-        .unwrap();
 
     /*
     // TODO: Revise if we can even use timestamps
@@ -173,8 +170,32 @@ pub fn stop_rapl_impl() {
     let timestamp = duration_since_epoch.as_millis();
     */
 
-    let mut wtr = WriterBuilder::new().from_writer(file);
-    wtr.write_record(["Start", "End"]).unwrap();
+    let wtr = match unsafe { CSV_WRITER.as_mut() } {
+        Some(wtr) => wtr,
+        None => {
+            // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
+            let file = OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(format!(
+                    "{}_{}.csv",
+                    cpu_type,
+                    RAPL_POWER_UNITS.get().unwrap()
+                ))
+                .unwrap();
+
+            // Create the CSV writer
+            let mut wtr = WriterBuilder::new().from_writer(file);
+            wtr.write_record(["PkgStart", "PkgEnd"]).unwrap();
+
+            // Store the CSV writer in a static variable
+            unsafe { CSV_WRITER = Some(wtr) };
+
+            // Return a mutable reference to the CSV writer
+            unsafe { CSV_WRITER.as_mut().unwrap() }
+        }
+    };
+
     wtr.serialize((rapl_start_val, rapl_pkg_energy_end_val))
         .unwrap();
     wtr.flush().unwrap();
