@@ -1,8 +1,5 @@
-use libc::{c_void, getpid, open, perror, pread, EIO, ENXIO, O_RDONLY};
+use libc::{c_void, open, perror, pread, EIO, ENXIO, O_RDONLY};
 use std::{ffi::CString, mem::size_of};
-
-// Impl this:
-// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 
 pub fn start_rapl_impl() {
     let fd = open_msr(0);
@@ -67,9 +64,7 @@ mod tests {
     #[test]
     fn test_read_msr() {
         let fd = open_msr(0);
-
         let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
-
         assert_eq!(result, 1234);
     }
 }
