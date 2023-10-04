@@ -1,6 +1,13 @@
 use libc::{c_void, open, perror, pread, EIO, ENXIO, O_RDONLY};
+use nix::fcntl;
 use once_cell::sync::OnceCell;
-use std::{ffi::CString, mem::size_of};
+use std::{
+    ffi::CString,
+    fs::File,
+    io::Read,
+    mem::size_of,
+    os::{fd::AsRawFd, unix::prelude::FileExt},
+};
 
 // Running it for now: sudo ./target/debug/rapl-bin
 
@@ -9,6 +16,31 @@ const MSR_RAPL_POWER_UNIT: i64 = 100;
 static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
 
 pub fn test_rapl() {
+    let fd = File::open("/dev/cpu/0/msr").unwrap();
+    println!("fd: {:?}", fd);
+
+    let mut ayy = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    // TODO: Consider just seek here instead, same impl for Windows then
+    let result = fd.read_at(&mut ayy, 0x606).unwrap();
+}
+
+pub fn test_rapl_nix() {
+    let fd = nix::fcntl::open(
+        "/dev/cpu/0/msr",
+        fcntl::OFlag::O_RDONLY,
+        nix::sys::stat::Mode::empty(),
+    )
+    .unwrap();
+
+    println!("fd: {}", fd);
+
+    let mut ayy = [0, 0, 0, 0];
+
+    //nix::sys::uio::pread(fd.as_raw_fd(), &mut ayy, 0x606).unwrap();
+}
+
+pub fn test_rapl_old() {
     let strr = format!("/dev/cpu/{}/msr", 0);
     let path = CString::new(strr).unwrap();
     let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
