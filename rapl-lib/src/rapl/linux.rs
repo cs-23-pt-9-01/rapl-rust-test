@@ -9,7 +9,8 @@ const MSR_RAPL_POWER_UNIT: i64 = 100;
 static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
 
 pub fn test_rapl() {
-    let path = CString::new(format!("/dev/cpu/{}/msr", 0)).unwrap();
+    let strr = format!("/dev/cpu/{}/msr", 0);
+    let path = CString::new(strr).unwrap();
     let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
 
     println!("fd: {}", fd);
