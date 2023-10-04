@@ -75,18 +75,41 @@ static RAPL_INIT: Once = Once::new();
 static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
 static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 
-static PROCESSOR_TYPE: OnceCell<ProcessorType> = OnceCell::new();
-#[allow(clippy::upper_case_acronyms)]
-enum ProcessorType {
-    Intel,
-    AMD,
+fn read_rapl_power_unit() -> Result<u64, RaplError> {
+    #[cfg(intel)]
+    {
+        read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
+    }
+
+    #[cfg(amd)]
+    {
+        read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
+    }
 }
 
-#[cfg(intel)]
-fn intel() {}
+fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
+    #[cfg(intel)]
+    {
+        read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_PKG)
+    }
 
-#[cfg(amd)]
-fn amd() {}
+    #[cfg(amd)]
+    {
+        read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
+    }
+}
+
+fn get_cpu_type() -> &'static str {
+    #[cfg(intel)]
+    {
+        "Intel"
+    }
+
+    #[cfg(amd)]
+    {
+        "AMD"
+    }
+}
 
 pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
@@ -99,35 +122,16 @@ pub fn start_rapl_impl() {
             .expect("failed to open driver handle, make sure the driver is installed and running");
         RAPL_DRIVER.get_or_init(|| h_device);
 
-        let sys = System::new_all();
-        let cpu = sys.cpus().first().expect("failed getting CPU").vendor_id();
-        match cpu {
-            "GenuineIntel" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::Intel),
-            "AuthenticAMD" => PROCESSOR_TYPE.get_or_init(|| ProcessorType::AMD),
-            _ => {
-                panic!("unknown CPU detected: {}", cpu);
-            }
-        };
-
         // Read power unit and store it the power units variable
-        let pwr_unit = match PROCESSOR_TYPE.get().unwrap() {
-            ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
-                .expect("failed to read MSR_RAPL_POWER_UNIT"),
-            ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
-                .expect("failed to read AMD_MSR_PWR_UNIT"),
-        };
+        let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
 
     // Read MSR based on the processor type
-    let msr_val = match PROCESSOR_TYPE.get().unwrap() {
-        ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_PKG)
-            .expect("failed to read MSR_RAPL_PKG"),
-        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
-            .expect("failed to read AMD_MSR_PACKAGE_ENERGY"),
-    };
+    let rapl_pkg_energy_start_val =
+        read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
-    RAPL_START.store(msr_val, Ordering::Relaxed);
+    RAPL_START.store(rapl_pkg_energy_start_val, Ordering::Relaxed);
 }
 
 // Get all drivers: sc query type=driver
@@ -136,21 +140,14 @@ pub fn start_rapl_impl() {
 
 pub fn stop_rapl_impl() {
     // Read the RAPL value
-    let rapl_end_val = match PROCESSOR_TYPE.get().unwrap() {
-        ProcessorType::Intel => read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_PKG)
-            .expect("failed to read MSR_RAPL_PKG"),
-        ProcessorType::AMD => read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
-            .expect("failed to read AMD_MSR_PACKAGE_ENERGY"),
-    };
+    let rapl_pkg_energy_end_val =
+        read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
     // Load in the atomic value
     let rapl_start_val = RAPL_START.load(Ordering::Relaxed);
 
-    let cpu_type = match PROCESSOR_TYPE.get().unwrap() {
-        ProcessorType::Intel => "Intel",
-        ProcessorType::AMD => "AMD",
-    };
-
+    let cpu_type = get_cpu_type();
+    
     // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
     let file = OpenOptions::new()
         .append(true)
@@ -174,7 +171,8 @@ pub fn stop_rapl_impl() {
 
     let mut wtr = WriterBuilder::new().from_writer(file);
     wtr.write_record(["Start", "End"]).unwrap();
-    wtr.serialize((rapl_start_val, rapl_end_val)).unwrap();
+    wtr.serialize((rapl_start_val, rapl_pkg_energy_end_val))
+        .unwrap();
     wtr.flush().unwrap();
 }
 
