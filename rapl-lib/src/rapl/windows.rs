@@ -87,24 +87,24 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 fn read_rapl_power_unit() -> Result<u64, RaplError> {
     #[cfg(intel)]
     {
-        read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_POWER_UNIT)
+        read_msr(MSR_RAPL_POWER_UNIT)
     }
 
     #[cfg(amd)]
     {
-        read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PWR_UNIT)
+        read_msr(AMD_MSR_PWR_UNIT)
     }
 }
 
 fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
     #[cfg(intel)]
     {
-        read_msr(*RAPL_DRIVER.get().unwrap(), MSR_RAPL_PKG)
+        read_msr(MSR_RAPL_PKG)
     }
 
     #[cfg(amd)]
     {
-        read_msr(*RAPL_DRIVER.get().unwrap(), AMD_MSR_PACKAGE_ENERGY)
+        read_msr(AMD_MSR_PACKAGE_ENERGY)
     }
 }
 
@@ -223,14 +223,21 @@ fn open_driver() -> Result<HANDLE, RaplError> {
     }?)
 }
 
-fn read_msr(h_device: HANDLE, msr: u32) -> Result<u64, RaplError> {
+fn read_msr(msr: u32) -> Result<u64, RaplError> {
+    // Get the driver handle
+    let rapl_driver = *RAPL_DRIVER.get().expect("RAPL driver not initialized");
+
+    // Convert the MSR to a little endian byte array
     let input_data: [u8; 4] = msr.to_le_bytes();
 
+    // Create an empty byte array to store the output
     let output_data: [u8; 8] = [0; 8];
     let mut lp_bytes_returned: u32 = 0;
+
+    // Call the driver to read the MSR
     unsafe {
         DeviceIoControl(
-            h_device,
+            rapl_driver,
             IOCTL_OLS_READ_MSR,
             Some(input_data.as_ptr() as _),
             input_data.len() as u32,
