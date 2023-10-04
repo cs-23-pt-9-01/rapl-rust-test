@@ -6,14 +6,14 @@ use std::{ffi::CString, mem::size_of};
 
 pub fn start_rapl_impl() {
     let fd = open_msr(0);
-
     let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
-
-    println!("MSR RES: {}", result);
+    println!("MSR RES START: {}", result);
 }
 
 pub fn stop_rapl_impl() {
-    unsafe { getpid() };
+    let fd = open_msr(0);
+    let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
+    println!("MSR RES STOP: {}", result);
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
