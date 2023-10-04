@@ -23,7 +23,7 @@ pub fn stop_rapl_impl() {
 // fn detect_cpu() {} // Compile timed currently
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
-fn open_msr(core: i32) -> i32 {
+fn open_msr(core: u32) -> i32 {
     let path = CString::new(format!("/dev/cpu/{}/msr", core)).unwrap();
     let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
 
