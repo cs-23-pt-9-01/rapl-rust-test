@@ -14,10 +14,10 @@ pub fn stop_rapl_impl() {
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
-fn rapl_init() {}
+// fn rapl_init() {} // Use OnceCell for init e.g. with fd
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L64
-fn detect_cpu() {}
+// fn detect_cpu() {} // Compile timed currently
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: i32) -> i32 {
