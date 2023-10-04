@@ -122,6 +122,7 @@ fn get_cpu_type() -> &'static str {
 pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
+        // Check if running as admin due to driver requirement
         if !is_admin() {
             panic!("not running as admin");
         }
