@@ -48,11 +48,11 @@ fn open_msr(core: u32) -> i32 {
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
-fn read_msr(fd: i32, which: i64) -> i64 {
-    let data: i64 = 0;
+fn read_msr(fd: i32, msr_offset: i64) -> u64 {
+    let data: u64 = 0;
     let data_ptr = data as *mut c_void;
 
-    if unsafe { pread(fd, data_ptr, size_of::<i64>(), which) } != size_of::<i64>() as isize {
+    if unsafe { pread(fd, data_ptr, size_of::<u64>(), 0x606) } != size_of::<u64>() as isize {
         let pread_err = CString::new("rdmsr:pread").unwrap();
         unsafe { perror(pread_err.as_ptr()) };
     }
