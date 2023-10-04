@@ -18,22 +18,25 @@ pub fn test_rapl() {
         let errno = unsafe { *libc::__errno_location() };
         if errno == ENXIO {
             println!("rdmsr: No CPU {}", 0);
+            return;
         } else if errno == EIO {
             println!("rdmsr: CPU {} doesn't support MSRs", 0);
+            return;
         } else {
             let pread_err = CString::new("rdmsr:open").unwrap();
             unsafe { perror(pread_err.as_ptr()) };
+            return;
         }
     }
 
-    let data: u64 = 0;
-
-    if unsafe { pread(fd, data as *mut c_void, 8, 0x606) } != 8 {
+    let output_data: u64 = 0;
+    if unsafe { pread(fd, output_data as *mut c_void, 8, 0x606) } != 8 {
         let pread_err = CString::new("rdmsr:pread").unwrap();
         unsafe { perror(pread_err.as_ptr()) };
+        return;
     }
 
-    println!("msr data: {}", data);
+    println!("msr data: {}", output_data);
 }
 
 pub fn start_rapl_impl() {
