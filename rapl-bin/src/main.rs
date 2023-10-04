@@ -2,6 +2,7 @@ use anyhow::Result;
 
 #[cfg(target_os = "linux")]
 mod rapl_impl {
+    pub use rapl_lib::rapl::linux::test_rapl;
     pub use rapl_lib::rapl::linux::{start_rapl_impl, stop_rapl_impl};
 }
 #[cfg(target_os = "windows")]
@@ -22,13 +23,16 @@ fn main() -> Result<()> {
 
     //println!("Bench test: {}", bench_test(1000000000));
 
-    rapl_impl::start_rapl_impl();
+    #[cfg(target_os = "linux")]
+    rapl_impl::test_rapl();
+
+    /*rapl_impl::start_rapl_impl();
 
     for i in 0..10 {
         println!("test {}", i);
     }
 
-    rapl_impl::stop_rapl_impl();
+    rapl_impl::stop_rapl_impl();*/
 
     Ok(())
 }
