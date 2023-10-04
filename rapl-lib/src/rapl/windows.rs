@@ -1,3 +1,6 @@
+#[cfg(amd)]
+use crate::rapl::windows::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
+
 use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
 use std::{
@@ -8,7 +11,6 @@ use std::{
         Once,
     },
 };
-use sysinfo::{CpuExt, System, SystemExt};
 use thiserror::Error;
 use windows::{
     core::PCSTR,
@@ -40,33 +42,37 @@ pub enum RaplError {
 */
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
-// AMD
-const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
-//const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
-const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
+#[cfg(amd)]
+mod amd {
+    pub const AMD_MSR_PWR_UNIT: u32 = 0xC0010299;
+    //const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A;
+    pub const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B;
 
-/*
-const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
-const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
-const AMD_POWER_UNIT_MASK: u64 = 0xF;
-*/
+    /*
+    const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
+    const AMD_ENERGY_UNIT_MASK: u64 = 0x1F00;
+    const AMD_POWER_UNIT_MASK: u64 = 0xF;
+    */
+}
 
-// Intel
-const MSR_RAPL_POWER_UNIT: u32 = 0x606;
-const MSR_RAPL_PKG: u32 = 0x611;
-/*
-const MSR_RAPL_PP0: u32 = 0x639;
-const MSR_RAPL_PP1: u32 = 0x641;
-const MSR_RAPL_DRAM: u32 = 0x619;
+#[cfg(intel)]
+mod intel {
+    const MSR_RAPL_POWER_UNIT: u32 = 0x606;
+    const MSR_RAPL_PKG: u32 = 0x611;
+    /*
+    const MSR_RAPL_PP0: u32 = 0x639;
+    const MSR_RAPL_PP1: u32 = 0x641;
+    const MSR_RAPL_DRAM: u32 = 0x619;
 
-const INTEL_TIME_UNIT_MASK: u64 = 0xF000;
-const INTEL_ENGERY_UNIT_MASK: u64 = 0x1F00;
-const INTEL_POWER_UNIT_MASK: u64 = 0x0F;
+    const INTEL_TIME_UNIT_MASK: u64 = 0xF000;
+    const INTEL_ENGERY_UNIT_MASK: u64 = 0x1F00;
+    const INTEL_POWER_UNIT_MASK: u64 = 0x0F;
 
-const INTEL_TIME_UNIT_OFFSET: u64 = 0x10;
-const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
-const INTEL_POWER_UNIT_OFFSET: u64 = 0;
-*/
+    const INTEL_TIME_UNIT_OFFSET: u64 = 0x10;
+    const INTEL_ENGERY_UNIT_OFFSET: u64 = 0x08;
+    const INTEL_POWER_UNIT_OFFSET: u64 = 0;
+    */
+}
 
 static RAPL_START: AtomicU64 = AtomicU64::new(0);
 //static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
@@ -147,7 +153,7 @@ pub fn stop_rapl_impl() {
     let rapl_start_val = RAPL_START.load(Ordering::Relaxed);
 
     let cpu_type = get_cpu_type();
-    
+
     // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
     let file = OpenOptions::new()
         .append(true)
