@@ -2,6 +2,8 @@ use libc::{c_void, open, perror, pread, EIO, ENXIO, O_RDONLY};
 use once_cell::sync::OnceCell;
 use std::{ffi::CString, mem::size_of};
 
+// Running it for now: sudo ./target/debug/rapl-bin
+
 static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
 
 pub fn start_rapl_impl() {
