@@ -2,7 +2,7 @@
 use crate::rapl::windows::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
 
 #[cfg(intel)]
-use crate::rapl::windows::amd::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
+use crate::rapl::windows::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
 
 use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
