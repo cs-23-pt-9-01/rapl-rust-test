@@ -1,4 +1,13 @@
-# TODO stop servies running on the computer
+append_to_lastest_csv () {
+    #finding latest csv file
+    FILE=$(find . -name "*.csv" | sort -t_ | tail -1)
+    # append string to name
+    mv $FILE "${FILE%.csv}_$1.csv"
+    echo $FILE
+}
+
+# TODO stop services running on the computer
+
 echo "starting"
 
 # -- fib --
@@ -6,11 +15,11 @@ echo "starting"
 echo "starting fib"
 
 node ./benchmarks/FibSequence/bench.js
-mv test.csv fib_node.csv
+append_to_lastest_csv "NodeFib"
 
 #   Pypy
 pypy ./benchmarks/FibSequence/bench.py
-mv test.csv fib_pypy.csv
+append_to_lastest_csv "PypyFib"
 
 #   C#
 # building
@@ -20,6 +29,6 @@ cd ../../..
 
 # running
 ./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib
-mv test.csv fib_csharp.csv
+append_to_lastest_csv "C#Fib"
 
 # TODO start services again
