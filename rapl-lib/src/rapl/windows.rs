@@ -1,6 +1,9 @@
 #[cfg(amd)]
 use crate::rapl::windows::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
 
+#[cfg(intel)]
+use crate::rapl::windows::amd::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
+
 use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
 use std::{
@@ -57,8 +60,8 @@ mod amd {
 
 #[cfg(intel)]
 mod intel {
-    const MSR_RAPL_POWER_UNIT: u32 = 0x606;
-    const MSR_RAPL_PKG: u32 = 0x611;
+    pub const MSR_RAPL_POWER_UNIT: u32 = 0x606;
+    pub const MSR_RAPL_PKG: u32 = 0x611;
     /*
     const MSR_RAPL_PP0: u32 = 0x639;
     const MSR_RAPL_PP1: u32 = 0x641;
