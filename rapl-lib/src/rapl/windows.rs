@@ -52,8 +52,8 @@ mod amd {
     per-package total"
      */
     pub const AMD_MSR_PWR_UNIT: u32 = 0xC0010299; // Similar to Intel MSR_RAPL_POWER_UNIT
-    pub const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A; // Similar to Intel PP0_ENERGY_STATUS
-    pub const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B; // Similar to Intel PKG_ENERGY_STATUS
+    pub const AMD_MSR_CORE_ENERGY: u32 = 0xC001029A; // Similar to Intel PP0_ENERGY_STATUS (PP1 is for the GPU)
+    pub const AMD_MSR_PACKAGE_ENERGY: u32 = 0xC001029B; // Similar to Intel PKG_ENERGY_STATUS (This is for the whole socket)
 
     /*
     const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
