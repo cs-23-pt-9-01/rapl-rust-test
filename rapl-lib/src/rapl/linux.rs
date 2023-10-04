@@ -4,6 +4,7 @@ use std::{ffi::CString, mem::size_of};
 
 // Running it for now: sudo ./target/debug/rapl-bin
 
+const MSR_RAPL_POWER_UNIT: i64 = 0x606;
 static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
 
 pub fn start_rapl_impl() {
@@ -59,8 +60,6 @@ fn read_msr(fd: i32, which: i64) -> i64 {
 
     data
 }
-
-const MSR_RAPL_POWER_UNIT: i64 = 0x606;
 
 #[cfg(test)]
 mod tests {
