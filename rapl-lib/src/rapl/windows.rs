@@ -6,14 +6,7 @@ use crate::rapl::windows::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
 
 use csv::WriterBuilder;
 use once_cell::sync::OnceCell;
-use std::{
-    ffi::CString,
-    fs::OpenOptions,
-    sync::{
-        atomic::{AtomicU64, Ordering},
-        Once,
-    },
-};
+use std::{ffi::CString, fs::OpenOptions, sync::Once};
 use thiserror::Error;
 use windows::{
     core::PCSTR,
@@ -77,7 +70,7 @@ mod intel {
     */
 }
 
-static RAPL_START: AtomicU64 = AtomicU64::new(0);
+static mut RAPL_START: u64 = 0;
 //static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
 
 static RAPL_INIT: Once = Once::new();
@@ -140,7 +133,8 @@ pub fn start_rapl_impl() {
     let rapl_pkg_energy_start_val =
         read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
-    RAPL_START.store(rapl_pkg_energy_start_val, Ordering::Relaxed);
+    // Safety: RAPL_START is only accessed in this function and only from a single thread
+    unsafe { RAPL_START = rapl_pkg_energy_start_val };
 }
 
 // Get all drivers: sc query type=driver
@@ -152,8 +146,9 @@ pub fn stop_rapl_impl() {
     let rapl_pkg_energy_end_val =
         read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
-    // Load in the atomic value
-    let rapl_start_val = RAPL_START.load(Ordering::Relaxed);
+    // Load in the RAPL start value
+    // Safety: RAPL_START is only accessed in this function and only from a single thread
+    let rapl_start_val = unsafe { RAPL_START };
 
     let cpu_type = get_cpu_type();
 
