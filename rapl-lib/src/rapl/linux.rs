@@ -4,16 +4,16 @@ use std::{ffi::CString, mem::size_of};
 // Impl this:
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 
-pub fn start_rapl_impl() -> u64 {
-    unsafe { getpid() };
+pub fn start_rapl_impl() {
+    let fd = open_msr(0);
 
-    123
+    let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
+
+    println!("MSR RES: {}", result);
 }
 
-pub fn stop_rapl_impl() -> u64 {
+pub fn stop_rapl_impl() {
     unsafe { getpid() };
-
-    123
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
