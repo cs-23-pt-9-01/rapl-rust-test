@@ -12,7 +12,6 @@ pub fn test_rapl() {
     let strr = format!("/dev/cpu/{}/msr", 0);
     let path = CString::new(strr).unwrap();
     let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
-
     println!("fd: {}", fd);
 
     if fd < 0 {
