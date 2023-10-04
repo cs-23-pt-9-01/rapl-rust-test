@@ -1,14 +1,17 @@
 use libc::{c_void, open, perror, pread, EIO, ENXIO, O_RDONLY};
+use once_cell::sync::OnceCell;
 use std::{ffi::CString, mem::size_of};
 
+static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
+
 pub fn start_rapl_impl() {
-    let fd = open_msr(0);
+    let fd = *CPU0_MSR_FD.get_or_init(|| open_msr(0));
     let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
     println!("MSR RES START: {}", result);
 }
 
 pub fn stop_rapl_impl() {
-    let fd = open_msr(0);
+    let fd = *CPU0_MSR_FD.get().unwrap();
     let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
     println!("MSR RES STOP: {}", result);
 }
