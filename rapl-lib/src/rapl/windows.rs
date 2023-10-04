@@ -148,7 +148,7 @@ pub fn start_rapl_impl() {
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
-    // Read the RAPL value
+    // Read the RAPL PKG end value
     let rapl_pkg_energy_end_val =
         read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
