@@ -30,6 +30,9 @@ use windows::{
 // Read MSR on Windows: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/cada6b76b009105aadd9bb2821a7c4cae5cca431/WinRing0/OpenLibSys.c#L313
 // Windows RAPL Driver: https://github.com/hubblo-org/windows-rapl-driver/tree/master
 
+// Use File Open on Windows instead
+// https://doc.rust-lang.org/stable/std/os/windows/io/trait.FromRawHandle.html
+
 #[derive(Error, Debug)]
 pub enum RaplError {
     #[error("windows error")]
