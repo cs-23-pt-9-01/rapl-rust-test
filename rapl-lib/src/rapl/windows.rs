@@ -4,6 +4,7 @@ use crate::rapl::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
 #[cfg(intel)]
 use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
 
+use super::get_cpu_type;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
 use std::{
@@ -75,18 +76,6 @@ fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
     #[cfg(amd)]
     {
         read_msr(AMD_MSR_PACKAGE_ENERGY)
-    }
-}
-
-fn get_cpu_type() -> &'static str {
-    #[cfg(intel)]
-    {
-        "Intel"
-    }
-
-    #[cfg(amd)]
-    {
-        "AMD"
     }
 }
 

@@ -1,3 +1,4 @@
+use super::get_cpu_type;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
 use std::{
@@ -74,19 +75,6 @@ fn read_rapl_power_unit() -> u64 {
     #[cfg(amd)]
     {
         read_msr(AMD_MSR_PWR_UNIT)
-    }
-}
-
-// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L64
-fn get_cpu_type() -> &'static str {
-    #[cfg(intel)]
-    {
-        "Intel"
-    }
-
-    #[cfg(amd)]
-    {
-        "AMD"
     }
 }
 

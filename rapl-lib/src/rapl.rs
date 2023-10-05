@@ -4,6 +4,19 @@ pub mod linux;
 #[cfg(target_os = "windows")]
 pub mod windows;
 
+// Get the CPU type based on the compile time configuration
+pub fn get_cpu_type() -> &'static str {
+    #[cfg(intel)]
+    {
+        "Intel"
+    }
+
+    #[cfg(amd)]
+    {
+        "AMD"
+    }
+}
+
 #[cfg(amd)]
 pub mod amd {
     /*
