@@ -11,24 +11,28 @@ append_to_lastest_csv () {
 echo "starting"
 
 # -- fib --
+
+fibInput=100
+count=100
+
 #   Node
 echo "starting fib"
 
-node ./benchmarks/FibSequence/bench.js
+node ./benchmarks/FibSequence/bench.js $(fibInput) $(count)
 append_to_lastest_csv "NodeFib"
 
 #   Pypy
-pypy ./benchmarks/FibSequence/bench.py
+pypy ./benchmarks/FibSequence/bench.py $(fibInput) $(count)
 append_to_lastest_csv "PypyFib"
 
 #   C#
 # building
-cd benchmarks/FibSequence/benchC#
+cd benchmarks/FibSequence/benchC# 
 dotnet build # todo --release
 cd ../../..
 
 # running
-./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib
-append_to_lastest_csv "CsharpFib"
+./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib $(fibInput) $(count)
+append_to_lastest_csv "CsharpFib" 
 
 # TODO start services again
