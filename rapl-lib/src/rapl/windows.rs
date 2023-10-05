@@ -134,7 +134,7 @@ pub fn start_rapl_impl() {
     RAPL_INIT.call_once(|| {
         // Check if running as admin due to driver requirement
         if !is_admin() {
-            panic!("not running as admin");
+            panic!("not running as admin, this is required for the RAPL driver to work");
         }
 
         let h_device = open_driver()
