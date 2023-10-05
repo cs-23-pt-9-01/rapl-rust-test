@@ -66,6 +66,7 @@ pub fn stop_rapl_impl() {
     wtr.flush().unwrap();
 }
 
+// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
 fn read_rapl_power_unit() -> u64 {
     #[cfg(intel)]
     {
@@ -78,6 +79,7 @@ fn read_rapl_power_unit() -> u64 {
     }
 }
 
+// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L64
 fn get_cpu_type() -> &'static str {
     #[cfg(intel)]
     {
@@ -89,12 +91,6 @@ fn get_cpu_type() -> &'static str {
         "AMD"
     }
 }
-
-// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
-// fn rapl_init() {} // Use OnceCell for init e.g. with fd
-
-// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L64
-// fn detect_cpu() {} // Compile timed currently
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: u32) -> File {
@@ -109,8 +105,6 @@ fn read_msr(msr_offset: i64) -> u64 {
 
     // TODO: Consider just seek here instead, same impl for Windows then
     f.read_at(&mut output_data, msr_offset as u64).unwrap();
-    //let num_bytes_read = fd.read_at(&mut output_data, msr_offset as u64).unwrap();
-    //println!("number of bytes read: {}", num_bytes_read);
 
     u64::from_le_bytes(output_data)
 }
