@@ -1,11 +1,10 @@
-const process = require('node:process');
 const os = require("os");
 
 const fibParam = process.argv[2];
 const runCount = process.argv[3];
 const libPath = os.platform() == "win32"?
   "target\\debug\\rapl_lib.dll":
-  "target\\debug\\librapl_lib.so"
+  "target/debug/librapl_lib.so"
 
 function fib(n) {
     var a = 0, b = 1, t;
