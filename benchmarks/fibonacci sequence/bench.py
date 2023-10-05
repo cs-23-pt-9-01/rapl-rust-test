@@ -16,7 +16,7 @@ def fibIter(n):
     return fib
 
 # start lib
-dll = cdll.LoadLibrary("target/debug/rapl_lib.so")
+dll = cdll.LoadLibrary("target/debug/librapl_lib.so")
 
 for i in range(test_count):
     # start recording
