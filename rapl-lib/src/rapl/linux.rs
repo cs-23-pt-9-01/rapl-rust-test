@@ -91,13 +91,9 @@ fn read_msr(fd: &File, msr_offset: i64) -> u64 {
     let mut output_data: [u8; 8] = [0; 8];
 
     // TODO: Consider just seek here instead, same impl for Windows then
-    let result = fd.read_at(&mut output_data, 0x606).unwrap();
-
-    println!("result: {}", result);
-
-    println!("ayy: {}", u64::from_le_bytes(output_data));
-
-    //println!("val: {}", val);
+    fd.read_at(&mut output_data, msr_offset as u64).unwrap();
+    //let num_bytes_read = fd.read_at(&mut output_data, msr_offset as u64).unwrap();
+    //println!("number of bytes read: {}", num_bytes_read);
 
     u64::from_le_bytes(output_data)
 }
