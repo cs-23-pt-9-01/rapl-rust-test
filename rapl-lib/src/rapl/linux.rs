@@ -8,9 +8,8 @@ use std::{
 
 // Running it for now: sudo ./target/debug/rapl-bin
 
-const MSR_RAPL_POWER_UNIT: i64 = 0x606;
-
 const AMD_MSR_PWR_UNIT: i64 = 0xC0010299;
+const MSR_RAPL_POWER_UNIT: i64 = 0x606;
 const MSR_RAPL_PKG: i64 = 0x611;
 static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 static mut RAPL_START: u64 = 0;
