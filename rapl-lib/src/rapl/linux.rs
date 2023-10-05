@@ -12,6 +12,7 @@ use std::{
 // Running it for now: sudo ./target/debug/rapl-bin
 
 const MSR_RAPL_POWER_UNIT: i64 = 0x606;
+pub const MSR_RAPL_PKG: i64 = 0x611;
 static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 
 pub fn test_rapl_old() {
@@ -47,13 +48,13 @@ pub fn test_rapl_old() {
 
 pub fn start_rapl_impl() {
     let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
-    let result = read_msr(f, MSR_RAPL_POWER_UNIT);
+    let result = read_msr(f, MSR_RAPL_PKG);
     println!("MSR RES START: {}", result);
 }
 
 pub fn stop_rapl_impl() {
     let f = CPU0_MSR_FD.get().unwrap();
-    let result = read_msr(f, MSR_RAPL_POWER_UNIT);
+    let result = read_msr(f, MSR_RAPL_PKG);
     println!("MSR RES STOP: {}", result);
 }
 
