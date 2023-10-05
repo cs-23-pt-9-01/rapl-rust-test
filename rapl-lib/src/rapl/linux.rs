@@ -19,10 +19,14 @@ pub fn test_rapl() {
     let fd = File::open("/dev/cpu/0/msr").unwrap();
     println!("fd: {:?}", fd);
 
-    let mut ayy = [0, 0, 0, 0, 0, 0, 0, 0];
+    let mut ayy: [u8; 8] = [0; 8];
 
     // TODO: Consider just seek here instead, same impl for Windows then
     let result = fd.read_at(&mut ayy, 0x606).unwrap();
+
+    println!("result: {}", result);
+
+    println!("ayy: {}", u64::from_le_bytes(ayy))
 }
 
 pub fn test_rapl_nix() {
