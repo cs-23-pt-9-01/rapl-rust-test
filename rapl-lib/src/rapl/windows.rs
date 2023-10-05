@@ -167,8 +167,6 @@ pub fn stop_rapl_impl() {
     // Safety: RAPL_START is only accessed in this function and only from a single thread
     let rapl_start_val = unsafe { RAPL_START };
 
-    let cpu_type = get_cpu_type();
-
     // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
 
     /*
@@ -190,7 +188,7 @@ pub fn stop_rapl_impl() {
                 .create(true)
                 .open(format!(
                     "{}_{}.csv",
-                    cpu_type,
+                    get_cpu_type(),
                     RAPL_POWER_UNITS.get().unwrap()
                 ))
                 .unwrap();

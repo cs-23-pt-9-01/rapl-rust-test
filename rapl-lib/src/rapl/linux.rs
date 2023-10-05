@@ -34,8 +34,6 @@ pub fn stop_rapl_impl() {
 
     let rapl_start_val = unsafe { RAPL_START };
 
-    let cpu_type = get_cpu_type();
-
     let wtr = match unsafe { CSV_WRITER.as_mut() } {
         Some(wtr) => wtr,
         None => {
@@ -45,7 +43,7 @@ pub fn stop_rapl_impl() {
                 .create(true)
                 .open(format!(
                     "{}_{}.csv",
-                    cpu_type,
+                    get_cpu_type(),
                     RAPL_POWER_UNITS.get().unwrap()
                 ))
                 .unwrap();
