@@ -2,7 +2,6 @@ use anyhow::Result;
 
 #[cfg(target_os = "linux")]
 mod rapl_impl {
-    pub use rapl_lib::rapl::linux::test_rapl;
     pub use rapl_lib::rapl::linux::{start_rapl_impl, stop_rapl_impl};
 }
 #[cfg(target_os = "windows")]

@@ -15,23 +15,6 @@ const MSR_RAPL_POWER_UNIT: i64 = 100;
 //const MSR_RAPL_POWER_UNIT: i64 = 0x606;
 static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 
-pub fn test_rapl() {}
-
-pub fn test_rapl_nix() {
-    let fd = nix::fcntl::open(
-        "/dev/cpu/0/msr",
-        fcntl::OFlag::O_RDONLY,
-        nix::sys::stat::Mode::empty(),
-    )
-    .unwrap();
-
-    println!("fd: {}", fd);
-
-    let mut ayy = [0, 0, 0, 0];
-
-    //nix::sys::uio::pread(fd.as_raw_fd(), &mut ayy, 0x606).unwrap();
-}
-
 pub fn test_rapl_old() {
     let strr = format!("/dev/cpu/{}/msr", 0);
     let path = CString::new(strr).unwrap();
