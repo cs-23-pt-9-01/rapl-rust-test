@@ -23,16 +23,13 @@ fn main() -> Result<()> {
 
     //println!("Bench test: {}", bench_test(1000000000));
 
-    #[cfg(target_os = "linux")]
-    rapl_impl::test_rapl();
-
-    /*rapl_impl::start_rapl_impl();
+    rapl_impl::start_rapl_impl();
 
     for i in 0..10 {
         println!("test {}", i);
     }
 
-    rapl_impl::stop_rapl_impl();*/
+    rapl_impl::stop_rapl_impl();
 
     Ok(())
 }

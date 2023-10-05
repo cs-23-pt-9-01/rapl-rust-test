@@ -13,21 +13,9 @@ use std::{
 
 const MSR_RAPL_POWER_UNIT: i64 = 100;
 //const MSR_RAPL_POWER_UNIT: i64 = 0x606;
-static CPU0_MSR_FD: OnceCell<i32> = OnceCell::new();
+static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 
-pub fn test_rapl() {
-    let fd = File::open("/dev/cpu/0/msr").unwrap();
-    println!("fd: {:?}", fd);
-
-    let mut ayy: [u8; 8] = [0; 8];
-
-    // TODO: Consider just seek here instead, same impl for Windows then
-    let result = fd.read_at(&mut ayy, 0x606).unwrap();
-
-    println!("result: {}", result);
-
-    println!("ayy: {}", u64::from_le_bytes(ayy))
-}
+pub fn test_rapl() {}
 
 pub fn test_rapl_nix() {
     let fd = nix::fcntl::open(
@@ -76,14 +64,14 @@ pub fn test_rapl_old() {
 }
 
 pub fn start_rapl_impl() {
-    let fd = *CPU0_MSR_FD.get_or_init(|| open_msr(0));
-    let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
+    let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
+    let result = read_msr(f, MSR_RAPL_POWER_UNIT);
     println!("MSR RES START: {}", result);
 }
 
 pub fn stop_rapl_impl() {
-    let fd = *CPU0_MSR_FD.get().unwrap();
-    let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
+    let f = CPU0_MSR_FD.get().unwrap();
+    let result = read_msr(f, MSR_RAPL_POWER_UNIT);
     println!("MSR RES STOP: {}", result);
 }
 
@@ -94,39 +82,24 @@ pub fn stop_rapl_impl() {
 // fn detect_cpu() {} // Compile timed currently
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
-fn open_msr(core: u32) -> i32 {
-    let path = CString::new(format!("/dev/cpu/{}/msr", core)).unwrap();
-    let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
-
-    println!("fd: {}", fd);
-
-    if fd < 0 {
-        let errno = unsafe { *libc::__errno_location() };
-        if errno == ENXIO {
-            println!("rdmsr: No CPU {}", core);
-        } else if errno == EIO {
-            println!("rdmsr: CPU {} doesn't support MSRs", core);
-        } else {
-            let pread_err = CString::new("rdmsr:open").unwrap();
-            unsafe { perror(pread_err.as_ptr()) };
-        }
-    }
-    fd
+fn open_msr(core: u32) -> File {
+    File::open(format!("/dev/cpu/{}/msr", core)).unwrap()
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
-fn read_msr(fd: i32, msr_offset: i64) -> u64 {
-    let data: u64 = 0;
-    let data_ptr = data as *mut c_void;
+fn read_msr(fd: &File, msr_offset: i64) -> u64 {
+    let mut output_data: [u8; 8] = [0; 8];
 
-    if unsafe { pread(fd, data_ptr, size_of::<u64>(), 0x606) } != size_of::<u64>() as isize {
-        let pread_err = CString::new("rdmsr:pread").unwrap();
-        unsafe { perror(pread_err.as_ptr()) };
-    }
+    // TODO: Consider just seek here instead, same impl for Windows then
+    let result = fd.read_at(&mut output_data, 0x606).unwrap();
+
+    println!("result: {}", result);
+
+    println!("ayy: {}", u64::from_le_bytes(output_data));
 
     //println!("val: {}", val);
 
-    data
+    u64::from_le_bytes(output_data)
 }
 
 #[cfg(test)]
@@ -136,7 +109,7 @@ mod tests {
     #[test]
     fn test_read_msr() {
         let fd = open_msr(0);
-        let result = read_msr(fd, MSR_RAPL_POWER_UNIT);
+        let result = read_msr(&fd, MSR_RAPL_POWER_UNIT);
         assert_eq!(result, 1234);
     }
 }
