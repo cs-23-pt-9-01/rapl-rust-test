@@ -1,50 +1,11 @@
-use libc::{c_void, open, perror, pread, EIO, ENXIO, O_RDONLY};
-use nix::fcntl;
 use once_cell::sync::OnceCell;
-use std::{
-    ffi::CString,
-    fs::File,
-    io::Read,
-    mem::size_of,
-    os::{fd::AsRawFd, unix::prelude::FileExt},
-};
+use std::{fs::File, os::unix::prelude::FileExt};
 
 // Running it for now: sudo ./target/debug/rapl-bin
 
-const MSR_RAPL_POWER_UNIT: i64 = 0x606;
-pub const MSR_RAPL_PKG: i64 = 0x611;
+//const MSR_RAPL_POWER_UNIT: i64 = 0x606;
+const MSR_RAPL_PKG: i64 = 0x611;
 static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
-
-pub fn test_rapl_old() {
-    let strr = format!("/dev/cpu/{}/msr", 0);
-    let path = CString::new(strr).unwrap();
-    let fd = unsafe { open(path.as_ptr(), O_RDONLY) };
-    println!("fd: {}", fd);
-
-    if fd < 0 {
-        let errno = unsafe { *libc::__errno_location() };
-        if errno == ENXIO {
-            println!("rdmsr: No CPU {}", 0);
-            return;
-        } else if errno == EIO {
-            println!("rdmsr: CPU {} doesn't support MSRs", 0);
-            return;
-        } else {
-            let pread_err = CString::new("rdmsr:open").unwrap();
-            unsafe { perror(pread_err.as_ptr()) };
-            return;
-        }
-    }
-
-    let output_data: u64 = 0;
-    if unsafe { pread(fd, output_data as *mut c_void, 8, 0x606) } != 8 {
-        let pread_err = CString::new("rdmsr:pread").unwrap();
-        unsafe { perror(pread_err.as_ptr()) };
-        return;
-    }
-
-    println!("msr data: {}", output_data);
-}
 
 pub fn start_rapl_impl() {
     let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
@@ -88,7 +49,7 @@ mod tests {
     #[test]
     fn test_read_msr() {
         let fd = open_msr(0);
-        let result = read_msr(&fd, MSR_RAPL_POWER_UNIT);
+        let result = read_msr(&fd, MSR_RAPL_PKG);
         assert_eq!(result, 1234);
     }
 }
