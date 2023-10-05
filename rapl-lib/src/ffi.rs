@@ -5,7 +5,7 @@ mod rapl_impl {
 
 #[cfg(target_os = "windows")]
 mod rapl_impl {
-    pub use crate::rapl::windows::{start_rapl_impl, stop_rapl_impl};
+    pub use crate::rapl::windowss::{start_rapl_impl, stop_rapl_impl};
 }
 
 #[no_mangle]

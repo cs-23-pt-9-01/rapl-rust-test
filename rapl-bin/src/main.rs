@@ -6,7 +6,7 @@ mod rapl_impl {
 }
 #[cfg(target_os = "windows")]
 mod rapl_impl {
-    pub use rapl_lib::rapl::windows::{start_rapl_impl, stop_rapl_impl};
+    pub use rapl_lib::rapl::windowss::{start_rapl_impl, stop_rapl_impl};
 }
 
 pub fn bench_test(n: i32) -> i32 {

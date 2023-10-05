@@ -5,6 +5,7 @@ use crate::rapl::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
 use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
 
 use super::get_cpu_type;
+use crate::rapl::RaplError;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
 use std::{
@@ -12,7 +13,6 @@ use std::{
     fs::{File, OpenOptions},
     sync::Once,
 };
-use thiserror::Error;
 use windows::{
     core::PCSTR,
     Win32::{
@@ -33,12 +33,6 @@ use windows::{
 
 // Use File Open on Windows instead
 // https://doc.rust-lang.org/stable/std/os/windows/io/trait.FromRawHandle.html
-
-#[derive(Error, Debug)]
-pub enum RaplError {
-    #[error("windows error")]
-    Windows(#[from] windows::core::Error),
-}
 
 /*
 #define IOCTL_OLS_READ_MSR \
