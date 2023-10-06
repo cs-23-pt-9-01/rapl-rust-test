@@ -2,7 +2,8 @@ append_to_lastest_csv () {
     #finding latest csv file
     FILE=$(find . -name "*.csv" | sort -r -t_ | tail -1)
     # append string to name
-    mv $FILE "${FILE%.csv}_$1.csv"
+    timestamp=$(date +%s)
+    mv $FILE "${FILE%.csv}_$1_$timestamp.csv"
     echo $FILE
 }
 
