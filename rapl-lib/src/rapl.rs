@@ -20,6 +20,9 @@ use self::windowss::read_msr;
 
 #[derive(Error, Debug)]
 pub enum RaplError {
+    #[error("unknown RAPL error")]
+    Unknown,
+    #[cfg(target_os = "windows")]
     #[error("windows error")]
     Windows(#[from] windows::core::Error),
 }
