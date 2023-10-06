@@ -1,4 +1,4 @@
-use super::get_cpu_type;
+use super::{get_cpu_type, read_rapl_pkg_energy_stat, read_rapl_power_unit, RaplError};
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
 use std::{
@@ -9,9 +9,6 @@ use std::{
 
 // Running it for now: sudo ./target/debug/rapl-bin
 
-const AMD_MSR_PWR_UNIT: i64 = 0xC0010299;
-const MSR_RAPL_POWER_UNIT: i64 = 0x606;
-const MSR_RAPL_PKG: i64 = 0x611;
 static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 static mut RAPL_START: u64 = 0;
 static mut CSV_WRITER: Option<Writer<File>> = None;
@@ -22,16 +19,16 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 pub fn start_rapl_impl() {
     RAPL_INIT.call_once(|| {
         // Read power unit and store it the power units variable
-        let pwr_unit = read_rapl_power_unit();
+        let pwr_unit = read_rapl_power_unit().unwrap();
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
 
-    let result = read_msr(MSR_RAPL_PKG);
+    let result = read_rapl_pkg_energy_stat().unwrap();
     unsafe { RAPL_START = result };
 }
 
 pub fn stop_rapl_impl() {
-    let rapl_end_val = read_msr(MSR_RAPL_PKG);
+    let rapl_end_val = read_rapl_pkg_energy_stat().unwrap();
 
     let rapl_start_val = unsafe { RAPL_START };
 
@@ -65,34 +62,21 @@ pub fn stop_rapl_impl() {
     wtr.flush().unwrap();
 }
 
-// https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L157
-fn read_rapl_power_unit() -> u64 {
-    #[cfg(intel)]
-    {
-        read_msr(MSR_RAPL_POWER_UNIT)
-    }
-
-    #[cfg(amd)]
-    {
-        read_msr(AMD_MSR_PWR_UNIT)
-    }
-}
-
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: u32) -> File {
     File::open(format!("/dev/cpu/{}/msr", core)).unwrap()
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
-pub fn read_msr(msr_offset: i64) -> u64 {
+pub fn read_msr(msr_offset: u64) -> Result<u64, RaplError> {
     let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
 
     let mut output_data: [u8; 8] = [0; 8];
 
     // TODO: Consider just seek here instead, same impl for Windows then
-    f.read_at(&mut output_data, msr_offset as u64).unwrap();
+    f.read_at(&mut output_data, msr_offset).unwrap();
 
-    u64::from_le_bytes(output_data)
+    Ok(u64::from_le_bytes(output_data))
 }
 
 #[cfg(test)]
@@ -101,7 +85,7 @@ mod tests {
 
     #[test]
     fn test_read_msr() {
-        let result = read_msr(MSR_RAPL_PKG);
+        let result = read_rapl_pkg_energy_stat().unwrap();
         assert_eq!(result, 1234);
     }
 }
