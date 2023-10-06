@@ -34,7 +34,7 @@ use windows::{
 */
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
-static mut RAPL_START: u64 = 0;
+static mut RAPL_START: (u64, u64) = (0, 0);
 //static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
 
 static RAPL_INIT: Once = Once::new();
@@ -60,12 +60,18 @@ pub fn start_rapl_impl() {
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
 
-    // Read MSR based on the processor type
-    let rapl_pkg_energy_start_val =
-        read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
-
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    unsafe { RAPL_START = rapl_pkg_energy_start_val };
+    unsafe { RAPL_START = read_rapl_amd_lol() };
+}
+
+#[cfg(amd)]
+fn read_rapl_amd_lol() -> (u64, u64) {
+    use super::amd::AMD_MSR_CORE_ENERGY;
+
+    let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
+    let core = read_msr(AMD_MSR_CORE_ENERGY).unwrap();
+
+    (pkg, core)
 }
 
 // Get all drivers: sc query type=driver
@@ -73,15 +79,12 @@ pub fn start_rapl_impl() {
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
-    // Read the RAPL PKG end value
-    let rapl_pkg_energy_end_val =
-        read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
+    // Read the RAPL end values
+    let (pkg_end, core_end) = read_rapl_amd_lol();
 
     // Load in the RAPL start value
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    let rapl_start_val = unsafe { RAPL_START };
-
-    // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
+    let (pkg_start, core_start) = unsafe { RAPL_START };
 
     /*
     // TODO: Revise if we can even use timestamps
@@ -109,6 +112,7 @@ pub fn stop_rapl_impl() {
 
             // Create the CSV writer
             let mut wtr = WriterBuilder::new().from_writer(file);
+            /*
             wtr.write_record([
                 "PP0Start",
                 "PP0End",
@@ -120,6 +124,9 @@ pub fn stop_rapl_impl() {
                 "DramEnd",
             ])
             .unwrap();
+            */
+            wtr.write_record(["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"])
+                .unwrap();
 
             // Store the CSV writer in a static variable
             unsafe { CSV_WRITER = Some(wtr) };
@@ -129,7 +136,7 @@ pub fn stop_rapl_impl() {
         }
     };
 
-    wtr.serialize((rapl_start_val, rapl_pkg_energy_end_val))
+    wtr.serialize((pkg_start, pkg_end, core_start, core_end))
         .unwrap();
     wtr.flush().unwrap();
 }
