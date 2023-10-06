@@ -7,7 +7,7 @@ append_to_lastest_csv () {
 }
 
 # stopping services
-sh kill_and_burn.sh 0
+bash kill_and_burn.sh 0
 
 echo "starting"
 
@@ -39,4 +39,4 @@ sleep 5s
 append_to_lastest_csv "CsharpFib" 
 
 # starting services
-sh kill_and_burn.sh 1
+bash kill_and_burn.sh 1
