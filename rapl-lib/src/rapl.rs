@@ -1,22 +1,22 @@
 use thiserror::Error;
 
+// Use the OS specific implementation
 #[cfg(target_os = "linux")]
 pub mod linux;
-
 #[cfg(target_os = "windows")]
 pub mod windowss;
 
+// Import the MSR constants per CPU type
 #[cfg(amd)]
 use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
-
 #[cfg(intel)]
 use crate::rapl::intel::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
-#[cfg(target_os = "windows")]
-use self::windowss::read_msr;
-
+// Import the OS specific MSR read function
 #[cfg(target_os = "linux")]
 use self::linux::read_msr;
+#[cfg(target_os = "windows")]
+use self::windowss::read_msr;
 
 #[derive(Error, Debug)]
 pub enum RaplError {
