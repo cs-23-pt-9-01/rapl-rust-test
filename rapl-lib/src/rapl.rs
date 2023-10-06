@@ -48,87 +48,85 @@ pub fn start_rapl() {
     start_rapl_impl();
 
     RAPL_INIT.call_once(|| {
-        // Read power unit and store in the power units variable
+        // Read power unit and store it in the power units global variable
         let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
 
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    #[cfg(amd)]
-    unsafe {
-        RAPL_START = read_rapl_values_amd()
-    };
-
-    #[cfg(intel)]
-    unsafe {
-        RAPL_START = read_rapl_values_intel()
-    };
+    unsafe { RAPL_START = read_rapl_registers() };
 }
 
-pub fn stop_rapl() {
-    #[cfg(amd)]
-    {
-        // Read the RAPL end values
-        let (pkg_end, core_end) = read_rapl_values_amd();
-
-        // Load in the RAPL start value
-        // Safety: RAPL_START is only accessed in this function and only from a single thread
-        let (pkg_start, core_start) = unsafe { RAPL_START };
-
-        /*
-        // TODO: Revise if we can even use timestamps
-
-        let current_time = SystemTime::now();
-        let duration_since_epoch = current_time
-            .duration_since(UNIX_EPOCH)
-            .expect("Time went backwards");
-        let timestamp = duration_since_epoch.as_millis();
-        */
-
-        let wtr = match unsafe { CSV_WRITER.as_mut() } {
-            Some(wtr) => wtr,
-            None => {
-                // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
-                let file = OpenOptions::new()
-                    .append(true)
-                    .create(true)
-                    .open(format!(
-                        "{}_{}.csv",
-                        get_cpu_type(),
-                        RAPL_POWER_UNITS.get().unwrap()
-                    ))
-                    .unwrap();
-
-                // Create the CSV writer
-                let mut wtr = WriterBuilder::new().from_writer(file);
-                /*
-                wtr.write_record([
-                    "PP0Start",
-                    "PP0End",
-                    "PP1Start",
-                    "PP1End",
-                    "PkgStart",
-                    "PkgEnd",
-                    "DramStart",
-                    "DramEnd",
-                ])
+fn write_to_csv(data: (u64, u64, u64, u64), columns: [&str; 4]) {
+    let wtr = match unsafe { CSV_WRITER.as_mut() } {
+        Some(wtr) => wtr,
+        None => {
+            // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
+            let file = OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(format!(
+                    "{}_{}.csv",
+                    get_cpu_type(),
+                    RAPL_POWER_UNITS.get().unwrap()
+                ))
                 .unwrap();
-                */
-                wtr.write_record(["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"])
-                    .unwrap();
 
-                // Store the CSV writer in a static variable
-                unsafe { CSV_WRITER = Some(wtr) };
-
-                // Return a mutable reference to the CSV writer
-                unsafe { CSV_WRITER.as_mut().unwrap() }
-            }
-        };
-
-        wtr.serialize((pkg_start, pkg_end, core_start, core_end))
+            // Create the CSV writer
+            let mut wtr = WriterBuilder::new().from_writer(file);
+            /*
+            wtr.write_record([
+                "PP0Start",
+                "PP0End",
+                "PP1Start",
+                "PP1End",
+                "PkgStart",
+                "PkgEnd",
+                "DramStart",
+                "DramEnd",
+            ])
             .unwrap();
-        wtr.flush().unwrap();
-    }
+            */
+            wtr.write_record(columns).unwrap();
+
+            // Store the CSV writer in a static variable
+            unsafe { CSV_WRITER = Some(wtr) };
+
+            // Return a mutable reference to the CSV writer
+            unsafe { CSV_WRITER.as_mut().unwrap() }
+        }
+    };
+
+    wtr.serialize((data.0, data.1, data.2, data.3)).unwrap();
+    wtr.flush().unwrap();
+}
+
+#[cfg(intel)]
+pub fn stop_rapl() {}
+
+#[cfg(amd)]
+pub fn stop_rapl() {
+    // Read the RAPL end values
+    let (pkg_end, core_end) = read_rapl_registers();
+
+    // Load in the RAPL start value
+    // Safety: RAPL_START is only accessed in this function and only from a single thread
+    let (pkg_start, core_start) = unsafe { RAPL_START };
+
+    write_to_csv(
+        (pkg_start, pkg_end, core_start, core_end),
+        ["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"],
+    );
+
+    /*
+    // TODO: Revise if we can use timestamps
+
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp = duration_since_epoch.as_millis();
+    */
 }
 
 // Get the CPU type based on the compile time configuration
@@ -153,7 +151,7 @@ pub fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
 }
 
 #[cfg(amd)]
-fn read_rapl_values_amd() -> (u64, u64) {
+fn read_rapl_registers() -> (u64, u64) {
     use self::amd::AMD_MSR_CORE_ENERGY;
 
     let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
@@ -163,7 +161,7 @@ fn read_rapl_values_amd() -> (u64, u64) {
 }
 
 #[cfg(intel)]
-fn read_rapl_values_intel() -> (u64, u64, u64, u64) {
+fn read_rapl_registers() -> (u64, u64, u64, u64) {
     use self::intel::{INTEL_MSR_RAPL_DRAM, INTEL_MSR_RAPL_PP0, INTEL_MSR_RAPL_PP1};
 
     let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read PP0");
@@ -183,6 +181,7 @@ pub mod amd {
     the "Cores" energy usage separately for each core, rather than a
     per-package total"
      */
+
     pub const MSR_RAPL_POWER_UNIT: u64 = 0xC0010299; // Similar to Intel MSR_RAPL_POWER_UNIT
     pub const MSR_RAPL_PKG_ENERGY_STAT: u64 = 0xC001029B; // Similar to Intel PKG_ENERGY_STATUS (This is for the whole socket)
 
