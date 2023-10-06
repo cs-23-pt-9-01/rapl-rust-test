@@ -15,11 +15,11 @@ use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 #[cfg(intel)]
 use crate::rapl::intel::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
-// Import the OS specific MSR read function
+// Import the OS specific functions
 #[cfg(target_os = "linux")]
-use self::linux::read_msr;
+use self::linux::{read_msr, start_rapl_impl, stop_rapl_impl};
 #[cfg(target_os = "windows")]
-use self::windowss::read_msr;
+use self::windowss::{read_msr, start_rapl_impl, stop_rapl_impl};
 
 #[derive(Error, Debug)]
 pub enum RaplError {
@@ -41,6 +41,8 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
 pub fn start_rapl() {
+    start_rapl_impl();
+
     RAPL_INIT.call_once(|| {
         // Read power unit and store in the power units variable
         let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
@@ -57,6 +59,10 @@ pub fn start_rapl() {
     unsafe {
         RAPL_START = read_rapl_values_intel()
     };
+}
+
+pub fn stop_rapl() {
+    stop_rapl_impl();
 }
 
 // Get the CPU type based on the compile time configuration

@@ -1,5 +1,5 @@
 use super::{get_cpu_type, read_rapl_power_unit};
-use crate::rapl::{read_rapl_values_amd, RaplError};
+use crate::rapl::RaplError;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
 use std::{
@@ -48,7 +48,7 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
-pub fn start_rapl_impll() {
+pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
         // Check if running as admin due to the driver requirement

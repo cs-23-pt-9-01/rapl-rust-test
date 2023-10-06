@@ -29,7 +29,7 @@ fn main() -> Result<()> {
         println!("test {}", i);
     }
 
-    rapl_impl::stop_rapl_impl();
+    rapl::stop_rapl();
 
     Ok(())
 }
