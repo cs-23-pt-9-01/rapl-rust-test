@@ -9,7 +9,7 @@ use thiserror::Error;
 
 // Use the OS specific implementation
 #[cfg(target_os = "linux")]
-pub mod linux;
+pub mod os_linux;
 #[cfg(target_os = "windows")]
 pub mod os_windows;
 
@@ -21,7 +21,7 @@ use crate::rapl::intel::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
 // Import the OS specific functions
 #[cfg(target_os = "linux")]
-use self::linux::{read_msr, start_rapl_impl};
+use self::os_linux::{read_msr, start_rapl_impl};
 #[cfg(target_os = "windows")]
 use self::os_windows::{read_msr, start_rapl_impl};
 
