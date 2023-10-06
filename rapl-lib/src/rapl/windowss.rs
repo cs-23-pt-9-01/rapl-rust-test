@@ -57,8 +57,6 @@ pub fn start_rapl_impl() {
     });
 }
 
-pub fn stop_rapl_impl() {}
-
 // check if running as admin using the windows crate
 fn is_admin() -> bool {
     let mut h_token = HANDLE::default();

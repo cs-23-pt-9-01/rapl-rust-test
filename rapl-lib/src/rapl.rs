@@ -20,9 +20,9 @@ use crate::rapl::intel::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
 // Import the OS specific functions
 #[cfg(target_os = "linux")]
-use self::linux::{read_msr, start_rapl_impl, stop_rapl_impl};
+use self::linux::{read_msr, start_rapl_impl};
 #[cfg(target_os = "windows")]
-use self::windowss::{read_msr, start_rapl_impl, stop_rapl_impl};
+use self::windowss::{read_msr, start_rapl_impl};
 
 #[derive(Error, Debug)]
 pub enum RaplError {
@@ -66,9 +66,6 @@ pub fn start_rapl() {
 }
 
 pub fn stop_rapl() {
-    // Run the OS specific stop_rapl_impl function
-    stop_rapl_impl();
-
     #[cfg(amd)]
     {
         // Read the RAPL end values
