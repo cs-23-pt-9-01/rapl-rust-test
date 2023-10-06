@@ -57,7 +57,10 @@ pub fn start_rapl() {
     unsafe { RAPL_START = read_rapl_registers() };
 }
 
-fn write_to_csv(data: (u64, u64, u64, u64), columns: [&str; 4]) {
+fn write_to_csv<T>(data: (u64, u64, u64, u64), columns: T)
+where
+    T: IntoIterator<Item = &'static str>,
+{
     let wtr = match unsafe { CSV_WRITER.as_mut() } {
         Some(wtr) => wtr,
         None => {
