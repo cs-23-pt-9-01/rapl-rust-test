@@ -1,4 +1,4 @@
-use super::{get_cpu_type, read_rapl_power_unit};
+use super::get_cpu_type;
 use crate::rapl::RaplError;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;

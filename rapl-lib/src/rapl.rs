@@ -41,6 +41,7 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
 pub fn start_rapl() {
+    // Run the OS specific start_rapl_impl function
     start_rapl_impl();
 
     RAPL_INIT.call_once(|| {
@@ -62,6 +63,7 @@ pub fn start_rapl() {
 }
 
 pub fn stop_rapl() {
+    // Run the OS specific stop_rapl_impl function
     stop_rapl_impl();
 }
 

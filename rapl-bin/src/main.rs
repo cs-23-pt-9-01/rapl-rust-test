@@ -1,15 +1,6 @@
 use anyhow::Result;
 use rapl_lib::rapl;
 
-#[cfg(target_os = "linux")]
-mod rapl_impl {
-    pub use rapl_lib::rapl::linux::{start_rapl_impl, stop_rapl_impl};
-}
-#[cfg(target_os = "windows")]
-mod rapl_impl {
-    pub use rapl_lib::rapl::windowss::{start_rapl_impll, stop_rapl_impl};
-}
-
 pub fn bench_test(n: i32) -> i32 {
     let mut val: i32 = 0;
     for _ in 0..n {
