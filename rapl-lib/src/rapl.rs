@@ -184,10 +184,10 @@ fn read_rapl_registers() -> (u64, u64, u64, u64) {
 
     let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read PP0");
     let pp1 = read_msr(INTEL_MSR_RAPL_PP1).expect("failed to read PP1");
-    let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read DRAM");
     let pkg = read_rapl_pkg_energy_stat().expect("failed to read PKG_ENERGY_STAT");
+    let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read DRAM");
 
-    (pp0, pp1, dram, pkg)
+    (pp0, pp1, pkg, dram)
 }
 
 #[cfg(amd)]
