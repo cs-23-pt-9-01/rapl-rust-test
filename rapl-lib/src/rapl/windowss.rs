@@ -109,7 +109,17 @@ pub fn stop_rapl_impl() {
 
             // Create the CSV writer
             let mut wtr = WriterBuilder::new().from_writer(file);
-            wtr.write_record(["PkgStart", "PkgEnd"]).unwrap();
+            wtr.write_record([
+                "PP0Start",
+                "PP0End",
+                "PP1Start",
+                "PP1End",
+                "PkgStart",
+                "PkgEnd",
+                "DramStart",
+                "DramEnd",
+            ])
+            .unwrap();
 
             // Store the CSV writer in a static variable
             unsafe { CSV_WRITER = Some(wtr) };
@@ -164,7 +174,7 @@ fn open_driver() -> Result<HANDLE, RaplError> {
 
 // Read the MSR using the driver
 pub fn read_msr(msr: u64) -> Result<u64, RaplError> {
-    Ok(read_msr_wrapper(msr as u32).unwrap())
+    Ok(read_msr_wrapper(msr as u32)?)
 }
 
 // Read the MSR using the driver with a 32 bit MSR
