@@ -61,15 +61,26 @@ pub fn start_rapl() {
 #[cfg(intel)]
 pub fn stop_rapl() {
     // Read the RAPL end values
-    let (pkg_end, core_end) = read_rapl_registers();
+    let (pp0_end, pp1_end, pkg_end, dram_end) = read_rapl_registers();
 
     // Load in the RAPL start value
-    let (pkg_start, core_start) = unsafe { RAPL_START };
+    let (pp0_start, pp1_start, pkg_start, dram_start) = unsafe { RAPL_START };
 
     // Write the RAPL start and end values to the CSV
     write_to_csv(
-        (pkg_start, pkg_end, core_start, core_end),
-        ["PP0Start", "PP0End", "PP1Start", "PP1End"],
+        (
+            pp0_start, pp0_end, pp1_start, pp1_end, pkg_start, pkg_end, dram_start, dram_end,
+        ),
+        [
+            "PP0Start",
+            "PP0End",
+            "PP1Start",
+            "PP1End",
+            "PkgStart",
+            "PkgEnd",
+            "DramStart",
+            "DramEnd",
+        ],
     );
 }
 
@@ -109,19 +120,8 @@ where
 
             // Create the CSV writer
             let mut wtr = WriterBuilder::new().from_writer(file);
-            /*
-            wtr.write_record([
-                "PP0Start",
-                "PP0End",
-                "PP1Start",
-                "PP1End",
-                "PkgStart",
-                "PkgEnd",
-                "DramStart",
-                "DramEnd",
-            ])
-            .unwrap();
-            */
+
+            // Write the column names
             wtr.write_record(columns).unwrap();
 
             // Store the CSV writer in a static variable
@@ -132,6 +132,7 @@ where
         }
     };
 
+    // Write the data to the CSV and flush it
     wtr.serialize(data).unwrap();
     wtr.flush().unwrap();
 
