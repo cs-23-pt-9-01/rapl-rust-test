@@ -40,7 +40,7 @@ static RAPL_INIT: Once = Once::new();
 static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
-pub fn start_rapl_impl() {
+pub fn start_rapl() {
     RAPL_INIT.call_once(|| {
         // Read power unit and store in the power units variable
         let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");

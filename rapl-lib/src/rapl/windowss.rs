@@ -48,10 +48,10 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
-pub fn start_rapl_impl() {
+pub fn start_rapl_impll() {
     // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
-        // Check if running as admin due to driver requirement
+        // Check if running as admin due to the driver requirement
         if !is_admin() {
             panic!("not running as admin, this is required for the RAPL driver to work");
         }
@@ -59,22 +59,7 @@ pub fn start_rapl_impl() {
         let h_device = open_driver()
             .expect("failed to open driver handle, make sure the driver is installed and running");
         RAPL_DRIVER.get_or_init(|| h_device);
-
-        // Read power unit and store it the power units variable
-        let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
-        RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
-
-    // Safety: RAPL_START is only accessed in this function and only from a single thread
-    #[cfg(amd)]
-    unsafe {
-        RAPL_START = read_rapl_values_amd()
-    };
-
-    #[cfg(intel)]
-    unsafe {
-        RAPL_START = read_rapl_values_intel()
-    };
 }
 
 // Get all drivers: sc query type=driver
