@@ -4,7 +4,7 @@ append_to_lastest_csv () {
     # append string to name
     timestamp=$(date +%s)
     echo $FILE
-    mv $FILE "${FILE%.csv}_$1_$timestamp.csv"
+    mv $FILE "results/${FILE%.csv}_$1_$timestamp.csv"
     
 }
 
@@ -13,6 +13,7 @@ bash kill_and_burn.sh 0
 
 echo "starting"
 
+mkdir results
 # -- fib --
 
 fibInput=20000
