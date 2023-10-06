@@ -61,11 +61,19 @@ pub fn start_rapl_impl() {
     });
 
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    unsafe { RAPL_START = read_rapl_amd_lol() };
+    #[cfg(amd)]
+    unsafe {
+        RAPL_START = read_rapl_values_amd()
+    };
+
+    #[cfg(intel)]
+    unsafe {
+        RAPL_START = read_rapl_values_intel()
+    };
 }
 
 #[cfg(amd)]
-fn read_rapl_amd_lol() -> (u64, u64) {
+fn read_rapl_values_amd() -> (u64, u64) {
     use super::amd::AMD_MSR_CORE_ENERGY;
 
     let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
@@ -74,13 +82,25 @@ fn read_rapl_amd_lol() -> (u64, u64) {
     (pkg, core)
 }
 
+#[cfg(intel)]
+fn read_rapl_values_intel() -> (u64, u64, u64, u64) {
+    use super::intel::{INTEL_MSR_RAPL_DRAM, INTEL_MSR_RAPL_PP0, INTEL_MSR_RAPL_PP1};
+
+    let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read pp0");
+    let pp1 = read_msr(INTEL_MSR_RAPL_PP1).expect("failed to read pp1");
+    let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read dram");
+    let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
+
+    (pp0, pp1, dram, pkg)
+}
+
 // Get all drivers: sc query type=driver
 // Stop manually in CMD: sc stop R0LibreHardwareMonitor
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
 pub fn stop_rapl_impl() {
     // Read the RAPL end values
-    let (pkg_end, core_end) = read_rapl_amd_lol();
+    let (pkg_end, core_end) = read_rapl_values_amd();
 
     // Load in the RAPL start value
     // Safety: RAPL_START is only accessed in this function and only from a single thread
