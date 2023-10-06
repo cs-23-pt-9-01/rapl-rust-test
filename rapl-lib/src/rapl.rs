@@ -1,3 +1,6 @@
+use csv::Writer;
+use once_cell::sync::OnceCell;
+use std::{fs::File, sync::Once};
 use thiserror::Error;
 
 // Use the OS specific implementation
@@ -25,6 +28,36 @@ pub enum RaplError {
     Windows(#[from] windows::core::Error),
     #[error("unknown RAPL error")]
     Unknown,
+}
+
+#[cfg(amd)]
+static mut RAPL_START: (u64, u64) = (0, 0);
+
+#[cfg(intel)]
+static mut RAPL_START: (u64, u64, u64, u64) = (0, 0, 0, 0);
+
+static RAPL_INIT: Once = Once::new();
+static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
+static mut CSV_WRITER: Option<Writer<File>> = None;
+
+pub fn start_rapl_impl() {
+    // Initialize RAPL driver on first call
+    RAPL_INIT.call_once(|| {
+        // Read power unit and store it the power units variable
+        let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
+        RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
+    });
+
+    // Safety: RAPL_START is only accessed in this function and only from a single thread
+    #[cfg(amd)]
+    unsafe {
+        RAPL_START = read_rapl_values_amd()
+    };
+
+    #[cfg(intel)]
+    unsafe {
+        RAPL_START = read_rapl_values_intel()
+    };
 }
 
 // Get the CPU type based on the compile time configuration
