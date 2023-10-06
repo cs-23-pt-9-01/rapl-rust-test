@@ -41,9 +41,8 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
 pub fn start_rapl_impl() {
-    // Initialize RAPL driver on first call
     RAPL_INIT.call_once(|| {
-        // Read power unit and store it the power units variable
+        // Read power unit and store in the power units variable
         let pwr_unit = read_rapl_power_unit().expect("failed to read RAPL power unit");
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
@@ -93,12 +92,12 @@ fn read_rapl_values_amd() -> (u64, u64) {
 
 #[cfg(intel)]
 fn read_rapl_values_intel() -> (u64, u64, u64, u64) {
-    use super::intel::{INTEL_MSR_RAPL_DRAM, INTEL_MSR_RAPL_PP0, INTEL_MSR_RAPL_PP1};
+    use self::intel::{INTEL_MSR_RAPL_DRAM, INTEL_MSR_RAPL_PP0, INTEL_MSR_RAPL_PP1};
 
     let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read PP0");
     let pp1 = read_msr(INTEL_MSR_RAPL_PP1).expect("failed to read PP1");
     let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read DRAM");
-    let pkg = read_rapl_pkg_energy_stat().expect("failed to read PKG ENERGY STAT");
+    let pkg = read_rapl_pkg_energy_stat().expect("failed to read PKG_ENERGY_STAT");
 
     (pp0, pp1, dram, pkg)
 }
