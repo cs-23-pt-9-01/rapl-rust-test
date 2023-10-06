@@ -1,5 +1,6 @@
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
+use serde::Serialize;
 use std::{
     fs::{File, OpenOptions},
     sync::Once,
@@ -57,9 +58,40 @@ pub fn start_rapl() {
     unsafe { RAPL_START = read_rapl_registers() };
 }
 
-fn write_to_csv<T>(data: (u64, u64, u64, u64), columns: T)
+#[cfg(intel)]
+pub fn stop_rapl() {
+    // Read the RAPL end values
+    let (pkg_end, core_end) = read_rapl_registers();
+
+    // Load in the RAPL start value
+    let (pkg_start, core_start) = unsafe { RAPL_START };
+
+    // Write the RAPL start and end values to the CSV
+    write_to_csv(
+        (pkg_start, pkg_end, core_start, core_end),
+        ["PP0Start", "PP0End", "PP1Start", "PP1End"],
+    );
+}
+
+#[cfg(amd)]
+pub fn stop_rapl() {
+    // Read the RAPL end values
+    let (pkg_end, core_end) = read_rapl_registers();
+
+    // Load in the RAPL start value
+    let (pkg_start, core_start) = unsafe { RAPL_START };
+
+    // Write the RAPL start and end values to the CSV
+    write_to_csv(
+        (pkg_start, pkg_end, core_start, core_end),
+        ["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"],
+    );
+}
+
+fn write_to_csv<T, C>(data: T, columns: C)
 where
-    T: IntoIterator<Item = &'static str>,
+    T: Serialize,
+    C: IntoIterator<Item = &'static str>,
 {
     let wtr = match unsafe { CSV_WRITER.as_mut() } {
         Some(wtr) => wtr,
@@ -100,29 +132,11 @@ where
         }
     };
 
-    wtr.serialize((data.0, data.1, data.2, data.3)).unwrap();
+    wtr.serialize(data).unwrap();
     wtr.flush().unwrap();
-}
-
-#[cfg(intel)]
-pub fn stop_rapl() {}
-
-#[cfg(amd)]
-pub fn stop_rapl() {
-    // Read the RAPL end values
-    let (pkg_end, core_end) = read_rapl_registers();
-
-    // Load in the RAPL start value
-    // Safety: RAPL_START is only accessed in this function and only from a single thread
-    let (pkg_start, core_start) = unsafe { RAPL_START };
-
-    write_to_csv(
-        (pkg_start, pkg_end, core_start, core_end),
-        ["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"],
-    );
 
     /*
-    // TODO: Revise if we can use timestamps
+    // TODO: Revise if we can use timestamps in the CSV writing
 
     let current_time = SystemTime::now();
     let duration_since_epoch = current_time
