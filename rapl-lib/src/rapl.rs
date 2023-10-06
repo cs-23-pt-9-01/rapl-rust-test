@@ -10,7 +10,7 @@ pub mod windowss;
 use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
 #[cfg(intel)]
-use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
+use crate::rapl::intel::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
 use self::windowss::read_msr;
 
