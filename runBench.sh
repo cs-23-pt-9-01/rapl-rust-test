@@ -6,7 +6,8 @@ append_to_lastest_csv () {
     echo $FILE
 }
 
-# TODO stop services running on the computer
+# stopping services
+sh kill_and_burn.sh 0
 
 echo "starting"
 
@@ -37,4 +38,5 @@ dotnet build ./benchmarks/FibSequence/benchC#  # TODO --release
 sleep 5s
 append_to_lastest_csv "CsharpFib" 
 
-# TODO start services again
+# starting services
+sh kill_and_burn.sh 1
