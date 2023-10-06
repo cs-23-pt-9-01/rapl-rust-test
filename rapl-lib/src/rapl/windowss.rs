@@ -1,5 +1,5 @@
 #[cfg(amd)]
-use crate::rapl::amd::{AMD_MSR_PACKAGE_ENERGY, AMD_MSR_PWR_UNIT};
+use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY, MSR_RAPL_POWER_UNIT};
 
 #[cfg(intel)]
 use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
@@ -50,27 +50,11 @@ static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 static mut CSV_WRITER: Option<Writer<File>> = None;
 
 fn read_rapl_power_unit() -> Result<u64, RaplError> {
-    #[cfg(intel)]
-    {
-        read_msr(MSR_RAPL_POWER_UNIT)
-    }
-
-    #[cfg(amd)]
-    {
-        read_msr(AMD_MSR_PWR_UNIT)
-    }
+    read_msr(MSR_RAPL_POWER_UNIT)
 }
 
 fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
-    #[cfg(intel)]
-    {
-        read_msr(MSR_RAPL_PKG)
-    }
-
-    #[cfg(amd)]
-    {
-        read_msr(AMD_MSR_PACKAGE_ENERGY)
-    }
+    read_msr(MSR_RAPL_PKG_ENERGY)
 }
 
 pub fn start_rapl_impl() {
