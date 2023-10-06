@@ -163,8 +163,13 @@ fn open_driver() -> Result<HANDLE, RaplError> {
 }
 
 // Read the MSR using the driver
+pub fn read_msr(msr: u64) -> Result<u64, RaplError> {
+    Ok(read_msr_wrapper(msr as u32).unwrap())
+}
+
+// Read the MSR using the driver with a 32 bit MSR
 // __readmsr on Windows takes in an "int" as the MSR, which is 32 bits
-pub fn read_msr(msr: u32) -> Result<u64, RaplError> {
+pub fn read_msr_wrapper(msr: u32) -> Result<u64, RaplError> {
     /*
     // TODO: Validate if this works correctly. Should be used instead
     let driver_file = File::open("\\\\.\\WinRing0_1_2_0").unwrap();
