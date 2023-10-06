@@ -84,7 +84,7 @@ fn open_msr(core: u32) -> File {
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
-fn read_msr(msr_offset: i64) -> u64 {
+pub fn read_msr(msr_offset: i64) -> u64 {
     let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
 
     let mut output_data: [u8; 8] = [0; 8];
