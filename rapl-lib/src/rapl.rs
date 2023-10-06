@@ -20,11 +20,11 @@ use self::windowss::read_msr;
 
 #[derive(Error, Debug)]
 pub enum RaplError {
-    #[error("unknown RAPL error")]
-    Unknown,
     #[cfg(target_os = "windows")]
     #[error("windows error")]
     Windows(#[from] windows::core::Error),
+    #[error("unknown RAPL error")]
+    Unknown,
 }
 
 // Get the CPU type based on the compile time configuration
@@ -58,8 +58,9 @@ pub mod amd {
     per-package total"
      */
     pub const MSR_RAPL_POWER_UNIT: u64 = 0xC0010299; // Similar to Intel MSR_RAPL_POWER_UNIT
-    pub const AMD_MSR_CORE_ENERGY: u64 = 0xC001029A; // Similar to Intel PP0_ENERGY_STATUS (PP1 is for the GPU)
     pub const MSR_RAPL_PKG_ENERGY_STAT: u64 = 0xC001029B; // Similar to Intel PKG_ENERGY_STATUS (This is for the whole socket)
+    
+    pub const AMD_MSR_CORE_ENERGY: u64 = 0xC001029A; // Similar to Intel PP0_ENERGY_STATUS (PP1 is for the GPU)
 
     /*
     const AMD_TIME_UNIT_MASK: u64 = 0xF0000;
@@ -73,9 +74,9 @@ pub mod intel {
     pub const MSR_RAPL_POWER_UNIT: u64 = 0x606;
     pub const MSR_RAPL_PKG_ENERGY_STAT: u64 = 0x611;
     /*
-    const MSR_RAPL_PP0: u32 = 0x639;
-    const MSR_RAPL_PP1: u32 = 0x641;
-    const MSR_RAPL_DRAM: u32 = 0x619;
+    const INTEL_MSR_RAPL_PP0: u64 = 0x639;
+    const INTEL_MSR_RAPL_PP1: u64 = 0x641;
+    const INTEL_MSR_RAPL_DRAM: u64 = 0x619;
 
     const INTEL_TIME_UNIT_MASK: u64 = 0xF000;
     const INTEL_ENGERY_UNIT_MASK: u64 = 0x1F00;
