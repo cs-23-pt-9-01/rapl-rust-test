@@ -1,10 +1,4 @@
-#[cfg(amd)]
-use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
-
-#[cfg(intel)]
-use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
-
-use super::get_cpu_type;
+use super::{get_cpu_type, read_rapl_pkg_energy_stat, read_rapl_power_unit};
 use crate::rapl::RaplError;
 use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
@@ -48,14 +42,6 @@ static RAPL_DRIVER: OnceCell<HANDLE> = OnceCell::new();
 static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
 
 static mut CSV_WRITER: Option<Writer<File>> = None;
-
-fn read_rapl_power_unit() -> Result<u64, RaplError> {
-    read_msr(MSR_RAPL_POWER_UNIT)
-}
-
-fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
-    read_msr(MSR_RAPL_PKG_ENERGY_STAT)
-}
 
 pub fn start_rapl_impl() {
     // Initialize RAPL driver on first call
@@ -178,7 +164,7 @@ fn open_driver() -> Result<HANDLE, RaplError> {
 
 // Read the MSR using the driver
 // __readmsr on Windows takes in an "int" as the MSR, which is 32 bits
-fn read_msr(msr: u32) -> Result<u64, RaplError> {
+pub fn read_msr(msr: u32) -> Result<u64, RaplError> {
     /*
     // TODO: Validate if this works correctly. Should be used instead
     let driver_file = File::open("\\\\.\\WinRing0_1_2_0").unwrap();

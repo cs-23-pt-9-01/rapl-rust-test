@@ -6,6 +6,14 @@ pub mod linux;
 #[cfg(target_os = "windows")]
 pub mod windowss;
 
+#[cfg(amd)]
+use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
+
+#[cfg(intel)]
+use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
+
+use self::windowss::read_msr;
+
 #[derive(Error, Debug)]
 pub enum RaplError {
     #[error("windows error")]
@@ -23,6 +31,14 @@ pub fn get_cpu_type() -> &'static str {
     {
         "AMD"
     }
+}
+
+pub fn read_rapl_power_unit() -> Result<u64, RaplError> {
+    read_msr(MSR_RAPL_POWER_UNIT)
+}
+
+pub fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
+    read_msr(MSR_RAPL_PKG_ENERGY_STAT)
 }
 
 #[cfg(amd)]
