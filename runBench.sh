@@ -33,7 +33,7 @@ append_to_lastest_csv "PypyFib"
 
 #   C#
 # building
-dotnet build ./benchmarks/FibSequence/benchC#  # TODO --release
+dotnet build ./benchmarks/FibSequence/benchC#  --configuration Release
 
 # running
 ./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib $fibInput $count
