@@ -34,7 +34,12 @@ use windows::{
 */
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
 
+#[cfg(amd)]
 static mut RAPL_START: (u64, u64) = (0, 0);
+
+#[cfg(intel)]
+static mut RAPL_START: (u64, u64, u64, u64) = (0, 0, 0, 0);
+
 //static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
 
 static RAPL_INIT: Once = Once::new();
