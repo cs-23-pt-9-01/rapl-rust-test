@@ -1,12 +1,6 @@
-use super::get_cpu_type;
 use crate::rapl::RaplError;
-use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
-use std::{
-    ffi::CString,
-    fs::{File, OpenOptions},
-    sync::Once,
-};
+use std::{ffi::CString, sync::Once};
 use windows::{
     core::PCSTR,
     Win32::{
@@ -97,7 +91,7 @@ fn open_driver() -> Result<HANDLE, RaplError> {
 
 // Read the MSR using the driver
 pub fn read_msr(msr: u64) -> Result<u64, RaplError> {
-    Ok(read_msr_wrapper(msr as u32)?)
+    read_msr_wrapper(msr as u32)
 }
 
 // Read the MSR using the driver with a 32 bit MSR
