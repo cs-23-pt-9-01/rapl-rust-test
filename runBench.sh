@@ -1,10 +1,11 @@
 append_to_lastest_csv () {
     #finding latest csv file
-    FILE=$(find . -name "*.csv" | sort -r -t_ | tail -1)
+    FILE=$(ls -t | grep csv | head -1)
     # append string to name
     timestamp=$(date +%s)
-    mv $FILE "${FILE%.csv}_$1_$timestamp.csv"
     echo $FILE
+    mv $FILE "${FILE%.csv}_$1_$timestamp.csv"
+    
 }
 
 # stopping services
