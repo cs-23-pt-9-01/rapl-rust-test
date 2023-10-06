@@ -195,6 +195,12 @@ fn open_driver() -> Result<HANDLE, RaplError> {
 // Read the MSR using the driver
 // __readmsr on Windows takes in an "int" as the MSR, which is 32 bits
 fn read_msr(msr: u32) -> Result<u64, RaplError> {
+    /*
+    // TODO: Validate if this works correctly. Should be used instead
+    let driver_file = File::open("\\\\.\\WinRing0_1_2_0").unwrap();
+    let driver_handle = HANDLE(driver_file.as_raw_handle() as _);
+    */
+
     // Get the driver handle
     let rapl_driver = *RAPL_DRIVER.get().expect("RAPL driver not initialized");
 

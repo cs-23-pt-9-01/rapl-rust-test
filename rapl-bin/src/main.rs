@@ -24,7 +24,7 @@ fn main() -> Result<()> {
 
     rapl_impl::start_rapl_impl();
 
-    for i in 0..10 {
+    for i in 0..200 {
         println!("test {}", i);
     }
 
