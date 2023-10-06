@@ -86,10 +86,10 @@ fn read_rapl_values_amd() -> (u64, u64) {
 fn read_rapl_values_intel() -> (u64, u64, u64, u64) {
     use super::intel::{INTEL_MSR_RAPL_DRAM, INTEL_MSR_RAPL_PP0, INTEL_MSR_RAPL_PP1};
 
-    let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read pp0");
-    let pp1 = read_msr(INTEL_MSR_RAPL_PP1).expect("failed to read pp1");
-    let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read dram");
-    let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
+    let pp0 = read_msr(INTEL_MSR_RAPL_PP0).expect("failed to read PP0");
+    let pp1 = read_msr(INTEL_MSR_RAPL_PP1).expect("failed to read PP1");
+    let dram = read_msr(INTEL_MSR_RAPL_DRAM).expect("failed to read DRAM");
+    let pkg = read_rapl_pkg_energy_stat().expect("failed to read PKG ENERGY STAT");
 
     (pp0, pp1, dram, pkg)
 }
@@ -98,7 +98,8 @@ fn read_rapl_values_intel() -> (u64, u64, u64, u64) {
 // Stop manually in CMD: sc stop R0LibreHardwareMonitor
 // Delete manually in CMD: sc delete R0LibreHardwareMonitor
 
-pub fn stop_rapl_impl() {
+#[cfg(amd)]
+fn stop_rapl_amd() {
     // Read the RAPL end values
     let (pkg_end, core_end) = read_rapl_values_amd();
 
@@ -159,6 +160,11 @@ pub fn stop_rapl_impl() {
     wtr.serialize((pkg_start, pkg_end, core_start, core_end))
         .unwrap();
     wtr.flush().unwrap();
+}
+
+pub fn stop_rapl_impl() {
+    #[cfg(amd)]
+    stop_rapl_amd();
 }
 
 // check if running as admin using the windows crate
