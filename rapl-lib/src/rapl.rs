@@ -1,6 +1,9 @@
-use csv::Writer;
+use csv::{Writer, WriterBuilder};
 use once_cell::sync::OnceCell;
-use std::{fs::File, sync::Once};
+use std::{
+    fs::{File, OpenOptions},
+    sync::Once,
+};
 use thiserror::Error;
 
 // Use the OS specific implementation
@@ -65,6 +68,70 @@ pub fn start_rapl() {
 pub fn stop_rapl() {
     // Run the OS specific stop_rapl_impl function
     stop_rapl_impl();
+
+    #[cfg(amd)]
+    {
+        // Read the RAPL end values
+        let (pkg_end, core_end) = read_rapl_values_amd();
+
+        // Load in the RAPL start value
+        // Safety: RAPL_START is only accessed in this function and only from a single thread
+        let (pkg_start, core_start) = unsafe { RAPL_START };
+
+        /*
+        // TODO: Revise if we can even use timestamps
+
+        let current_time = SystemTime::now();
+        let duration_since_epoch = current_time
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards");
+        let timestamp = duration_since_epoch.as_millis();
+        */
+
+        let wtr = match unsafe { CSV_WRITER.as_mut() } {
+            Some(wtr) => wtr,
+            None => {
+                // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
+                let file = OpenOptions::new()
+                    .append(true)
+                    .create(true)
+                    .open(format!(
+                        "{}_{}.csv",
+                        get_cpu_type(),
+                        RAPL_POWER_UNITS.get().unwrap()
+                    ))
+                    .unwrap();
+
+                // Create the CSV writer
+                let mut wtr = WriterBuilder::new().from_writer(file);
+                /*
+                wtr.write_record([
+                    "PP0Start",
+                    "PP0End",
+                    "PP1Start",
+                    "PP1End",
+                    "PkgStart",
+                    "PkgEnd",
+                    "DramStart",
+                    "DramEnd",
+                ])
+                .unwrap();
+                */
+                wtr.write_record(["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"])
+                    .unwrap();
+
+                // Store the CSV writer in a static variable
+                unsafe { CSV_WRITER = Some(wtr) };
+
+                // Return a mutable reference to the CSV writer
+                unsafe { CSV_WRITER.as_mut().unwrap() }
+            }
+        };
+
+        wtr.serialize((pkg_start, pkg_end, core_start, core_end))
+            .unwrap();
+        wtr.flush().unwrap();
+    }
 }
 
 // Get the CPU type based on the compile time configuration
