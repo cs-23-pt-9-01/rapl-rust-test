@@ -1,5 +1,5 @@
 #[cfg(amd)]
-use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY, MSR_RAPL_POWER_UNIT};
+use crate::rapl::amd::{MSR_RAPL_PKG_ENERGY_STAT, MSR_RAPL_POWER_UNIT};
 
 #[cfg(intel)]
 use crate::rapl::intel::{MSR_RAPL_PKG, MSR_RAPL_POWER_UNIT};
@@ -54,7 +54,7 @@ fn read_rapl_power_unit() -> Result<u64, RaplError> {
 }
 
 fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
-    read_msr(MSR_RAPL_PKG_ENERGY)
+    read_msr(MSR_RAPL_PKG_ENERGY_STAT)
 }
 
 pub fn start_rapl_impl() {
