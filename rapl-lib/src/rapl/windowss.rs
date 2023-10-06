@@ -192,6 +192,8 @@ fn open_driver() -> Result<HANDLE, RaplError> {
     }?)
 }
 
+// Read the MSR using the driver
+// __readmsr on Windows takes in an "int" as the MSR, which is 32 bits
 fn read_msr(msr: u32) -> Result<u64, RaplError> {
     // Get the driver handle
     let rapl_driver = *RAPL_DRIVER.get().expect("RAPL driver not initialized");
