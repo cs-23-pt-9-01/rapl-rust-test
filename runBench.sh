@@ -24,7 +24,7 @@ echo "starting fib"
 
 node ./benchmarks/FibSequence/bench.js $fibInput $count
 sleep 5s
-append_to_lastest_csv "NodeFib"
+append_to_latest_csv "NodeFib"
 
 
 #   Pypy
