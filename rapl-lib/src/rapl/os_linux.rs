@@ -24,16 +24,3 @@ pub fn read_msr(msr_offset: u64) -> Result<u64, RaplError> {
 
     Ok(u64::from_le_bytes(output_data))
 }
-
-/*
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_read_msr() {
-        let result = read_rapl_pkg_energy_stat().unwrap();
-        assert_eq!(result, 1234);
-    }
-}
-*/
