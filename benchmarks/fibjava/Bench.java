@@ -1,10 +1,4 @@
-import java.lang.foreign.Linker;
-import java.lang.foreign.FunctionDescriptor;
-import java.lang.foreign.ValueLayout;
-import java.lang.foreign.SymbolLookup;
-import java.lang.foreign.MemorySegment;
-import java.lang.foreign.Arena;
-
+import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
 // java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10
