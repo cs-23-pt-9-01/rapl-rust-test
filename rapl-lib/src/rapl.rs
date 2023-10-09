@@ -97,10 +97,11 @@ pub fn stop_rapl() {
     );
 }
 
-fn write_to_csv<T, C>(data: T, columns: C)
+fn write_to_csv<T, C, U>(data: T, columns: C)
 where
     T: Serialize,
-    C: IntoIterator<Item = &'static str>,
+    C: IntoIterator<Item = U>,
+    U: AsRef<[u8]>,
 {
     let wtr = match unsafe { CSV_WRITER.as_mut() } {
         Some(wtr) => wtr,
