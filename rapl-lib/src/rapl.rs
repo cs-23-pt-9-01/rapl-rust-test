@@ -24,8 +24,6 @@ pub enum RaplError {
     #[cfg(target_os = "windows")]
     #[error("windows error")]
     Windows(#[from] windows::core::Error),
-    #[error("unknown RAPL error")]
-    Unknown,
 }
 
 #[cfg(amd)]
