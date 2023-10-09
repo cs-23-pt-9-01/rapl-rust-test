@@ -39,7 +39,7 @@ dotnet build ./benchmarks/FibSequence/benchC#  --configuration Release
 # running
 ./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib $fibInput $count
 sleep 5s
-append_to_lastest_csv "CsharpFib" 
+append_to_latest_csv "CsharpFib" 
 
 # starting services
 bash kill_and_burn.sh 1
