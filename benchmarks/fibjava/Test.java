@@ -12,16 +12,16 @@ import java.lang.invoke.MethodHandle;
 class Test {
     public static void main(String[] args) {
 
-        System.loadLibrary("rapl_rust_lib");
+        System.loadLibrary("rapl_lib");
 
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
         MethodHandle start_rapl_test = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
-/*
+
         MemorySegment stop_rapl_symbol = SymbolLookup.loaderLookup().find("stop_rapl").get();
         MethodHandle stop_rapl_test = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
-*/
+
 
         try (Arena arena = Arena.ofConfined()) {
             start_rapl_test.invoke();
@@ -29,13 +29,12 @@ class Test {
             e.printStackTrace();
         }
 
-/*
+
         try (Arena arena = Arena.ofConfined()) {
             stop_rapl_test.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
-*/
 
         int n = Integer.parseInt(args[0]);
         int result = fib(n);
