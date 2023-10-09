@@ -30,7 +30,7 @@ append_to_latest_csv "NodeFib"
 #   Pypy
 pypy ./benchmarks/FibSequence/bench.py $fibInput $count
 sleep 5s
-append_to_lastest_csv "PypyFib"
+append_to_latest_csv "PypyFib"
 
 #   C#
 # building
