@@ -1,4 +1,4 @@
-append_to_lastest_csv () {
+append_to_latest_csv () {
     #finding latest csv file
     FILE=$(ls -t | grep csv | head -1)
     # append string to name
