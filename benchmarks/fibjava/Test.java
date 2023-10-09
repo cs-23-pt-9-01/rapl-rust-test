@@ -22,6 +22,9 @@ class Test {
         MethodHandle stop_rapl_test = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
+        System.out.println("calling start_rapl");
+
+        int n = Integer.parseInt(args[0]);
 
         try (Arena arena = Arena.ofConfined()) {
             start_rapl_test.invoke();
@@ -30,15 +33,16 @@ class Test {
         }
 
 
+        int result = fib(n);
+        System.out.println(result);
+
         try (Arena arena = Arena.ofConfined()) {
             stop_rapl_test.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
-        int n = Integer.parseInt(args[0]);
-        int result = fib(n);
-        System.out.println(result);
+        System.out.println("stopped start_rapl");
     }
 
     public static int fib(int n) {
