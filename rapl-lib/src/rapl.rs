@@ -87,15 +87,15 @@ pub fn stop_rapl() {
 #[cfg(amd)]
 pub fn stop_rapl() {
     // Read the RAPL end values
-    let (pkg_end, core_end) = read_rapl_registers();
+    let (core_end, pkg_end) = read_rapl_registers();
 
     // Load in the RAPL start value
-    let (pkg_start, core_start) = unsafe { RAPL_START };
+    let (core_start, pkg_start) = unsafe { RAPL_START };
 
     // Write the RAPL start and end values to the CSV
     write_to_csv(
-        (pkg_start, pkg_end, core_start, core_end),
-        ["PkgStart", "PkgEnd", "CoreStart", "CoreEnd"],
+        (core_start, core_end, pkg_start, pkg_end),
+        ["CoreStart", "CoreEnd", "PkgStart", "PkgEnd"],
     );
 }
 
@@ -172,10 +172,10 @@ pub fn read_rapl_pkg_energy_stat() -> Result<u64, RaplError> {
 fn read_rapl_registers() -> (u64, u64) {
     use self::amd::AMD_MSR_CORE_ENERGY;
 
-    let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
     let core = read_msr(AMD_MSR_CORE_ENERGY).unwrap();
+    let pkg = read_rapl_pkg_energy_stat().expect("failed to read pkg energy stat");
 
-    (pkg, core)
+    (core, pkg)
 }
 
 #[cfg(intel)]
