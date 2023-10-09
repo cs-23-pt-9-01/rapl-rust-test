@@ -7,9 +7,9 @@ import java.lang.foreign.Arena;
 
 import java.lang.invoke.MethodHandle;
 
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Test.java 10
+// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10
 
-class Test {
+class Bench {
     public static void main(String[] args) {
 
         System.loadLibrary("rapl_lib");
