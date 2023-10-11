@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandle;
 
 class Bench {
     public static void main(String[] args) {
-
         System.loadLibrary("target/release/rapl_lib");
 
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
