@@ -1,10 +1,10 @@
 # rapl-interface
 
-This is a library and executable project for reading the RAPL registers on Intel and AMD processors. 
+This is a library and executable project for reading the RAPL registers on Intel and AMD processors written in Rust.
 
-It is written in Rust and uses the `msr` crate for reading and writing to the registers.
+The supported operating systems are Linux and Windows.
 
-This repository also contains several benchmarks for testing the library.
+The repository also contains several benchmarks for testing the library.
 
 ## GitHub Actions
 
