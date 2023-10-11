@@ -15,16 +15,15 @@ class Bench {
         MethodHandle stop_rapl_test = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
-        System.out.println("calling start_rapl");
-
         int n = Integer.parseInt(args[0]);
+
+        System.out.println("starting start_rapl");
 
         try (Arena arena = Arena.ofConfined()) {
             start_rapl_test.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
 
         int result = fib(n);
         System.out.println(result);
