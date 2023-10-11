@@ -20,20 +20,39 @@ class Bench {
 
         System.out.println("calling start_rapl");
 
-        try (Arena arena = Arena.ofConfined()) {
+        try {
             start_rapl.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
+        /*
+        // works without arena as seen above, but not sure if it is correct to do so
+        // the code is commented out here in case it is needed later
+
+        try (Arena arena = Arena.ofConfined()) {
+            start_rapl.invoke();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        */
+
         int result = fib(n);
         System.out.println(result);
 
+        try {
+            stop_rapl.invoke();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        /*
         try (Arena arena = Arena.ofConfined()) {
             stop_rapl.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
+        */
 
         System.out.println("called stop_rapl");
     }
