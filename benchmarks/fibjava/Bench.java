@@ -37,8 +37,12 @@ class Bench {
             e.printStackTrace();
         }
 
-        int result = fib(n);
-        System.out.println(result);
+        // Loop 10 times.
+        // Note that this could potentially be optimized away
+        // by the compiler due to the fact that the result is not used.
+        for (int i = 0; i < 10; i++) {
+            int result = fib(n);
+        }
 
         try {
             stop_rapl.invoke();
