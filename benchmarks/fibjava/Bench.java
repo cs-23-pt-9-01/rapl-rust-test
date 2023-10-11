@@ -6,7 +6,7 @@ import java.lang.invoke.MethodHandle;
 class Bench {
     public static void main(String[] args) {
 
-        System.loadLibrary("rapl_lib");
+        System.loadLibrary("target/release/rapl_lib");
 
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
         MethodHandle start_rapl_test = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
