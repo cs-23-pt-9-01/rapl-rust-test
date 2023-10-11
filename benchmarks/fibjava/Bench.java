@@ -1,6 +1,7 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
+// run with:
 // java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10
 
 class Bench {
