@@ -20,12 +20,6 @@ class Bench {
 
         System.out.println("calling start_rapl");
 
-        try {
-            start_rapl.invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
         /*
         // works without arena as seen above, but not sure if it is correct to do so
         // the code is commented out here in case it is needed later
@@ -36,6 +30,12 @@ class Bench {
             e.printStackTrace();
         }
         */
+
+        try {
+            start_rapl.invoke();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
         int result = fib(n);
         System.out.println(result);
