@@ -2,7 +2,7 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
 // run with:
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10
+// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10 10
 
 class Bench {
     public static void main(String[] args) {
@@ -17,6 +17,7 @@ class Bench {
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
         int n = Integer.parseInt(args[0]);
+        int loop_count = Integer.parseInt(args[1]);
 
         System.out.println("calling start_rapl");
 
@@ -40,7 +41,7 @@ class Bench {
         // Loop 10 times.
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
-        for (int i = 0; i < 10; i++) {
+        for (int i = loop_count; i < 10; i++) {
             int result = fib(n);
         }
 
