@@ -9,19 +9,19 @@ class Bench {
         System.loadLibrary("target/release/rapl_lib");
 
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
-        MethodHandle start_rapl_test = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
+        MethodHandle start_rapl = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
         MemorySegment stop_rapl_symbol = SymbolLookup.loaderLookup().find("stop_rapl").get();
-        MethodHandle stop_rapl_test = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
+        MethodHandle stop_rapl = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
         int n = Integer.parseInt(args[0]);
 
-        System.out.println("starting start_rapl");
+        System.out.println("calling start_rapl");
 
         try (Arena arena = Arena.ofConfined()) {
-            start_rapl_test.invoke();
+            start_rapl.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -30,12 +30,12 @@ class Bench {
         System.out.println(result);
 
         try (Arena arena = Arena.ofConfined()) {
-            stop_rapl_test.invoke();
+            stop_rapl.invoke();
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
-        System.out.println("stopped start_rapl");
+        System.out.println("called stop_rapl");
     }
 
     public static int fib(int n) {
