@@ -21,7 +21,7 @@ class Bench {
         System.out.println("calling start_rapl");
 
         /*
-        // works without arena as seen above, but not sure if it is correct to do so
+        // works without arena as seen below, but not sure if it is correct to do so
         // the code is commented out here in case it is needed later
 
         try (Arena arena = Arena.ofConfined()) {
