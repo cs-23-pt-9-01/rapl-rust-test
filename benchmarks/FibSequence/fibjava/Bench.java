@@ -13,7 +13,6 @@ import java.lang.invoke.MethodHandle;
 class Bench {
     public static void main(String[] args) {
         var os = System.getProperty("os.name");
-        System.out.println("OS: " + System.getProperty("os.name"));
 
         var dll_path = System.getProperty("user.dir") + "/target/release/";
         if (os.equals("Linux")) {
@@ -38,8 +37,6 @@ class Bench {
         int n = Integer.parseInt(args[0]);
         int loop_count = Integer.parseInt(args[1]);
 
-        System.out.println("calling start_rapl");
-
         /*
         // works without arena as seen below, but not sure if it is correct to do so
         // the code is commented out here in case it is needed later
@@ -51,23 +48,23 @@ class Bench {
         }
         */
 
-        try {
-            start_rapl.invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
         // Loop 10 times.
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
         for (int i = loop_count; i < 10; i++) {
-            int result = fib(n);
-        }
+            try {
+                start_rapl.invoke();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
 
-        try {
-            stop_rapl.invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
+            int result = fib(n);
+
+            try {
+                stop_rapl.invoke();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
 
         /*
@@ -77,8 +74,6 @@ class Bench {
             e.printStackTrace();
         }
         */
-
-        System.out.println("called stop_rapl");
     }
 
     public static int fib(int n) {
