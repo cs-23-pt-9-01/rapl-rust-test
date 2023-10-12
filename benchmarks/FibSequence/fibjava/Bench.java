@@ -48,10 +48,9 @@ class Bench {
         }
         */
 
-        // Loop 10 times.
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
-        for (int i = loop_count; i < 10; i++) {
+        for (int i = 0; i < loop_count; i++) {
             try {
                 start_rapl.invoke();
             } catch (Throwable e) {
