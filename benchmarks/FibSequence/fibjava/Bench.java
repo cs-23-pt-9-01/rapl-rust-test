@@ -1,12 +1,31 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
-// run with:
+// OLD:
 // java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10 10
+
+// Testing with Java library path:
+// java -Djava.library.path=./target/release --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java 10 10
+
+// Latest working version:
+// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java 10 10
 
 class Bench {
     public static void main(String[] args) {
-        System.loadLibrary("target/release/rapl_lib");
+        var os = System.getProperty("os.name");
+        System.out.println("OS: " + System.getProperty("os.name"));
+
+        var dll_path = System.getProperty("user.dir") + "/target/release/";
+        if (os.equals("Linux")) {
+            dll_path = dll_path + "librapl_lib.so";
+        } else if (os.equals("Windows 11")) {
+            dll_path = dll_path + "rapl_lib.dll";
+        } else {
+            System.out.println("OS not supported");
+            return;
+        }
+
+        System.load(dll_path);
 
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
         MethodHandle start_rapl = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
