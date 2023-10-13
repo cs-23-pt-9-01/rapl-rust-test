@@ -12,8 +12,11 @@ import java.lang.invoke.MethodHandle;
 
 class Bench {
     public static void main(String[] args) {
+
+        // Finding os
         var os = System.getProperty("os.name");
 
+        // Finding the path of library (and loading it)
         var dll_path = System.getProperty("user.dir") + "/target/release/";
         if (os.equals("Linux")) {
             dll_path = dll_path + "librapl_lib.so";
@@ -26,6 +29,7 @@ class Bench {
 
         System.load(dll_path);
 
+        // Loading functions
         MemorySegment start_rapl_symbol = SymbolLookup.loaderLookup().find("start_rapl").get();
         MethodHandle start_rapl = Linker.nativeLinker().downcallHandle(start_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
@@ -34,6 +38,8 @@ class Bench {
         MethodHandle stop_rapl = Linker.nativeLinker().downcallHandle(stop_rapl_symbol,
                     FunctionDescriptor.of(ValueLayout.JAVA_INT));
 
+        
+        // Getting arguments
         int n = Integer.parseInt(args[0]);
         int loop_count = Integer.parseInt(args[1]);
 
@@ -48,6 +54,7 @@ class Bench {
         }
         */
 
+        // Running benchmark
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
         for (int i = 0; i < loop_count; i++) {
@@ -75,6 +82,7 @@ class Bench {
         */
     }
 
+    // Test method
     public static long itFibN(int n)
     {
         if (n < 2)
