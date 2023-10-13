@@ -1,51 +1,44 @@
-append_to_latest_csv () {
-    #finding latest csv file
-    FILE=$(ls -t | grep csv | head -1)
-    # append string to name
-    timestamp=$(date +%s)
-    echo $FILE
-    mv $FILE "results/${FILE%.csv}_$1_$timestamp.csv"
-    
-}
+#!/bin/bash
 
-# stopping services
-bash kill_and_burn.sh 0
+##########################
+##### Pre Benchmarks #####
+##########################
 
-echo "starting"
+#Send start signal to Raspberry PI - await confirmation from raspberry?
+bash utils/raspberry_logger.sh 1
 
+# Stop services and background processes
+bash utils/kill_and_burn.sh 0
+
+##########################
+##### Run Benchmarks #####
+########################## 
+echo "Starting benchmarks"
+
+# Create dir for results
 mkdir results
-# -- fib --
 
-fibInput=20000
-count=1000
+# Running all benchmarks
+for f in benchRunners/*.sh; do
+  bash "$f"
+done
 
-echo "starting fib"
-
-
-#   Node
-node ./benchmarks/FibSequence/bench.js $fibInput $count
-sleep 5s
-append_to_latest_csv "NodeFib"
-
-#   Pypy
-pypy ./benchmarks/FibSequence/bench.py $fibInput $count
-sleep 5s
-append_to_latest_csv "PypyFib"
-
-#   C#
-# building
-dotnet build ./benchmarks/FibSequence/benchC#  --configuration Release
-
-# running
-./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib $fibInput $count
-sleep 5s
-append_to_latest_csv "CsharpFib" 
-
-#   Java
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java $fibInput $count
-sleep 5s
-append_to_latest_csv "JavaFib"
-
+###########################
+##### Post Benchmarks #####
+###########################
 
 # starting services
-bash kill_and_burn.sh 1
+bash utils/kill_and_burn.sh 1
+
+# waiting for services to start
+echo "waiting 10 secounds for services to start"
+sleep 10s
+
+# Send stop signal to Raspberry PI
+bash utils/raspberry_logger.sh 0
+
+# Send results data to Raspberry PI
+bash utils/send_results.sh
+
+
+
