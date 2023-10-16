@@ -7,9 +7,6 @@ arg1=${1:-'true'}
 arg2=${2:-'true'}
 # set them to false stop the given feature.
 
-echo $arg1
-echo $arg2
-
 # checking for invalid input
 if ([ $arg1 != 'true' ] && [ $arg1 != 'false' ]) || ([ $arg2 != 'true' ] && [ $arg2 != 'false' ])
 then
