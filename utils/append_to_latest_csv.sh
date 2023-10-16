@@ -1,4 +1,4 @@
-# Update lasts benchmark csv to include timestamp and mv to appropriate dir
+# Update last benchmark csv to include timestamp and mv to appropriate dir
 
 #finding latest csv file
 FILE=$(ls -t | grep csv | head -1)
