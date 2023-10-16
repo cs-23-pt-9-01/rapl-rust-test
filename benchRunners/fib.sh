@@ -14,11 +14,7 @@ sleep 5s
 bash utils/append_to_latest_csv.sh "PypyFib"
 
 #   C#
-# building
-dotnet build ./benchmarks/FibSequence/benchC#  --configuration Release
-
-# running
-./benchmarks/FibSequence/benchC#/bin/Debug/net7.0/Fib $fibInput $count
+dotnet run --project ./benchmarks/FibSequence/benchC#/Fib.csproj --configuration Release $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CsharpFib"
 
