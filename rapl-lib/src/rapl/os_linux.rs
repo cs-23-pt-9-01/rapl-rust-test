@@ -10,7 +10,7 @@ pub fn start_rapl_impl() {}
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: u32) -> File {
-    File::open(format!("/dev/cpu/{}/msr", core)).unwrap()
+    File::open(format!("/dev/cpu/{}/msr", core))?
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
@@ -20,7 +20,7 @@ pub fn read_msr(msr_offset: u64) -> Result<u64, RaplError> {
     let mut output_data: [u8; 8] = [0; 8];
 
     // TODO: Consider just seek here instead, same impl for Windows then
-    f.read_at(&mut output_data, msr_offset).unwrap();
+    f.read_at(&mut output_data, msr_offset)?;
 
     Ok(u64::from_le_bytes(output_data))
 }
