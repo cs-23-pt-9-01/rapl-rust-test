@@ -8,6 +8,11 @@ node ./benchmarks/FibSequence/bench.js $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "NodeFib"
 
+#   Python
+pypy ./benchmarks/FibSequence/bench.py $fibInput $count
+sleep 5s
+bash utils/append_to_latest_csv.sh "PythonFib"
+
 #   Pypy
 pypy ./benchmarks/FibSequence/bench.py $fibInput $count
 sleep 5s
