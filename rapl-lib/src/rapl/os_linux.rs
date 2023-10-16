@@ -10,7 +10,7 @@ pub fn start_rapl_impl() {}
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: u32) -> Result<File, RaplError> {
-    File::open(format!("/dev/cpu/{}/msr", core))
+    Ok(File::open(format!("/dev/cpu/{}/msr", core))?)
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
