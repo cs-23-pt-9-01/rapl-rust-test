@@ -10,12 +10,12 @@ pub fn start_rapl_impl() {}
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
 fn open_msr(core: u32) -> Result<File, RaplError> {
-    File::open(format!("/dev/cpu/{}/msr", core))?
+    File::open(format!("/dev/cpu/{}/msr", core))
 }
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L38
 pub fn read_msr(msr_offset: u64) -> Result<u64, RaplError> {
-    let f = CPU0_MSR_FD.get_or_init(|| open_msr(0));
+    let f = CPU0_MSR_FD.get_or_init(|| open_msr(0).expect("failed to open MSR"));
 
     let mut output_data: [u8; 8] = [0; 8];
 
