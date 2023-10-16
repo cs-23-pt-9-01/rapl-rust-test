@@ -9,7 +9,7 @@ static CPU0_MSR_FD: OnceCell<File> = OnceCell::new();
 pub fn start_rapl_impl() {}
 
 // https://github.com/greensoftwarelab/Energy-Languages/blob/master/RAPL/rapl.c#L14
-fn open_msr(core: u32) -> File {
+fn open_msr(core: u32) -> Result<File, RaplError> {
     File::open(format!("/dev/cpu/{}/msr", core))?
 }
 
