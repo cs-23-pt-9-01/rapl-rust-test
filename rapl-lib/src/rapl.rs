@@ -21,6 +21,8 @@ use self::os_windows::{read_msr, start_rapl_impl};
 
 #[derive(Error, Debug)]
 pub enum RaplError {
+    #[error("io error")]
+    Io(#[from] std::io::Error),
     #[cfg(target_os = "windows")]
     #[error("windows error")]
     Windows(#[from] windows::core::Error),
