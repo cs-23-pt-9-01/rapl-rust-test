@@ -63,7 +63,8 @@ pub fn start_rapl() {
     let timestamp_start = duration_since_epoch.as_millis();
 
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    unsafe { RAPL_START = (timestamp_start, read_rapl_registers()) };
+    let rapl_registers = read_rapl_registers();
+    unsafe { RAPL_START = (timestamp_start, rapl_registers) };
 }
 
 #[cfg(intel)]
