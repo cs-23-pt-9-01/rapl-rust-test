@@ -31,7 +31,7 @@ pub enum RaplError {
 static mut RAPL_START: (u128, (u64, u64)) = (0, (0, 0));
 
 #[cfg(intel)]
-static mut RAPL_START: (u64, u64, u64, u64) = (0, 0, 0, 0);
+static mut RAPL_START: (u128, (u64, u64, u64, u64)) = (0, (0, 0, 0, 0));
 
 static RAPL_INIT: Once = Once::new();
 static RAPL_POWER_UNITS: OnceCell<u64> = OnceCell::new();
@@ -69,15 +69,33 @@ pub fn stop_rapl() {
     // Read the RAPL end values
     let (pp0_end, pp1_end, pkg_end, dram_end) = read_rapl_registers();
 
+    // Get the current time in milliseconds since the UNIX epoch
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp_end = duration_since_epoch.as_millis();
+
     // Load in the RAPL start value
-    let (pp0_start, pp1_start, pkg_start, dram_start) = unsafe { RAPL_START };
+    let (timestamp_start, (pp0_start, pp1_start, pkg_start, dram_start)) = unsafe { RAPL_START };
 
     // Write the RAPL start and end values to the CSV
     write_to_csv(
         (
-            pp0_start, pp0_end, pp1_start, pp1_end, pkg_start, pkg_end, dram_start, dram_end,
+            timestamp_start,
+            timestamp_end,
+            pp0_start,
+            pp0_end,
+            pp1_start,
+            pp1_end,
+            pkg_start,
+            pkg_end,
+            dram_start,
+            dram_end,
         ),
         [
+            "TimeStart",
+            "TimeEnd",
             "PP0Start",
             "PP0End",
             "PP1Start",
@@ -115,7 +133,14 @@ pub fn stop_rapl() {
             pkg_start,
             pkg_end,
         ),
-        ["CoreStart", "CoreEnd", "PkgStart", "PkgEnd"],
+        [
+            "TimeStart",
+            "TimeEnd",
+            "CoreStart",
+            "CoreEnd",
+            "PkgStart",
+            "PkgEnd",
+        ],
     );
 }
 
