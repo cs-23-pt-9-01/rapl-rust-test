@@ -4,6 +4,7 @@ use serde::Serialize;
 use std::{
     fs::{File, OpenOptions},
     sync::Once,
+    time::{SystemTime, UNIX_EPOCH},
 };
 use thiserror::Error;
 
@@ -27,7 +28,7 @@ pub enum RaplError {
 }
 
 #[cfg(amd)]
-static mut RAPL_START: (u64, u64) = (0, 0);
+static mut RAPL_START: (u128, (u64, u64)) = (0, (0, 0));
 
 #[cfg(intel)]
 static mut RAPL_START: (u64, u64, u64, u64) = (0, 0, 0, 0);
@@ -52,8 +53,15 @@ pub fn start_rapl() {
         RAPL_POWER_UNITS.get_or_init(|| pwr_unit);
     });
 
+    // Get the current time in milliseconds since the UNIX epoch
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp_start = duration_since_epoch.as_millis();
+
     // Safety: RAPL_START is only accessed in this function and only from a single thread
-    unsafe { RAPL_START = read_rapl_registers() };
+    unsafe { RAPL_START = (timestamp_start, read_rapl_registers()) };
 }
 
 #[cfg(intel)]
@@ -87,12 +95,26 @@ pub fn stop_rapl() {
     // Read the RAPL end values
     let (core_end, pkg_end) = read_rapl_registers();
 
+    // Get the current time in milliseconds since the UNIX epoch
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp_end = duration_since_epoch.as_millis();
+
     // Load in the RAPL start value
-    let (core_start, pkg_start) = unsafe { RAPL_START };
+    let (timestamp_start, (core_start, pkg_start)) = unsafe { RAPL_START };
 
     // Write the RAPL start and end values to the CSV
     write_to_csv(
-        (core_start, core_end, pkg_start, pkg_end),
+        (
+            timestamp_start,
+            timestamp_end,
+            core_start,
+            core_end,
+            pkg_start,
+            pkg_end,
+        ),
         ["CoreStart", "CoreEnd", "PkgStart", "PkgEnd"],
     );
 }
@@ -134,16 +156,6 @@ where
     // Write the data to the CSV and flush it
     wtr.serialize(data).unwrap();
     wtr.flush().unwrap();
-
-    /*
-    // TODO: Revise if we can use timestamps in the CSV writing
-
-    let current_time = SystemTime::now();
-    let duration_since_epoch = current_time
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-    let timestamp = duration_since_epoch.as_millis();
-    */
 }
 
 // Get the CPU type based on the compile time configuration
