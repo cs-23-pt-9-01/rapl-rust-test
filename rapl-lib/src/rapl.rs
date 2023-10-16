@@ -22,6 +22,8 @@ use self::os_windows::{read_msr, start_rapl_impl};
 
 #[derive(Error, Debug)]
 pub enum RaplError {
+    #[error("io error")]
+    Io(#[from] std::io::Error),
     #[cfg(target_os = "windows")]
     #[error("windows error")]
     Windows(#[from] windows::core::Error),
@@ -105,7 +107,8 @@ pub fn stop_rapl() {
             "DramStart",
             "DramEnd",
         ],
-    );
+    )
+    .expect("failed to write to CSV");
 }
 
 #[cfg(amd)]
@@ -141,10 +144,11 @@ pub fn stop_rapl() {
             "PkgStart",
             "PkgEnd",
         ],
-    );
+    )
+    .expect("failed to write to CSV");
 }
 
-fn write_to_csv<T, C, U>(data: T, columns: C)
+fn write_to_csv<T, C, U>(data: T, columns: C) -> Result<(), std::io::Error>
 where
     T: Serialize,
     C: IntoIterator<Item = U>,
@@ -154,33 +158,33 @@ where
         Some(wtr) => wtr,
         None => {
             // Open the file to write to CSV. First argument is CPU type, second is RAPL power units
-            let file = OpenOptions::new()
-                .append(true)
-                .create(true)
-                .open(format!(
-                    "{}_{}.csv",
-                    get_cpu_type(),
-                    RAPL_POWER_UNITS.get().unwrap()
-                ))
-                .unwrap();
+            let file = OpenOptions::new().append(true).create(true).open(format!(
+                "{}_{}.csv",
+                get_cpu_type(),
+                RAPL_POWER_UNITS
+                    .get()
+                    .expect("failed to get RAPL power units")
+            ))?;
 
             // Create the CSV writer
             let mut wtr = WriterBuilder::new().from_writer(file);
 
             // Write the column names
-            wtr.write_record(columns).unwrap();
+            wtr.write_record(columns)?;
 
             // Store the CSV writer in a static variable
             unsafe { CSV_WRITER = Some(wtr) };
 
             // Return a mutable reference to the CSV writer
-            unsafe { CSV_WRITER.as_mut().unwrap() }
+            unsafe { CSV_WRITER.as_mut().expect("failed to get CSV writer") }
         }
     };
 
     // Write the data to the CSV and flush it
-    wtr.serialize(data).unwrap();
-    wtr.flush().unwrap();
+    wtr.serialize(data)?;
+    wtr.flush()?;
+
+    Ok(())
 }
 
 // Get the CPU type based on the compile time configuration
@@ -200,7 +204,7 @@ pub fn get_cpu_type() -> &'static str {
 fn read_rapl_registers() -> (u64, u64) {
     use self::amd::{AMD_MSR_CORE_ENERGY, MSR_RAPL_PKG_ENERGY_STAT};
 
-    let core = read_msr(AMD_MSR_CORE_ENERGY).unwrap();
+    let core = read_msr(AMD_MSR_CORE_ENERGY).expect("failed to read CORE_ENERGY");
     let pkg = read_msr(MSR_RAPL_PKG_ENERGY_STAT).expect("failed to read RAPL_PKG_ENERGY_STAT");
 
     (core, pkg)
