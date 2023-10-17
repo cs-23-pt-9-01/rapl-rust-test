@@ -56,11 +56,7 @@ pub fn start_rapl() {
     });
 
     // Get the current time in milliseconds since the UNIX epoch
-    let current_time = SystemTime::now();
-    let duration_since_epoch = current_time
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-    let timestamp_start = duration_since_epoch.as_millis();
+    let timestamp_start = get_timestamp_millis();
 
     // Safety: RAPL_START is only accessed in this function and only from a single thread
     let rapl_registers = read_rapl_registers();
@@ -73,11 +69,7 @@ pub fn stop_rapl() {
     let (pp0_end, pp1_end, pkg_end, dram_end) = read_rapl_registers();
 
     // Get the current time in milliseconds since the UNIX epoch
-    let current_time = SystemTime::now();
-    let duration_since_epoch = current_time
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-    let timestamp_end = duration_since_epoch.as_millis();
+    let timestamp_end = get_timestamp_millis();
 
     // Load in the RAPL start value
     let (timestamp_start, (pp0_start, pp1_start, pkg_start, dram_start)) = unsafe { RAPL_START };
@@ -118,11 +110,7 @@ pub fn stop_rapl() {
     let (core_end, pkg_end) = read_rapl_registers();
 
     // Get the current time in milliseconds since the UNIX epoch
-    let current_time = SystemTime::now();
-    let duration_since_epoch = current_time
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-    let timestamp_end = duration_since_epoch.as_millis();
+    let timestamp_end = get_timestamp_millis();
 
     // Load in the RAPL start value
     let (timestamp_start, (core_start, pkg_start)) = unsafe { RAPL_START };
@@ -147,6 +135,15 @@ pub fn stop_rapl() {
         ],
     )
     .expect("failed to write to CSV");
+}
+
+fn get_timestamp_millis() -> u128 {
+    let current_time = SystemTime::now();
+    let duration_since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let timestamp_end = duration_since_epoch.as_millis();
+    timestamp_end
 }
 
 fn write_to_csv<T, C, U>(data: T, columns: C) -> Result<(), std::io::Error>
