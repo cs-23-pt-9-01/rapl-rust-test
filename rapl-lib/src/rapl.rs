@@ -142,8 +142,7 @@ fn get_timestamp_millis() -> u128 {
     let duration_since_epoch = current_time
         .duration_since(UNIX_EPOCH)
         .expect("Time went backwards");
-    let timestamp_end = duration_since_epoch.as_millis();
-    timestamp_end
+    duration_since_epoch.as_millis()
 }
 
 fn write_to_csv<T, C, U>(data: T, columns: C) -> Result<(), std::io::Error>
