@@ -40,12 +40,14 @@ const stop = lib.func('void stop_rapl()');
 
 
 for (let i = 0; i < runCount; i++){
+
+    let tobeSorted = Array.from(mergeParam);
     start();
 
-    let result = mergeSortInPlaceFast(mergeParam);
+    mergeSortInPlaceFast(tobeSorted);
 
     stop();
-    console.log(result);
+    console.log(tobeSorted);
 }
 
 console.log("js job done");  
