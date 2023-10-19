@@ -39,7 +39,12 @@ for (int i = 0; i < count; i++)
     sorter.Sort(tobeSorted);
 
     stop_rapl();
-    Console.WriteLine(tobeSorted.ToString());
+    
+    foreach (var item in tobeSorted)
+    {
+        Console.Write(item + ",");
+    }
+    Console.WriteLine(" ");
 }
 Console.WriteLine("job done");
 
