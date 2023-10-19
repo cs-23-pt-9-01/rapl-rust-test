@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using System.text.Json;
+using System.Text.Json;
 
 // inspired from https://stackoverflow.com/questions/24374658/check-the-operating-system-at-compile-time 
 #if _LINUX
