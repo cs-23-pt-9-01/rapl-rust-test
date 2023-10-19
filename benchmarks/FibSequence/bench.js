@@ -26,9 +26,10 @@ const stop = lib.func('void stop_rapl()');
 for (let i = 0; i < runCount; i++){
     start();
 
-    fib(fibParam);
+    let result = fib(fibParam);
 
     stop();
+    console.log(result);
 }
 
 console.log("job done");  

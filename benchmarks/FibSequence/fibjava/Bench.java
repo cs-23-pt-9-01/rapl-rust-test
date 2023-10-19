@@ -71,6 +71,7 @@ class Bench {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+            System.out.println(result);
         }
 
         /*

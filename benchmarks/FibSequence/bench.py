@@ -26,9 +26,10 @@ for i in range(test_count):
     dll.start_rapl()
 
     # run test
-    fibIter(fib_param)
+    result = fibIter(fib_param)
 
     # stop recording
     dll.stop_rapl()
+    print(result)
 
 print("job done")

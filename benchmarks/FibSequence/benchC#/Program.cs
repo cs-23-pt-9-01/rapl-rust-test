@@ -42,8 +42,9 @@ for (int i = 0; i < count; i++)
 {
     start_rapl();
 
-    Fib(fibVal);
+    var result = Fib(fibVal);
 
     stop_rapl();
+    Console.WriteLine(result);
 }
 Console.WriteLine("job done");
