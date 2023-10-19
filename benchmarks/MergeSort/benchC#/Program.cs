@@ -39,7 +39,7 @@ for (int i = 0; i < count; i++)
     sorter.Sort(tobeSorted);
 
     stop_rapl();
-    Console.WriteLine(tobeSorted.to_string());
+    Console.WriteLine(tobeSorted.ToString);
 }
 Console.WriteLine("job done");
 
