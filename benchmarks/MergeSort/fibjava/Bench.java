@@ -46,7 +46,7 @@ class Bench {
         
         // Getting arguments
         // converting json array to java array
-        String[] data = args[0].replace("{","").replace("}","").split(",");
+        String[] data = args[0].replace("[","").replace("]","").split(",");
         List<Long> mergeParam = Arrays.stream(data).map(String::trim).map(Long::valueOf).toList();
         int loop_count = Integer.parseInt(args[1]);
 
