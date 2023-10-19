@@ -2,8 +2,7 @@ from ctypes import *
 import sys
 import platform
 
-fib_param = int(sys.argv[1])
-test_count = int(sys.argv[2])
+test_count = int(sys.argv[1])
 lib_path = "target\\release\\rapl_lib.dll" if platform.system(
 ) == "Windows" else "target/release/librapl_lib.so"
 
