@@ -5,6 +5,7 @@ import sys
 import platform
 
 merge_param = sys.argv[1]
+merge_param = merge_param.replace("[", "").replace("]", "").split(",")
 test_count =  int(sys.argv[2])
 lib_path = "target\\release\\rapl_lib.dll" if platform.system() == "Windows" else "target/release/librapl_lib.so"
 
