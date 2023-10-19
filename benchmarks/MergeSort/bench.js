@@ -2,6 +2,7 @@ const os = require("os");
 
 let data = process.argv[2];
 data = data.replace("[", "").replace("]", "").split(",");
+const mergeParam = data
 const runCount = process.argv[3];
 const libPath = os.platform() == "win32"?
   "target\\release\\rapl_lib.dll":
