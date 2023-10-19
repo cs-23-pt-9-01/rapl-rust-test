@@ -61,10 +61,6 @@ class Bench {
         }
         */
 
-        // instantiting sorter
-        Merge sorter = new Merge();
-
-
         // Running benchmark
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
@@ -75,7 +71,7 @@ class Bench {
                 e.printStackTrace();
             }
 
-            List<Long> sorted = sorter.mergeSort(mergeParam);
+            List<Long> sorted = Merge.mergeSort(mergeParam);
 
             try {
                 stop_rapl.invoke();
