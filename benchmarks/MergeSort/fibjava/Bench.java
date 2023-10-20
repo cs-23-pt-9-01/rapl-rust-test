@@ -117,28 +117,31 @@ class Bench {
             while (true){
                 //change the direction of this comparison to change the direction of the sort
                 if(x.compareTo(y) <= 0){
-            result.add(x);
-            if(it1.hasNext()){
-                x = it1.next();
-            }else{
-                result.add(y);
-                while(it2.hasNext()){
-                result.add(it2.next());
+                    result.add(x);
+                    if(it1.hasNext()){
+                        x = it1.next();
+                    }
+                    else{
+                        result.add(y);
+                        while(it2.hasNext()){
+                            result.add(it2.next());
+                        }
+                        break;
+                    }
                 }
-                break;
-            }
-            }else{
-            result.add(y);
-            if(it2.hasNext()){
-                y = it2.next();
-            }else{
-                result.add(x);
-                while (it1.hasNext()){
-                result.add(it1.next());
+                else{
+                    result.add(y);
+                    if(it2.hasNext()){
+                        y = it2.next();
+                    }
+                    else{
+                        result.add(x);
+                        while (it1.hasNext()){
+                            result.add(it1.next());
+                        }
+                        break;
+                    }
                 }
-                break;
-            }
-            }
             }
             return result;
         }
