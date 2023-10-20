@@ -46,14 +46,14 @@ class Bench {
                 e.printStackTrace();
             }
 
-            long result = itFibBig(n);
+            BigInteger result = itFibBig(n);
 
             try {
                 stop_rapl.invoke();
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-            System.out.println(result);
+            System.out.println(result.toString());
         }
         System.out.println("Java job done ");
     }
