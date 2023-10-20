@@ -63,4 +63,4 @@ for (int i = 0; i < count; i++)
     stop_rapl();
     Console.WriteLine(result.ToString());
 }
-Console.WriteLine("job done");
+Console.WriteLine("C# job done");

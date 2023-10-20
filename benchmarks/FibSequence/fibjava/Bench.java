@@ -46,7 +46,7 @@ class Bench {
                 e.printStackTrace();
             }
 
-            long result = itFibN(n);
+            long result = itFibBig(n);
 
             try {
                 stop_rapl.invoke();
@@ -80,8 +80,8 @@ class Bench {
     {
         if (n < 2)
         return new BigInteger(n + "");
-        BigInteger ans = new BigInteger();
-        BigInteger n1 = new BigInteger();
+        BigInteger ans = new BigInteger("0");
+        BigInteger n1 = new BigInteger("0");
         BigInteger n2 = new BigInteger("1");
         for(n--; n > 0; n--)
         {
