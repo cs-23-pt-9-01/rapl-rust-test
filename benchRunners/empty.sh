@@ -3,26 +3,26 @@ count=1000
 echo "starting empty"
 
 #   Node
-node ./benchmarks/FibSequence/bench.js $fibInput $count
+node ./benchmarks/empty/javascript/bench.js $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "NodeFib"
+bash utils/append_to_latest_csv.sh "NodeEmpty"
 
 #   Python
-pypy ./benchmarks/FibSequence/bench.py $fibInput $count
+pypy ./benchmarks/empty/python/bench.py $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "PythonFib"
+bash utils/append_to_latest_csv.sh "PythonEmpty"
 
 #   Pypy
-pypy ./benchmarks/FibSequence/bench.py $fibInput $count
+pypy ./benchmarks/empty/python/bench.py $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "PypyFib"
+bash utils/append_to_latest_csv.sh "PypyEmpty"
 
 #   C#
-dotnet run --project ./benchmarks/FibSequence/benchC#/Fib.csproj --configuration Release $fibInput $count
+dotnet run --project ./benchmarks/empty/csharp/Empty.csproj --configuration Release $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "CsharpFib"
+bash utils/append_to_latest_csv.sh "CsharpEmpty"
 
 #   Java
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java $fibInput $count
+java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/empty/java/Bench.java $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "JavaFib"
+bash utils/append_to_latest_csv.sh "JavaEmpty"
