@@ -1,4 +1,4 @@
-mergeInput=$(<mergeSortParam) # getting input from file
+mergeInput=`cat benchRunners/mergeSortParam` # getting input from file
 count=1000
 testName="mergeSort"
 folder="MergeSort"
