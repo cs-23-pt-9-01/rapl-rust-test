@@ -2,13 +2,13 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
 // OLD:
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10 10
+// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\empty\java\Bench.java 10
 
 // Testing with Java library path:
-// java -Djava.library.path=./target/release --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java 10 10
+// java -Djava.library.path=./target/release --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks\empty\java\Bench.java 10
 
 // Latest working version:
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/FibSequence/fibjava/Bench.java 10 10
+// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/empty/java/Bench.java 10
 
 class Bench {
     public static void main(String[] args) {
