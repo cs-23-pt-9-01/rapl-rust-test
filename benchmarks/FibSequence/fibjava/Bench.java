@@ -1,6 +1,8 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
+import java.math.BigInteger;
+
 // OLD:
 // java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\fibjava\Bench.java 10 10
 
@@ -94,6 +96,23 @@ class Bench {
         for(n--; n > 0; n--)
         {
             ans = n1 + n2;
+            n1 = n2;
+            n2 = ans;
+        }
+        return ans;
+    }
+
+    // Modified version of the itFibN method that uses BigInteger
+    public static BigInteger itFibBig(int n)
+    {
+        if (n < 2)
+        return new BigInteger(n + "");
+        BigInteger ans = new BigInteger();
+        BigInteger n1 = new BigInteger();
+        BigInteger n2 = new BigInteger("1");
+        for(n--; n > 0; n--)
+        {
+            ans = n1.add(n2);
             n1 = n2;
             n2 = ans;
         }
