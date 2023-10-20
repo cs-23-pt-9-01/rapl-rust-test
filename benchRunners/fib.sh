@@ -1,4 +1,4 @@
-fibInput=20000
+fibInput=200000
 count=1000
 testName="fib"
 folder="FibSequence"
