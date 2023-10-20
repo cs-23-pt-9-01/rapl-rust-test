@@ -38,7 +38,7 @@ static ulong Fib(uint x)
     return next;
 }
 // Modified test method that uses big integers
-static ulong FibBig(uint x)
+static BigInteger FibBig(uint x)
 {
     if (x == 0) return 0;
 
@@ -53,14 +53,14 @@ static ulong FibBig(uint x)
     return next;
 }
 
-//testing
+// testing
 for (int i = 0; i < count; i++)
 {
     start_rapl();
 
-    var result = Fib(fibVal);
+    var result = FibBig(fibVal);
 
     stop_rapl();
-    Console.WriteLine(result);
+    Console.WriteLine(result.ToString());
 }
 Console.WriteLine("job done");
