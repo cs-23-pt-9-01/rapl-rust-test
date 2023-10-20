@@ -32,4 +32,4 @@ for (let i = 0; i < runCount; i++){
     console.log(result);
 }
 
-console.log("job done");  
+console.log("js job done");  

@@ -75,6 +75,7 @@ class Bench {
             }
             System.out.println(result);
         }
+        System.out.println("Java job done");
 
         /*
         try (Arena arena = Arena.ofConfined()) {

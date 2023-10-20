@@ -81,6 +81,7 @@ class Bench {
 
             System.out.println(sorted.toString());
         }
+        System.out.println("Java job done");
 
         /*
         try (Arena arena = Arena.ofConfined()) {
