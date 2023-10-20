@@ -1,9 +1,16 @@
-// gcc benchmarks/empty/c/bench.c -O3 -o benchmarks/empty/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/empty/c/bench
+#include <stdio.h>
+#include <stdlib.h>
 
 void start_rapl();
 void stop_rapl();
 
-void main() {
-    start_rapl();
-    stop_rapl();
+void main(int argc, char *argv[]) {
+    int count = atoi(argv[1]);
+
+    for (int i = 0; i < count; i++) {
+        start_rapl();
+        stop_rapl();
+    }
+
+    printf("job done\n");
 }
