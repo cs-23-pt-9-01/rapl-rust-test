@@ -67,7 +67,7 @@ then
 fi
 
 
-if [ $arg2 != 'false' ]
+if [ $arg1 != 'false' ]
 then
 	# Send results data to Raspberry PI
 	bash utils/send_results_raspberry.sh
