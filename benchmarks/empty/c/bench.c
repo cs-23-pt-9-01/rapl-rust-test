@@ -4,7 +4,7 @@
 void start_rapl();
 void stop_rapl();
 
-void main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     int count = atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
@@ -13,4 +13,6 @@ void main(int argc, char *argv[]) {
     }
 
     printf("C job done\n");
+
+    return 0;
 }
