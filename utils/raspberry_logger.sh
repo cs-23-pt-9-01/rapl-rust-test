@@ -11,4 +11,5 @@ elif [ "$1" == 0 ]; then
   COMMAND="python temp_socket_testing_manager.py"
 
 # Call Raspberry PI with command
-ssh $HOSTNAME@$IP $COMMAND
+# Uses -i ~/.ssh/id_rsa for public key use, rather than password auth
+ssh -i ~/.ssh/id_rsa $HOSTNAME@$IP $COMMAND
