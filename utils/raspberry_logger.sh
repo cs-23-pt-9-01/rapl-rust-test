@@ -12,4 +12,4 @@ elif [ "$1" == 0 ]; then
 fi
 # Call Raspberry PI with command
 # Uses -i ~/.ssh/id_rsa for public key use, rather than password auth
-ssh -i /home/seff/.ssh/id_rsa $HOSTNAME@$IP $COMMAND &
+ssh -i $HOME/.ssh/id_rsa $HOSTNAME@$IP $COMMAND &
