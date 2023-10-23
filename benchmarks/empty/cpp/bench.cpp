@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstdlib>
 
 extern "C" {
     void start_rapl();
