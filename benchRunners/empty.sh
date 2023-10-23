@@ -5,7 +5,12 @@ echo "starting empty"
 #   C
 gcc benchmarks/empty/c/bench.c -O3 -o benchmarks/empty/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/empty/c/bench $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "Cempty"
+bash utils/append_to_latest_csv.sh "CEmpty"
+
+#   C++
+g++ benchmarks/empty/cpp/bench.cpp -O3 -o benchmarks/empty/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/empty/cpp/bench $count
+sleep 5s
+bash utils/append_to_latest_csv.sh "CppEmpty"
 
 #   Node
 node ./benchmarks/empty/javascript/bench.js $count
