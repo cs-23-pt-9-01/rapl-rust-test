@@ -18,7 +18,7 @@ sleep 5s
 bash utils/append_to_latest_csv.sh "NodeEmpty"
 
 #   Python
-pypy ./benchmarks/empty/python/bench.py $count
+python3 ./benchmarks/empty/python/bench.py $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "PythonEmpty"
 
