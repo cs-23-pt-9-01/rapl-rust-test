@@ -68,6 +68,8 @@ class Bench {
             }
         }
 
+        System.out.println("Java job done");
+
         /*
         try (Arena arena = Arena.ofConfined()) {
             stop_rapl.invoke();

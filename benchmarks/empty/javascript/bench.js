@@ -16,4 +16,4 @@ for (let i = 0; i < runCount; i++) {
   stop();
 }
 
-console.log("job done");  
+console.log("Javascript job done");  

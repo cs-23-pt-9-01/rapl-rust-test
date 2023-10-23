@@ -12,4 +12,4 @@ for i in range(test_count):
     dll.start_rapl()
     dll.stop_rapl()
 
-print("job done")
+print("Python job done")

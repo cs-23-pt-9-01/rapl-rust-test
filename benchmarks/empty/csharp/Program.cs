@@ -24,4 +24,4 @@ for (int i = 0; i < count; i++)
     start_rapl();
     stop_rapl();
 }
-Console.WriteLine("job done");
+Console.WriteLine("Csharp job done");
