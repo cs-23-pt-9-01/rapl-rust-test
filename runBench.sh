@@ -70,7 +70,7 @@ fi
 if [ $arg2 != 'false' ]
 then
 	# Send results data to Raspberry PI
-	bash utils/send_results.sh
+	bash utils/send_results_raspberry.sh
 fi
 
 
