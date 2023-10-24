@@ -1,7 +1,7 @@
 fibInput=200000
 count=1000
 testName="fib"
-folder="FibSequence"
+folder="fibsequence"
 
 echo "starting fib"
 
