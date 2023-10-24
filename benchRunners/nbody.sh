@@ -20,11 +20,11 @@ echo --- C++ Done ---
 echo
 
 #   Node
-echo --- Starting Node.js ---
+echo --- Starting JavaScript ---
 node ./benchmarks/n-body/javascript/bench.js $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "NodeNBody"
-echo --- Node.js Done ---
+echo --- JavaScript Done ---
 echo
 
 #   Python
