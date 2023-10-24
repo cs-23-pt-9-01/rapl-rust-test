@@ -29,8 +29,20 @@ template<typename RandomAccessIterator>
   mergesort(first, last, std::less<typename std::iterator_traits<RandomAccessIterator>::value_type>());
 }
 
+// read a vector of integers from a string (comma seperated)
+vector<int> IntVectorFromString(std::string str){
+    vector<int> result;
 
-using namespace std;
+    size_t pos = 0;
+    while( pos = str.find(",") != std::string::npos){
+
+        std::string token = str.substr(0, str.find(","));
+        result.push_back(std::atoi(token.c_str()));
+        str.erase(0, pos + 1);
+    }
+    result.push_back(std::atoi(str.c_str()));
+    return result;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -42,19 +54,10 @@ int main(int argc, char *argv[]) {
     
 
     // getting numbers from mergeParamRaw
-    vector<int> mergeParam(1, 0);
- 
-    int j = 0;
-    for (int i = 0; i < mergeParamRaw.size(); i++) {
-        // s[i] - '0' would also work here
-        mergeParam[j] = mergeParam[j] * 10 + (mergeParamRaw[i] - 48);
-    }
+    vector<int> mergeParam = IntVectorFromString(mergeParamRaw);
+    
 
     int count = std::atoi(argv[2]);
-
-    for (int i = 0; i < mergeParam.size(); i++) {
-        std::cout << mergeParam[i] << " ";
-    }
 
     for (int i = 0; i < count; i++) {
         // copying mergeParam to avoid changing it
@@ -65,10 +68,6 @@ int main(int argc, char *argv[]) {
         mergesort(mergeParamCopy.begin(), mergeParamCopy.end());
 
         stop_rapl();
-
-        for (int i = 0; i < mergeParamCopy.size(); i++) {
-            std::cout << mergeParamCopy[i] << " ";
-        }
 
         // stopping compiler optimization
         if (mergeParamCopy.size() < 42){
