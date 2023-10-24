@@ -5,13 +5,15 @@ echo "starting N-Body"
 
 #   C
 echo - Starting C
-gcc -fomit-frame-pointer -march=ivybridge benchmarks/N-Body/benchC/Also_better_than_rust.c -O3 -o benchmarks/N-Body/benchC/Also_better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC/Also_better_than_rust.c $Body_Count $count
+gcc -fomit-frame-pointer -march=ivybridge benchmarks/N-Body/benchC/Also_better_than_rust.c -O3 -o benchmarks/N-Body/benchC/Also_better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release
+gcc ./benchmarks/N-Body/benchC/Also_better_than_rust $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CNBody"
 
 #   C++
 echo - Starting C++
-g++ -fomit-frame-pointer -march=ivybridge -std=c++17 benchmarks/N-Body/benchC++/better_than_rust.cpp -O3 -o benchmarks/N-Body/benchC++/better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC++/better_than_rust.cpp $Body_Count $count
+g++ -fomit-frame-pointer -march=ivybridge -std=c++17 benchmarks/N-Body/benchC++/better_than_rust.cpp -O3 -o benchmarks/N-Body/benchC++/better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release
+g++ ./benchmarks/N-Body/benchC++/better_than_rust $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CppNBody"
 
