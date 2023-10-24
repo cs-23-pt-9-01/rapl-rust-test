@@ -53,7 +53,7 @@ echo
 
 #   Java
 echo --- Starting Java ---
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/N-Body/benchJava/N-Body/src/Bench.java $Body_Count $count
+java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/N-Body/benchJava/N-Body/Bench.java $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "JavaNBody"
 echo --- Java Done ---
