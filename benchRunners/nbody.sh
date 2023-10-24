@@ -9,7 +9,7 @@ sleep 5s
 bash utils/append_to_latest_csv.sh "NodeNBody"
 
 #   Python
-pypy ./benchmarks/N-Body/bench.py $Body_Count $count
+python3 ./benchmarks/N-Body/bench.py $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "PythonNBody"
 
