@@ -120,9 +120,9 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
 
 def N_Body(n, ref='sun'):
     offset_momentum(BODIES[ref])
-    report_energy()
+    #report_energy()
     advance(0.01, n)
-    report_energy()
+    #report_energy()
 ######################################################################################
 
 
