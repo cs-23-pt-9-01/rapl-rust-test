@@ -8,4 +8,4 @@ All benchmarks are written to be called from the root of the repository (relativ
 - Python : faster version
 - Javascript (NodeJS) 
 - C# (.NET 7) 
-- Java
+- Java 21
