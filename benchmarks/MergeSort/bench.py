@@ -8,6 +8,7 @@ import platform
 from heapq import merge
 
 merge_param = sys.argv[1]
+# formatting merge_param into a list of integers
 merge_param = merge_param.replace("[", "").replace("]", "").split(",")
 merge_param = [int(i) for i in merge_param]
 test_count =  int(sys.argv[2])

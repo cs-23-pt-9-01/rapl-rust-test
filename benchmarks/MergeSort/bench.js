@@ -1,9 +1,13 @@
 const os = require("os");
 
+// getting arguments
 let data = process.argv[2];
+// formatting input into a list of numbers
 data = data.replace("[", "").replace("]", "").split(",").map(Number);
 const mergeParam = data
 const runCount = process.argv[3];
+
+// finding path depending on OS
 const libPath = os.platform() == "win32"?
   "target\\release\\rapl_lib.dll":
   "target/release/librapl_lib.so"
@@ -34,13 +38,15 @@ function mergeSortInPlaceFast(v) {
   }
 }
 
+// loading library
 const koffi = require('koffi');
 const lib = koffi.load(libPath);
 
+// loading functions
 const start = lib.func('int start_rapl()');
 const stop = lib.func('void stop_rapl()');
 
-
+// running benchmark
 for (let i = 0; i < runCount; i++){
 
     let tobeSorted = Array.from(mergeParam);
