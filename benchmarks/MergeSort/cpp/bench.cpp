@@ -62,6 +62,10 @@ int main(int argc, char *argv[]) {
 
         stop_rapl();
 
+        for (int i = 0; i < mergeParamCopy.size(); i++) {
+            std::cout << mergeParamCopy[i] << " ";
+        }
+
         // stopping compiler optimization
         if (mergeParamCopy.size() < 42){
             std::cout << "Result: " << mergeParamCopy[0] << std::endl;

@@ -120,6 +120,7 @@ int main(int argc, char *argv[]) {
 
         stop_rapl();
 
+        printf("count: %d\n", count);
         for (int j = 0; j < count; j++) {
             printf("%d ", mergeParamCopy[j]);
         }
