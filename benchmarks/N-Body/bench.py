@@ -134,10 +134,9 @@ for i in range(test_count):
     dll.start_rapl()
 
     # run test
-    result = N_Body(N_Count)
+    N_Body(N_Count)
 
     # stop recording
     dll.stop_rapl()
-    print(result)
 
 print("job done")
