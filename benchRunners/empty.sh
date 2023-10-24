@@ -3,6 +3,7 @@ testName="empty"
 folder="empty"
 
 echo "!!! Starting $testName !!!"
+echo
 
 #   C
 echo --- Starting C ---
