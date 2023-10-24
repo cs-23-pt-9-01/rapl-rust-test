@@ -6,22 +6,22 @@ folder="MergeSort"
 echo "starting mergeSort"
 
 #   Node
-node ./benchmarks/$folder/bench.js $mergeInput $count
+node ./benchmarks/$folder/javascript/bench.js $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Node$testName"
 
 #   Python
-python3 ./benchmarks/$folder/bench.py $mergeInput $count
+python3 ./benchmarks/$folder/python/bench.py $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Python$testName"
 
 #   Pypy
-pypy ./benchmarks/$folder/bench.py $mergeInput $count
+pypy ./benchmarks/$folder/python/bench.py $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Pypy$testName"
 
 #   C#
-dotnet run --project ./benchmarks/$folder/benchC#/MergeSort.csproj --configuration Release $mergeInput $count
+dotnet run --project ./benchmarks/$folder/csharp/MergeSort.csproj --configuration Release $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 

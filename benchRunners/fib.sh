@@ -6,26 +6,26 @@ folder="FibSequence"
 echo "starting fib"
 
 #   Node
-node ./benchmarks/$folder/bench.js $fibInput $count
+node ./benchmarks/$folder/javascript/bench.js $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Node$testName"
 
 #   Python
-python3 ./benchmarks/$folder/bench.py $fibInput $count
+python3 ./benchmarks/$folder/python/bench.py $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Python$testName"
 
 #   Pypy
-pypy ./benchmarks/$folder/bench.py $fibInput $count
+pypy ./benchmarks/$folder/python/bench.py $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Pypy$testName"
 
 #   C#
-dotnet run --project ./benchmarks/$folder/benchC#/Fib.csproj --configuration Release $fibInput $count
+dotnet run --project ./benchmarks/$folder/csharp/Fib.csproj --configuration Release $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 
 #   Java
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/fibjava/Bench.java $fibInput $count
+java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Java$testName"
