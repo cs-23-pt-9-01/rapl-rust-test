@@ -58,11 +58,10 @@ class Bench {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-
-            System.out.println(sorted.toString());
+            if (sorted.size() < 42){
+                System.out.println(sorted.toString());
+            }
         }
-        System.out.println("Java job done");
-
     }
 
     // Test class (implementation was a class in rosetta)

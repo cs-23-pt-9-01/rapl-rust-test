@@ -40,11 +40,13 @@ for (int i = 0; i < count; i++)
 
     stop_rapl();
     
-    foreach (var item in tobeSorted)
-    {
-        Console.Write(item + ",");
+    if (tobeSorted.length < 42){
+        foreach (var item in tobeSorted)
+        {
+            Console.Write(item + " ");
+        }
+        Console.WriteLine();
     }
-    Console.WriteLine(" ");
 }
 Console.WriteLine("C# job done");
 

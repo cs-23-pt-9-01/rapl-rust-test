@@ -55,7 +55,9 @@ for (let i = 0; i < runCount; i++){
     mergeSortInPlaceFast(tobeSorted);
 
     stop();
-    console.log(tobeSorted);
+
+    if (tobeSorted.length < 42){
+        console.log(tobeSorted.length);
+    }
 }
 
-console.log("js job done");  

@@ -66,4 +66,3 @@ for (int i = 0; i < count; i++)
         Console.WriteLine(result.ToString());
     }
 }
-Console.WriteLine("C# job done");
