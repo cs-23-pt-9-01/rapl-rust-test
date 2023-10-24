@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 
     int* mergeParam = convertStrtoArr(mergeParamRaw);
 
-    for (int i = 0; i < countChar(mergeParamRaw,","); i++) {
+    for (int i = 0; i < countChar(mergeParamRaw,','); i++) {
         printf("%d ", mergeParam[i]);
     }
 
