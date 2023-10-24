@@ -16,7 +16,7 @@ echo --- Starting C++ ---
 g++ -fomit-frame-pointer -march=ivybridge -std=c++17 benchmarks/N-Body/Cpp/better_than_rust.cpp -O3 -o benchmarks/N-Body/Cpp/better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/Cpp/better_than_rust $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CppNBody"
-echo --- C++ Done --
+echo --- C++ Done ---
 echo
 
 #   Node
