@@ -1,7 +1,8 @@
 count=1000
+testName="empty"
+folder="empty"
 
-
-echo "!!! Starting empty !!!"
+echo "!!! Starting $testName !!!"
 
 #   C
 echo --- Starting C ---
@@ -59,4 +60,4 @@ bash utils/append_to_latest_csv.sh "JavaEmpty"
 echo --- Java Done ---
 echo
 
-echo "!!! Finished empty !!!"
+echo "!!! Finished $testName !!!"

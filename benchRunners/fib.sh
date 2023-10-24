@@ -3,7 +3,7 @@ count=1000
 testName="fib"
 folder="fibsequence"
 
-echo "starting fib"
+echo "!!! Starting $testName !!!"
 
 #   Node
 node ./benchmarks/$folder/javascript/bench.js $fibInput $count
@@ -29,3 +29,5 @@ bash utils/append_to_latest_csv.sh "Csharp$testName"
 java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Java$testName"
+
+echo "!!! Finished $testName !!!"

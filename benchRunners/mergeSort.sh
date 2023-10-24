@@ -1,9 +1,9 @@
 mergeInput=`cat benchRunners/mergeSortParam` # getting input from file
 count=1000
 testName="mergeSort"
-folder="MergeSort"
+folder="mergesort"
 
-echo "starting mergeSort"
+echo "!!! Starting $testName !!!"
 
 #   Node
 node ./benchmarks/$folder/javascript/bench.js $mergeInput $count
@@ -29,3 +29,5 @@ bash utils/append_to_latest_csv.sh "Csharp$testName"
 java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Java$testName"
+
+echo "!!! Finished $testName !!!"
