@@ -259,8 +259,8 @@ int main(int argc, char* argv[]) {
 
         stop_rapl();
 
-        std::cout << "job done" << std::endl;
+        
     }
-
+    std::cout << "job done" << std::endl;
 }
 
