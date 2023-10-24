@@ -52,6 +52,10 @@ int main(int argc, char *argv[]) {
 
     int count = std::atoi(argv[2]);
 
+    for (int i = 0; i < mergeParam.size(); i++) {
+        std::cout << mergeParam[i] << " ";
+    }
+
     for (int i = 0; i < count; i++) {
         // copying mergeParam to avoid changing it
         vector<int> mergeParamCopy = vector<int>(mergeParam);

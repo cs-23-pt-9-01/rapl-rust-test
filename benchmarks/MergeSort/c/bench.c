@@ -102,6 +102,10 @@ int main(int argc, char *argv[]) {
 
     int* mergeParam = convertStrtoArr(mergeParamRaw);
 
+    for (int i = 0; i < countChar(mergeParamRaw,","); i++) {
+        printf("%d ", mergeParam[i]);
+    }
+
     free(mergeParamRaw);
 
     int count = atoi(argv[2]);
