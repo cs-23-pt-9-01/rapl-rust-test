@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void start_rapl();
 void stop_rapl();
@@ -38,7 +39,7 @@ int* convertStrtoArr(char* str)
  
     // create an array with size as string
     // length and initialize with 0
-    int* arr = malloc(countChar(str,",") * sizeof(int));
+    int* arr = malloc(countChar(str,',') * sizeof(int));
  
     int j = 0, i, sum = 0;
  
