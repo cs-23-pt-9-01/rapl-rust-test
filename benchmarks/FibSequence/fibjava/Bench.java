@@ -55,7 +55,7 @@ class Bench {
             }
             System.out.println(result.toString());
         }
-        System.out.println("Java job done ");
+        System.out.println("Java job done");
     }
 
     // Test method
