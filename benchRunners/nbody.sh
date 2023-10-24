@@ -59,3 +59,5 @@ bash utils/append_to_latest_csv.sh "JavaNBody"
 echo --- Java Done ---
 echo.
 
+echo "!!! Finished N-Body !!!"
+
