@@ -35,7 +35,7 @@ for (let i = 0; i < runCount; i++){
     let result = fib(fibParam);
 
     stop();
-    console.log(result);
+    if (result < 42){
+        console.log(result);
+    }
 }
-
-console.log("js job done");  

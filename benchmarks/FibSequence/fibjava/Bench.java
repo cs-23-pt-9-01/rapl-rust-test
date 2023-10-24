@@ -53,9 +53,12 @@ class Bench {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-            System.out.println(result.toString());
+            
+            // stopping compiler optimization
+            if (result.compareTo(new BigInteger("42")) == 0){
+                System.out.println(result.toString());
+            }
         }
-        System.out.println("Java job done");
     }
 
     // Test method

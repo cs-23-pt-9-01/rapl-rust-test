@@ -31,6 +31,6 @@ for i in range(test_count):
 
     # stop recording
     dll.stop_rapl()
-    print(result)
-
-print("py job done")
+    
+    if result < 42:
+        print(result)

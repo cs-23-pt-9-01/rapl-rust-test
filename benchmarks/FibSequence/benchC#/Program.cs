@@ -62,6 +62,8 @@ for (int i = 0; i < count; i++)
     var result = FibBig(fibVal);
 
     stop_rapl();
-    Console.WriteLine(result.ToString());
+    if (result < 42){
+        Console.WriteLine(result.ToString());
+    }
 }
 Console.WriteLine("C# job done");
