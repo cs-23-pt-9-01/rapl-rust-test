@@ -29,11 +29,11 @@ sleep 5s
 bash utils/append_to_latest_csv.sh "JavaNBody"
 
 #   C
-gcc benchmarks/empty/c/bench.c -O3 -o benchmarks/empty/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC/Also_better_than_rust.c $Body_Count $count
+gcc benchmarks/N-Body/benchC/Also_better_than_rust.c -O3 -o benchmarks/N-Body/benchC/Also_better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC/Also_better_than_rust.c $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CNBody"
 
 #   C++
-g++ benchmarks/empty/cpp/bench.cpp -O3 -o benchmarks/empty/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC++/better_than_rust.cpp $Body_Count $count
+g++ benchmarks/N-Body/benchC++/better_than_rust.cpp -O3 -o benchmarks/N-Body/benchC++/better_than_rust -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/N-Body/benchC++/better_than_rust.cpp $Body_Count $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "CppNBody"
