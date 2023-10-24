@@ -4,6 +4,7 @@ testName="mergeSort"
 folder="mergesort"
 
 echo "!!! Starting $testName !!!"
+echo
 
 #   Node
 echo --- Starting JavaScript ---

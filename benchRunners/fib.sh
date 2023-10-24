@@ -4,6 +4,7 @@ testName="fib"
 folder="fibsequence"
 
 echo "!!! Starting $testName !!!"
+echo
 
 #   Node
 echo --- Starting JavaScript ---
