@@ -23,6 +23,7 @@ void RemoveChars(char *s, char c)
 
     s[writer]=0;
 }
+
 // helper function for counting characters
 int countChar(char* str, char c){
     int i = 0; 
@@ -31,36 +32,14 @@ int countChar(char* str, char c){
 }
 
 // helper function for converting string to array of int (comma seperated)
-// inspired by https://www.geeksforgeeks.org/convert-a-string-to-integer-array-in-c-c/
-int* convertStrtoArr(char* str)
-{
-    // get length of string str
-    int str_length = strlen(str);
- 
-    // create an array with size as string
-    // length and initialize with 0
+int* convertToIntArr(char* str){
     int* arr = malloc(countChar(str,',') * sizeof(int));
- 
-    int j = 0, i, sum = 0;
- 
-    // Traverse the string
-    for (i = 0; i<str_length; i++) {
- 
-        // if str[i] is ', ' then split
-        if (str[i] == ',')
-            continue;
-         if (str[i] == ' '){
-            // Increment j to point to next
-            // array location
-            j++;
-        }
-        else {
- 
-            // subtract str[i] by 48 to convert it to int
-            // Generate number by multiplying 10 and adding
-            // (int)(str[i])
-            arr[j] = arr[j] * 10 + (str[i] - 48);
-        }
+    char* token = strtok(str, ",");
+    int i = 0;
+    while (token != NULL) {
+        arr[i] = atoi(token);
+        token = strtok(NULL, ",");
+        i++;
     }
     return arr;
 }
@@ -92,8 +71,7 @@ void merge_sort (int *a, int n) {
 }
 
 
-int main(int argc, char *argv[]) {
-    
+int main(int argc, char *argv[]) {    
     // getting raw merge input
     char* mergeParamRaw = argv[1];
 
@@ -101,11 +79,8 @@ int main(int argc, char *argv[]) {
     RemoveChars(argv[1], '[');
     RemoveChars(argv[1], ']');
 
-    int* mergeParam = convertStrtoArr(mergeParamRaw);
-
-    for (int i = 0; i < countChar(mergeParamRaw,','); i++) {
-        printf("%d ", mergeParam[i]);
-    }
+    int* mergeParam = convertToIntArr(mergeParamRaw);
+    int mergeParamLen = sizeof(mergeParam) / sizeof(mergeParam[0]) + 1;
 
     free(mergeParamRaw);
 
@@ -114,25 +89,20 @@ int main(int argc, char *argv[]) {
     // running benchmark
     for (int i = 0; i < count; i++) {
         // copying mergeParam as merge_sort is in-place
-        int* mergeParamCopy = malloc(count * sizeof(int));
-        for (int j = 0; j < count; j++) {
+        int* mergeParamCopy = malloc(mergeParamLen * sizeof(int));
+        for (int j = 0; j < mergeParamLen; j++) {
             mergeParamCopy[j] = mergeParam[j];
         }
 
         start_rapl();
 
-        merge_sort(mergeParamCopy, count);
+        merge_sort(mergeParamCopy, mergeParamLen);
 
         stop_rapl();
 
-        printf("count: %d\n", count);
-        for (int j = 0; j < count; j++) {
-            printf("%d ", mergeParamCopy[j]);
-        }
-
         // stopping compiler optimization
         if (sizeof(mergeParamCopy) < 42){
-            printf("Result: %d\n", mergeParamCopy[0]);
+            printf("%d\n", mergeParamCopy[0]);
         }
 
         free(mergeParamCopy);
