@@ -50,7 +50,7 @@ echo
 
 #   C++
 echo --- Starting C++ ---
-g++ benchmarks/empty/FibSequence/bench.cpp -O3 -o benchmarks/FibSequence/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/FibSequence/cpp/bench $fibInput $count
+g++ benchmarks/FibSequence/cpp/bench.cpp -O3 -o benchmarks/FibSequence/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/FibSequence/cpp/bench $fibInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---
