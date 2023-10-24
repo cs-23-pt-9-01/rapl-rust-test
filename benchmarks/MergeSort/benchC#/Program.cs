@@ -40,7 +40,7 @@ for (int i = 0; i < count; i++)
 
     stop_rapl();
     
-    if (tobeSorted.length < 42){
+    if (tobeSorted.Length < 42){
         foreach (var item in tobeSorted)
         {
             Console.Write(item + " ");
