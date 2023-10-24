@@ -22,7 +22,7 @@ const lib = koffi.load(libPath);
 const start = lib.func('int start_rapl()');
 const stop = lib.func('void stop_rapl()');
 
-
+// running benchmark
 for (let i = 0; i < runCount; i++){
     start();
 

@@ -30,7 +30,7 @@ static extern void stop_rapl();
 // instantiate sorter
 var sorter = new MergeSort<uint>();
 
-//testing
+// running benchmark
 for (int i = 0; i < count; i++)
 {
     var tobeSorted = new List<uint>(mergeParam).ToArray();

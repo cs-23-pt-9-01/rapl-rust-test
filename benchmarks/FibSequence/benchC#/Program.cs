@@ -37,6 +37,7 @@ static ulong Fib(uint x)
     }
     return next;
 }
+
 // Modified test method that uses big integers
 static BigInteger FibBig(uint x)
 {
@@ -53,7 +54,7 @@ static BigInteger FibBig(uint x)
     return next;
 }
 
-// testing
+// running benchmark
 for (int i = 0; i < count; i++)
 {
     start_rapl();

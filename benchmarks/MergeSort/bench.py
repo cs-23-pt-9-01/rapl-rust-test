@@ -4,6 +4,9 @@ from ctypes import *
 import sys
 import platform
 
+# used in test method
+from heapq import merge
+
 merge_param = sys.argv[1]
 merge_param = merge_param.replace("[", "").replace("]", "").split(",")
 merge_param = [int(i) for i in merge_param]
@@ -11,8 +14,6 @@ test_count =  int(sys.argv[2])
 lib_path = "target\\release\\rapl_lib.dll" if platform.system() == "Windows" else "target/release/librapl_lib.so"
 
 # test method
-from heapq import merge
-
 def merge_sort(m):
     if len(m) <= 1:
         return m
@@ -25,9 +26,10 @@ def merge_sort(m):
     right = merge_sort(right)
     return list(merge(left, right))
 
-# start lib
+# load lib
 dll = cdll.LoadLibrary(lib_path)
 
+# running benchmark
 for i in range(test_count):
     # start recording
     dll.start_rapl()
