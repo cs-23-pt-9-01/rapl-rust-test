@@ -82,8 +82,6 @@ int main(int argc, char *argv[]) {
     int* mergeParam = convertToIntArr(mergeParamRaw);
     int mergeParamLen = sizeof(mergeParam) / sizeof(mergeParam[0]) + 1;
 
-    free(mergeParamRaw);
-
     int count = atoi(argv[2]);
 
     // running benchmark
