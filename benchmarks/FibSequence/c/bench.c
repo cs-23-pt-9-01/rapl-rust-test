@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < count; i++) {
         start_rapl();
-        long long int result = fibb(0,1,fibParam);
+        long long int result = fibb(1,1,fibParam);
         stop_rapl();
 
         // stopping compiler optimization
