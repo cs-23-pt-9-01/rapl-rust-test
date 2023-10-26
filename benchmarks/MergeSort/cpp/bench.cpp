@@ -1,5 +1,6 @@
 #include <iostream>
 
+using namespace std;
 extern "C" {
     void start_rapl();
     void stop_rapl();
