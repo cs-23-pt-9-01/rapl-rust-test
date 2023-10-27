@@ -33,8 +33,8 @@ class Bench {
 
         
         // Getting arguments
-        int n = Integer.parseInt(args[0]);
-        int loop_count = Integer.parseInt(args[1]);
+        int loop_count = Integer.parseInt(args[0]);
+        int n = Integer.parseInt(args[1]);
 
         // Running benchmark
         // Note that this could potentially be optimized away

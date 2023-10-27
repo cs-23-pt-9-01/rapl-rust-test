@@ -12,8 +12,8 @@ using System.Numerics;
 #endif
 
 string[] arguments = Environment.GetCommandLineArgs();
-uint count = uint.Parse(arguments[2]);
-uint fibVal = uint.Parse(arguments[1]);
+uint count = uint.Parse(arguments[1]);
+uint fibVal = uint.Parse(arguments[2]);
 
 // DLL imports
 [DllImport(pathToLib)]

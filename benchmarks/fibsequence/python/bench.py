@@ -4,11 +4,14 @@ from ctypes import *
 import sys
 import platform
 
-fib_param = int(sys.argv[1])
-test_count =  int(sys.argv[2])
-lib_path = "target\\release\\rapl_lib.dll" if platform.system() == "Windows" else "target/release/librapl_lib.so"
+test_count = int(sys.argv[1])
+fib_param = int(sys.argv[2])
+lib_path = "target\\release\\rapl_lib.dll" if platform.system(
+) == "Windows" else "target/release/librapl_lib.so"
 
 # test method
+
+
 def fibIter(n):
     if n < 2:
         return n
@@ -17,6 +20,7 @@ def fibIter(n):
     for _ in range(2, n):
         fibPrev, fib = fib, fib + fibPrev
     return fib
+
 
 # load lib
 dll = cdll.LoadLibrary(lib_path)
