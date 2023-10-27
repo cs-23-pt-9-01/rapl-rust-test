@@ -32,7 +32,7 @@ echo
 
 #   C#
 echo --- Starting C# ---
-dotnet run --project ./benchmarks/$folder/csharp/Fib.csproj --configuration Release $count $fibInput
+dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count $fibInput
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---

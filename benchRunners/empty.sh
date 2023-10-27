@@ -47,7 +47,7 @@ echo
 
 #   C#
 echo --- Starting C# ---
-dotnet run --project ./benchmarks/$folder/csharp/Empty.csproj --configuration Release $count
+dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---
