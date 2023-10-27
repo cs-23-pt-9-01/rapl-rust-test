@@ -9,13 +9,13 @@ echo
 echo --- Starting C ---
 gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count
 sleep 5s
-bash utils/append_to_latest_csv.sh "CEmpty"
+bash utils/append_to_latest_csv.sh "C$testName"
 echo --- C Done ---
 echo
 
 #   C++
 echo --- Starting C++ ---
-g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/empty/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---

@@ -10,7 +10,7 @@ echo
 echo --- Starting C ---
 gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "CSleep"
+bash utils/append_to_latest_csv.sh "C$testName"
 echo --- C Done ---
 echo
 
@@ -18,47 +18,47 @@ echo
 echo --- Starting C++ ---
 g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "CppSleep"
+bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---
 echo
 
 #   Node
 echo --- Starting JavaScript ---
-node ./benchmarks/sleep/javascript/bench.js $count $sleep_time
+node ./benchmarks/$folder/javascript/bench.js $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "NodeSleep"
+bash utils/append_to_latest_csv.sh "Node$testName"
 echo --- JavaScript Done ---
 echo
 
 #   Python
 echo --- Starting Python ---
-python3 ./benchmarks/sleep/python/bench.py $count $sleep_time
+python3 ./benchmarks/$folder/python/bench.py $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "PythonSleep"
+bash utils/append_to_latest_csv.sh "Python$testName"
 echo --- Python Done ---
 echo
 
 #   Pypy
 echo --- Starting PyPy ---
-pypy ./benchmarks/sleep/python/bench.py $count $sleep_time
+pypy ./benchmarks/$folder/python/bench.py $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "PypySleep"
+bash utils/append_to_latest_csv.sh "Pypy$testName"
 echo --- PyPy Done ---
 echo
 
 #   C#
 echo --- Starting C# ---
-dotnet run --project ./benchmarks/sleep/csharp/Sleep.csproj --configuration Release $count $sleep_time
+dotnet run --project ./benchmarks/$folder/csharp/Sleep.csproj --configuration Release $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "CsharpSleep"
+bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---
 echo
 
 #   Java
 echo --- Starting Java ---
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/sleep/java/Bench.java $count $sleep_time
+java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count $sleep_time
 sleep 5s
-bash utils/append_to_latest_csv.sh "JavaSleep"
+bash utils/append_to_latest_csv.sh "Java$testName"
 echo --- Java Done ---
 echo
 
