@@ -8,7 +8,7 @@ echo
 
 #   C
 echo --- Starting C ---
-gcc benchmarks/sleep/c/bench.c -O3 -o benchmarks/sleep/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/sleep/c/bench $count $sleep_time
+gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count $sleep_time
 sleep 5s
 bash utils/append_to_latest_csv.sh "CSleep"
 echo --- C Done ---
@@ -16,7 +16,7 @@ echo
 
 #   C++
 echo --- Starting C++ ---
-g++ benchmarks/sleep/cpp/bench.cpp -O3 -o benchmarks/sleep/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/sleep/cpp/bench $count $sleep_time
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count $sleep_time
 sleep 5s
 bash utils/append_to_latest_csv.sh "CppSleep"
 echo --- C++ Done ---
