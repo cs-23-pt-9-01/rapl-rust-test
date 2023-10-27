@@ -60,4 +60,3 @@ for (let i = 0; i < runCount; i++){
         console.log(tobeSorted.length);
     }
 }
-

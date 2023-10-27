@@ -1,37 +1,42 @@
 mergeInput=`cat benchRunners/mergeSortParam` # getting input from file
 count=1000
 testName="mergeSort"
-folder="MergeSort"
+folder="mergesort"
 
-echo "starting mergeSort"
+echo "!!! Starting $testName !!!"
+echo
 
 #   Node
-echo --- Starting Node.js ---
-node ./benchmarks/$folder/bench.js $mergeInput $count
+echo --- Starting JavaScript ---
+node ./benchmarks/$folder/javascript/bench.js $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Node$testName"
-echo --- Node.js Done ---
+echo --- JavaScript Done ---
+echo
 
 #   Python
 echo --- Starting Python ---
-python3 ./benchmarks/$folder/bench.py $mergeInput $count
+python3 ./benchmarks/$folder/python/bench.py $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Python$testName"
 echo --- Python Done ---
+echo
 
 #   Pypy
 echo --- Starting PyPy ---
-pypy ./benchmarks/$folder/bench.py $mergeInput $count
+pypy ./benchmarks/$folder/python/bench.py $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Pypy$testName"
 echo --- PyPy Done ---
+echo
 
 #   C#
 echo --- Starting C# ---
-dotnet run --project ./benchmarks/$folder/benchC#/MergeSort.csproj --configuration Release $mergeInput $count
+dotnet run --project ./benchmarks/$folder/csharp/MergeSort.csproj --configuration Release $mergeInput $count
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---
+echo
 
 #   Java
 echo --- Starting Java ---
@@ -53,3 +58,6 @@ g++ benchmarks/MergeSort/cpp/bench.cpp -O3 -o benchmarks/MergeSort/cpp/bench -L.
 sleep 5s
 bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---
+echo
+
+echo "!!! Finished $testName !!!"
