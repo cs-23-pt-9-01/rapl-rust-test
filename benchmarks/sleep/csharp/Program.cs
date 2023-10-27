@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 string[] arguments = Environment.GetCommandLineArgs();
 uint count = uint.Parse(arguments[1]);
-uint sleepTime = uint.Parse(arguments[2]);
+int sleepTime = uint.Parse(arguments[2]);
 
 [DllImport(pathToLib)]
 static extern int start_rapl();
@@ -23,6 +23,6 @@ static extern void stop_rapl();
 for (int i = 0; i < count; i++)
 {
     start_rapl();
-    System.Threading.Thread.Sleep(sleepTime);
+    System.Threading.Thread.Sleep(sleepTime*1000);
     stop_rapl();
 }
