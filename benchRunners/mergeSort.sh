@@ -44,6 +44,7 @@ java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmark
 sleep 5s
 bash utils/append_to_latest_csv.sh "Java$testName"
 echo --- Java Done ---
+echo
 
 #   C
 echo --- Starting C ---
@@ -51,6 +52,7 @@ gcc benchmarks/MergeSort/c/bench.c -O3 -o benchmarks/MergeSort/c/bench -L./targe
 sleep 5s
 bash utils/append_to_latest_csv.sh "C$testName"
 echo --- C Done ---
+echo
 
 #   C++
 echo --- Starting C++ ---
