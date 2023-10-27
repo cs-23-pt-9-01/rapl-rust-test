@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 extern "C" {
     void start_rapl();
@@ -11,7 +13,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < count; i++) {
         start_rapl();
-        sleep(1);
+        std::this_thread::sleep_for (std::chrono::seconds(sleep_time));
         stop_rapl();
     }
 
