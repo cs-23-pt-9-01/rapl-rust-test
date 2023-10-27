@@ -7,17 +7,17 @@ echo
 
 #   C
 echo --- Starting C ---
-gcc benchmarks/sleep/c/bench.c -O3 -o benchmarks/sleep/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/empty/c/bench $count 5
+gcc benchmarks/sleep/c/bench.c -O3 -o benchmarks/sleep/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/sleep/c/bench $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "CEmpty"
+bash utils/append_to_latest_csv.sh "CSleep"
 echo --- C Done ---
 echo
 
 #   C++
 echo --- Starting C++ ---
-g++ benchmarks/sleep/cpp/bench.cpp -O3 -o benchmarks/sleep/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/empty/cpp/bench $count 5
+g++ benchmarks/sleep/cpp/bench.cpp -O3 -o benchmarks/sleep/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/sleep/cpp/bench $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "CppEmpty"
+bash utils/append_to_latest_csv.sh "CppSleep"
 echo --- C++ Done ---
 echo
 
@@ -25,7 +25,7 @@ echo
 echo --- Starting JavaScript ---
 node ./benchmarks/sleep/javascript/bench.js $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "NodeEmpty"
+bash utils/append_to_latest_csv.sh "NodeSleep"
 echo --- JavaScript Done ---
 echo
 
@@ -33,7 +33,7 @@ echo
 echo --- Starting Python ---
 python3 ./benchmarks/sleep/python/bench.py $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "PythonEmpty"
+bash utils/append_to_latest_csv.sh "PythonSleep"
 echo --- Python Done ---
 echo
 
@@ -41,7 +41,7 @@ echo
 echo --- Starting PyPy ---
 pypy ./benchmarks/sleep/python/bench.py $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "PypyEmpty"
+bash utils/append_to_latest_csv.sh "PypySleep"
 echo --- PyPy Done ---
 echo
 
@@ -49,7 +49,7 @@ echo
 echo --- Starting C# ---
 dotnet run --project ./benchmarks/sleep/csharp/Sleep.csproj --configuration Release $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "CsharpEmpty"
+bash utils/append_to_latest_csv.sh "CsharpSleep"
 echo --- C# Done ---
 echo
 
@@ -57,7 +57,7 @@ echo
 echo --- Starting Java ---
 java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/sleep/java/Bench.java $count 5
 sleep 5s
-bash utils/append_to_latest_csv.sh "JavaEmpty"
+bash utils/append_to_latest_csv.sh "JavaSleep"
 echo --- Java Done ---
 echo
 
