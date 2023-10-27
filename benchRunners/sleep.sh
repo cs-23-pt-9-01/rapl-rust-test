@@ -1,6 +1,6 @@
-count=1
 testName="sleep"
 folder="sleep"
+count=1
 
 echo "!!! Starting $testName !!!"
 echo

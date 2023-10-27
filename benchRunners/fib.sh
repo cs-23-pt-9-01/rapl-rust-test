@@ -1,7 +1,7 @@
-fibInput=200000
-count=1000
 testName="fib"
 folder="fibsequence"
+count=1000
+fibInput=200000
 
 echo "!!! Starting $testName !!!"
 echo

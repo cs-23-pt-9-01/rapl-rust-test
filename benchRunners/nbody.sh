@@ -1,7 +1,9 @@
-Body_Count=50000000
+testName="n-body"
+folder="n-body"
 count=1 #Testing only #TODO: change to actually useful number
+Body_Count=50000000
 
-echo "!!! Starting N-Body !!!"
+echo "!!! Starting $testName !!!"
 echo
 
 #   C

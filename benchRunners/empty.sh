@@ -1,6 +1,6 @@
-count=1000
 testName="empty"
 folder="empty"
+count=1000
 
 echo "!!! Starting $testName !!!"
 echo
