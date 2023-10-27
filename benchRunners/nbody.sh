@@ -10,7 +10,7 @@ echo
 echo --- Starting C ---
 gcc -fomit-frame-pointer -march=ivybridge benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "CNBody"
+bash utils/append_to_latest_csv.sh "C$testName"
 echo --- C Done ---
 echo
 
@@ -18,7 +18,7 @@ echo
 echo --- Starting C++ ---
 g++ -fomit-frame-pointer -march=ivybridge -std=c++17 benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "CppNBody"
+bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---
 echo
 
@@ -26,7 +26,7 @@ echo
 echo --- Starting JavaScript ---
 node ./benchmarks/$folder/javascript/bench.js $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "NodeNBody"
+bash utils/append_to_latest_csv.sh "Node$testName"
 echo --- JavaScript Done ---
 echo
 
@@ -34,7 +34,7 @@ echo
 echo --- Starting Python ---
 python3 ./benchmarks/$folder/python/bench.py $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "PythonNBody"
+bash utils/append_to_latest_csv.sh "Python$testName"
 echo --- Python Done ---
 echo
 
@@ -42,7 +42,7 @@ echo
 echo --- Starting PyPy ---
 pypy ./benchmarks/$folder/python/bench.py $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "PypyNBody"
+bash utils/append_to_latest_csv.sh "Pypy$testName"
 echo --- PyPy Done ---
 echo
 
@@ -50,7 +50,7 @@ echo
 echo --- Starting C# ---
 dotnet run --project ./benchmarks/$folder/csharp/N-Body.csproj --configuration Release $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "CsharpNBody"
+bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---
 echo
 
@@ -58,9 +58,9 @@ echo
 echo --- Starting Java ---
 java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count $body_count
 sleep 5s
-bash utils/append_to_latest_csv.sh "JavaNBody"
+bash utils/append_to_latest_csv.sh "Java$testName"
 echo --- Java Done ---
 echo
 
-echo "!!! Finished N-Body !!!"
+echo "!!! Finished $testName !!!"
 
