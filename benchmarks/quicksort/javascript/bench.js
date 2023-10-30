@@ -1,11 +1,11 @@
 const os = require("os");
 
 // getting arguments
-let data = process.argv[2];
+let data = process.argv[3];
 // formatting input into a list of numbers
 data = data.replace("[", "").replace("]", "").split(",").map(Number);
 const mergeParam = data
-const runCount = process.argv[3];
+const runCount = process.argv[2];
 
 // finding path depending on OS
 const libPath = os.platform() == "win32"?
