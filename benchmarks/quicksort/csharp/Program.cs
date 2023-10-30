@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Diagnostics; // for conditional compilation
 
 // inspired from https://stackoverflow.com/questions/24374658/check-the-operating-system-at-compile-time 
 #if _LINUX
