@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 
         start_rapl();
 
-        merge_sort(mergeParamCopy, mergeParamLen);
+        quicksort(mergeParamCopy, mergeParamLen);
 
         stop_rapl();
 
