@@ -44,7 +44,7 @@ int* convertToIntArr(char* str){
     return arr;
 }
 
-// test function 
+// test function from Rosseta Code
 void quicksort(int *A, int len) {
   if (len < 2) return;
 
@@ -69,40 +69,40 @@ void quicksort(int *A, int len) {
 
 int main(int argc, char *argv[]) {    
     // getting raw merge input
-    char* mergeParamRaw = argv[2];
+    char* inputRaw = argv[2];
 
     // removing brackets
-    RemoveChars(mergeParamRaw, '[');
-    RemoveChars(mergeParamRaw, ']');
+    RemoveChars(inputRaw, '[');
+    RemoveChars(inputRaw, ']');
 
-    int* mergeParam = convertToIntArr(mergeParamRaw);
-    int mergeParamLen = sizeof(mergeParam) / sizeof(mergeParam[0]) + 1;
+    int* sortParam = convertToIntArr(inputRaw);
+    int sortParamLen = sizeof(sortParam) / sizeof(sortParam[0]) + 1;
 
     int count = atoi(argv[1]);
 
     // running benchmark
     for (int i = 0; i < count; i++) {
         // copying mergeParam as merge_sort is in-place
-        int* mergeParamCopy = malloc(mergeParamLen * sizeof(int));
-        for (int j = 0; j < mergeParamLen; j++) {
-            mergeParamCopy[j] = mergeParam[j];
+        int* sortParamCopy = malloc(sortParamLen * sizeof(int));
+        for (int j = 0; j < sortParamLen; j++) {
+            sortParamCopy[j] = sortParam[j];
         }
 
         start_rapl();
 
-        quicksort(mergeParamCopy, mergeParamLen);
+        quicksort(sortParamCopy, sortParamLen);
 
         stop_rapl();
 
         // stopping compiler optimization
-        if (sizeof(mergeParamCopy) < 42){
-            printf("%d\n", mergeParamCopy[0]);
+        if (sizeof(sortParamCopy) < 42){
+            printf("%d\n", sortParamCopy[0]);
         }
 
-        free(mergeParamCopy);
+        free(sortParamCopy);
     }
 
-    free(mergeParam);
+    free(sortParam);
 
     return 0;
 }

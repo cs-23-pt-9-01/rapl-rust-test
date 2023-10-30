@@ -34,21 +34,21 @@ var sorter = new QuickSort<uint>();
 // running benchmark
 for (int i = 0; i < count; i++)
 {
-    var tobeSorted = new List<uint>(mergeParam).ToArray();
+    var toBeSorted = new List<uint>(mergeParam).ToArray();
     start_rapl();
 
-    sorter.Sort(tobeSorted);
+    sorter.Sort(toBeSorted);
 
     stop_rapl();
     
-    foreach (var item in tobeSorted)
-    {
-        Console.Write(item + ",");
+    // stopping compiler optimisations
+    if (toBeSorted[0] < 42){
+        Console.WriteLine(toBeSorted[0]);
     }
-    Console.WriteLine(" ");
 }
 
-// test class (the implementation on rosetta was a class)
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Rosetta code
 class QuickSort<T> where T : IComparable {
     #region Constants
     public const UInt32 INSERTION_LIMIT_DEFAULT = 12;

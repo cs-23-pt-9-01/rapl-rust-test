@@ -7,14 +7,14 @@ import platform
 # used in test method
 from heapq import merge
 
-merge_param = sys.argv[2]
+sort_param = sys.argv[2]
 # formatting merge_param into a list of integers
-merge_param = merge_param.replace("[", "").replace("]", "").split(",")
-merge_param = [int(i) for i in merge_param]
+sort_param = sort_param.replace("[", "").replace("]", "").split(",")
+sort_param = [int(i) for i in sort_param]
 test_count =  int(sys.argv[1])
 lib_path = "target\\release\\rapl_lib.dll" if platform.system() == "Windows" else "target/release/librapl_lib.so"
 
-# test method
+# test method from Rosetta Code
 def quickSort(arr):
     less = []
     pivotList = []
@@ -43,7 +43,7 @@ for i in range(test_count):
     dll.start_rapl()
 
     # run test
-    result = quickSort(merge_param)
+    result = quickSort(sort_param)
 
     # stop recording
     dll.stop_rapl()

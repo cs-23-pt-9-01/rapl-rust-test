@@ -4,7 +4,7 @@ const os = require("os");
 let data = process.argv[3];
 // formatting input into a list of numbers
 data = data.replace("[", "").replace("]", "").split(",").map(Number);
-const mergeParam = data
+const sortParam = data
 const runCount = process.argv[2];
 
 // finding path depending on OS
@@ -12,7 +12,7 @@ const libPath = os.platform() == "win32"?
   "target\\release\\rapl_lib.dll":
   "target/release/librapl_lib.so"
 
-// test method
+// test method from Rosetta Code
 function sort(array, less) {
 
     function swap(i, j) {
@@ -22,7 +22,6 @@ function sort(array, less) {
     }
   
     function quicksort(left, right) {   
-  
       if (left < right) {
         var pivot = array[left + Math.floor((right - left) / 2)],
             left_new = left,
@@ -66,7 +65,7 @@ for (let i = 0; i < runCount; i++){
 
     start();
 
-    let sorted = sort(mergeParam, function(a, b) {return a < b});
+    let sorted = sort(sortParam, function(a, b) {return a < b});
 
     stop();
     console.log(sorted);

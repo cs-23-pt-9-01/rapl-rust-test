@@ -38,7 +38,7 @@ class Bench {
         // Getting arguments
         // converting json array to java array
         String[] data = args[1].replace("[","").replace("]","").split(",");
-        List<Long> mergeParam = Arrays.stream(data).map(String::trim).map(Long::valueOf).toList();
+        List<Long> sortParam = Arrays.stream(data).map(String::trim).map(Long::valueOf).toList();
         int loop_count = Integer.parseInt(args[0]);
 
         // Running benchmark
@@ -51,7 +51,7 @@ class Bench {
                 e.printStackTrace();
             }
 
-            List<Long> sorted = quickSort(mergeParam);
+            List<Long> sorted = quickSort(sortParam);
 
             try {
                 stop_rapl.invoke();
@@ -59,10 +59,15 @@ class Bench {
                 e.printStackTrace();
             }
 
-            System.out.println(sorted.toString());
+            if (sorted.size() < 42) {
+                System.out.println(sorted);
+            }
         }
 
     }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // Rosetta code
 
     public static <E extends Comparable<? super E>> List<E> quickSort(List<E> arr) {
         if (arr.isEmpty())

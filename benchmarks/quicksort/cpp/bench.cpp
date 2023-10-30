@@ -12,6 +12,9 @@ extern "C" {
 #include <string>
 #include <vector>
 
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Code from rosetta start
+
 // helper function for median of three
 template<typename T>
  T median(T t1, T t2, T t3)
@@ -79,6 +82,10 @@ template<typename RandomAccessIterator>
   quicksort(first, last, std::less<typename std::iterator_traits<RandomAccessIterator>::value_type>());
 }
 
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Code from rosetta stop
+
+
 // read a vector of integers from a string (comma seperated)
 vector<int> IntVectorFromString(std::string str){
     vector<int> result;
@@ -96,32 +103,32 @@ vector<int> IntVectorFromString(std::string str){
 
 int main(int argc, char *argv[]) {
 
-    std::string mergeParamRaw = std::string(argv[2]);
+    std::string inputRaw = std::string(argv[2]);
 
     // removing brackets
-    mergeParamRaw.erase(remove(mergeParamRaw.begin(), mergeParamRaw.end(), ']'), mergeParamRaw.end());
-    mergeParamRaw.erase(remove(mergeParamRaw.begin(), mergeParamRaw.end(), '['), mergeParamRaw.end());
+    inputRaw.erase(remove(inputRaw.begin(), inputRaw.end(), ']'), inputRaw.end());
+    inputRaw.erase(remove(inputRaw.begin(), inputRaw.end(), '['), inputRaw.end());
 
 
     // getting numbers from mergeParamRaw
-    vector<int> mergeParam = IntVectorFromString(mergeParamRaw);
+    vector<int> sortParam = IntVectorFromString(inputRaw);
 
 
     int count = std::atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
         // copying mergeParam to avoid changing it
-        vector<int> mergeParamCopy = vector<int>(mergeParam);
+        vector<int> sortParamCopy = vector<int>(sortParam);
 
         start_rapl();
 
-        quicksort(mergeParamCopy.begin(), mergeParamCopy.end());
+        quicksort(sortParamCopy.begin(), sortParamCopy.end());
 
         stop_rapl();
 
         // stopping compiler optimization
-        if (mergeParamCopy.size() < 42){
-            std::cout << "Result: " << mergeParamCopy[0] << std::endl;
+        if (sortParamCopy.size() < 42){
+            std::cout << "Result: " << sortParamCopy[0] << std::endl;
         }
     }
 
