@@ -110,14 +110,14 @@ int main(int argc, char *argv[]) {
     inputRaw.erase(remove(inputRaw.begin(), inputRaw.end(), '['), inputRaw.end());
 
 
-    // getting numbers from mergeParamRaw
+    // getting numbers from input
     vector<int> sortParam = IntVectorFromString(inputRaw);
 
 
     int count = std::atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
-        // copying mergeParam to avoid changing it
+        // copying sortParam to avoid changing it
         vector<int> sortParamCopy = vector<int>(sortParam);
 
         start_rapl();

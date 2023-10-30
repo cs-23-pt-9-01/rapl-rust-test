@@ -68,7 +68,7 @@ void quicksort(int *A, int len) {
 
 
 int main(int argc, char *argv[]) {    
-    // getting raw merge input
+    // getting raw input
     char* inputRaw = argv[2];
 
     // removing brackets
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 
     // running benchmark
     for (int i = 0; i < count; i++) {
-        // copying mergeParam as merge_sort is in-place
+        // copying sortParam as quicksort is in-place
         int* sortParamCopy = malloc(sortParamLen * sizeof(int));
         for (int j = 0; j < sortParamLen; j++) {
             sortParamCopy[j] = sortParam[j];

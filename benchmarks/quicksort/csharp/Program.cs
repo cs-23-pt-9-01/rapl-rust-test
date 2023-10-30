@@ -19,7 +19,7 @@ uint count = uint.Parse(arguments[1]);
 // converting argument as it was a json array
 List<uint> data = JsonSerializer.Deserialize<List<uint>>(arguments[2]);
 // converting list to array
-uint[] mergeParam = data.ToArray();
+uint[] sortParam = data.ToArray();
 
 // DLL imports
 [DllImport(pathToLib)]
@@ -34,7 +34,7 @@ var sorter = new QuickSort<uint>();
 // running benchmark
 for (int i = 0; i < count; i++)
 {
-    var toBeSorted = new List<uint>(mergeParam).ToArray();
+    var toBeSorted = new List<uint>(sortParam).ToArray();
     start_rapl();
 
     sorter.Sort(toBeSorted);

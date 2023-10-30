@@ -4,11 +4,8 @@ from ctypes import *
 import sys
 import platform
 
-# used in test method
-from heapq import merge
-
 sort_param = sys.argv[2]
-# formatting merge_param into a list of integers
+# formatting sort_param into a list of integers
 sort_param = sort_param.replace("[", "").replace("]", "").split(",")
 sort_param = [int(i) for i in sort_param]
 test_count =  int(sys.argv[1])
