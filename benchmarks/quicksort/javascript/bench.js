@@ -66,7 +66,7 @@ for (let i = 0; i < runCount; i++){
 
     start();
 
-    let sorted = sort(mergeParam, function(a, b) {return a > b});
+    let sorted = sort(mergeParam, function(a, b) {return a < b});
 
     stop();
     console.log(sorted);
