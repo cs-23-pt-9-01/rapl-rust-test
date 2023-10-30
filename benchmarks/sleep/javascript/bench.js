@@ -12,14 +12,22 @@ const lib = koffi.load(libPath);
 const start = lib.func('int start_rapl()');
 const stop = lib.func('void stop_rapl()');
 
-for (let i = 0; i < runCount; i++) {
-  start();
-
-  const start_time = Date.now();
-  let now = start_time;
-  while (now - start_time < sleep_time * 1000) {
-    now = Date.now();
-  }
-
-  stop();
+// test method
+// taken from https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// wrapping the benchmark in a function to allow for await
+async function benchmark(){
+  for (let i = 0; i < runCount; i++) {
+    start();
+
+    await sleep(sleep_time * 1000);
+
+    stop();
+  }
+} 
+
+// running benchmark
+benchmark();
