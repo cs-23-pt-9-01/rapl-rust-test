@@ -47,7 +47,7 @@ vector<int> IntVectorFromString(std::string str){
 
 int main(int argc, char *argv[]) {
 
-    std::string mergeParamRaw = std::string(argv[1]);
+    std::string mergeParamRaw = std::string(argv[2]);
 
     // removing brackets
     mergeParamRaw.erase(remove(mergeParamRaw.begin(), mergeParamRaw.end(), ']'), mergeParamRaw.end());
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     vector<int> mergeParam = IntVectorFromString(mergeParamRaw);
     
 
-    int count = std::atoi(argv[2]);
+    int count = std::atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
         // copying mergeParam to avoid changing it

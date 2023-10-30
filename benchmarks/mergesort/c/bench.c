@@ -73,7 +73,7 @@ void merge_sort (int *a, int n) {
 
 int main(int argc, char *argv[]) {    
     // getting raw merge input
-    char* mergeParamRaw = argv[1];
+    char* mergeParamRaw = argv[2];
 
     // removing brackets
     RemoveChars(mergeParamRaw, '[');
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     int* mergeParam = convertToIntArr(mergeParamRaw);
     int mergeParamLen = sizeof(mergeParam) / sizeof(mergeParam[0]) + 1;
 
-    int count = atoi(argv[2]);
+    int count = atoi(argv[1]);
 
     // running benchmark
     for (int i = 0; i < count; i++) {
