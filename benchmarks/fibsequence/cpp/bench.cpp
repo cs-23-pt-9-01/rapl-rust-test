@@ -20,8 +20,8 @@ unsigned int fibonacci(unsigned int n) {
 }
 
 int main(int argc, char *argv[]) {
-    int fib_param = std::atoi(argv[1]);
-    int count = std::atoi(argv[2]);
+    int fib_param = std::atoi(argv[2]);
+    int count = std::atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
         start_rapl();

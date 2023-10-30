@@ -10,8 +10,8 @@ long long fibb(long long a, long long b, int n) {
 }
 
 int main(int argc, char *argv[]) {
-    int fibParam = atoi(argv[1]);
-    int count = atoi(argv[2]);
+    int fibParam = atoi(argv[2]);
+    int count = atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
         start_rapl();
