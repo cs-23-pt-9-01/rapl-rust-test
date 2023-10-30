@@ -37,9 +37,9 @@ class Bench {
         
         // Getting arguments
         // converting json array to java array
-        String[] data = args[0].replace("[","").replace("]","").split(",");
+        String[] data = args[1].replace("[","").replace("]","").split(",");
         List<Long> mergeParam = Arrays.stream(data).map(String::trim).map(Long::valueOf).toList();
-        int loop_count = Integer.parseInt(args[1]);
+        int loop_count = Integer.parseInt(args[0]);
 
         // Running benchmark
         // Note that this could potentially be optimized away
@@ -58,10 +58,10 @@ class Bench {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-
-            System.out.println(sorted.toString());
+            if (sorted.size() < 42){
+                System.out.println(sorted.toString());
+            }
         }
-
     }
 
     // Test class (implementation was a class in rosetta)
