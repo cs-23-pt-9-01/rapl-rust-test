@@ -76,8 +76,8 @@ int main(int argc, char *argv[]) {
     char* mergeParamRaw = argv[1];
 
     // removing brackets
-    RemoveChars(argv[1], '[');
-    RemoveChars(argv[1], ']');
+    RemoveChars(mergeParamRaw, '[');
+    RemoveChars(mergeParamRaw, ']');
 
     int* mergeParam = convertToIntArr(mergeParamRaw);
     int mergeParamLen = sizeof(mergeParam) / sizeof(mergeParam[0]) + 1;
