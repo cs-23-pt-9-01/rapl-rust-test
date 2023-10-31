@@ -44,4 +44,7 @@ for i in range(test_count):
 
     # stop recording
     dll.stop_rapl()
-    print(result)
+
+    # stopping compiler optimizations
+    if (len(result) < 42):
+        print(result)

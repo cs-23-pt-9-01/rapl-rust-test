@@ -49,7 +49,8 @@ for (int i = 0; i < count; i++)
     }
 }
 
-// test class (the implementation on rosetta was a class)
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Rosetta code
 public class MergeSort<T> where T : IComparable {
     #region Constants
     public const UInt32 INSERTION_LIMIT_DEFAULT = 12;

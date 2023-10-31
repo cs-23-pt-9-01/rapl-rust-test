@@ -59,6 +59,7 @@ class Bench {
                 e.printStackTrace();
             }
 
+            // stopping compiler optimizations
             if (sorted.size() < 42) {
                 System.out.println(sorted);
             }

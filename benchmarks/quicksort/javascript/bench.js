@@ -68,5 +68,8 @@ for (let i = 0; i < runCount; i++){
     let sorted = sort(sortParam, function(a, b) {return a < b});
 
     stop();
-    console.log(sorted);
+    
+    if (sorted.length < 42){
+        console.log(sorted);
+    }
 }

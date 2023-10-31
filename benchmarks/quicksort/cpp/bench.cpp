@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 
         stop_rapl();
 
-        // stopping compiler optimization
+        // stopping compiler optimizations
         if (sortParamCopy.size() < 42){
             std::cout << "Result: " << sortParamCopy[0] << std::endl;
         }
