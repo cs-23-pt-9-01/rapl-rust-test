@@ -1,7 +1,7 @@
 testName="quicksort"
 folder="quicksort"
 count=1000
-Input=`cat benchRunners/mergeSortParam` # getting input from file
+input=`cat benchRunners/mergeSortParam` # getting input from file
 
 
 echo "!!! Starting $testName !!!"
@@ -9,7 +9,7 @@ echo
 
 #   Node
 echo --- Starting JavaScript ---
-node ./benchmarks/$folder/javascript/bench.js $count $Input
+node ./benchmarks/$folder/javascript/bench.js $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "Node$testName"
 echo --- JavaScript Done ---
@@ -17,7 +17,7 @@ echo
 
 #   Python
 echo --- Starting Python ---
-python3 ./benchmarks/$folder/python/bench.py $count $Input
+python3 ./benchmarks/$folder/python/bench.py $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "Python$testName"
 echo --- Python Done ---
@@ -25,7 +25,7 @@ echo
 
 #   Pypy
 echo --- Starting PyPy ---
-pypy ./benchmarks/$folder/python/bench.py $count $Input
+pypy ./benchmarks/$folder/python/bench.py $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "Pypy$testName"
 echo --- PyPy Done ---
@@ -33,7 +33,7 @@ echo
 
 #   C#
 echo --- Starting C# ---
-dotnet run --project ./benchmarks/$folder/csharp/bench.csproj --configuration Release $count $Input
+dotnet run --project ./benchmarks/$folder/csharp/bench.csproj --configuration Release $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "Csharp$testName"
 echo --- C# Done ---
@@ -41,7 +41,7 @@ echo
 
 #   Java
 echo --- Starting Java ---
-java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count $Input
+java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "Java$testName"
 echo --- Java Done ---
@@ -49,7 +49,7 @@ echo
 
 #   C
 echo --- Starting C ---
-gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count $Input
+gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count $input
 sleep 5s
 bash utils/append_to_latest_csv.sh "C$testName"
 echo --- C Done ---
@@ -57,7 +57,7 @@ echo
 
 #   C++
 echo --- Starting C++ ---
-g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count $Input 
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count $input 
 sleep 5s
 bash utils/append_to_latest_csv.sh "Cpp$testName"
 echo --- C++ Done ---

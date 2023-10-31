@@ -49,14 +49,14 @@ const stop = lib.func('void stop_rapl()');
 // running benchmark
 for (let i = 0; i < runCount; i++) {
 
-    let tobeSorted = Array.from(mergeParam);
+    let toBeSorted = Array.from(mergeParam);
     start();
 
-    mergeSortInPlaceFast(tobeSorted);
+    mergeSortInPlaceFast(toBeSorted);
 
     stop();
 
-    if (tobeSorted.length < 42){
-        console.log(tobeSorted.length);
+    if (toBeSorted.length < 42){
+        console.log(toBeSorted);
     }
 }
