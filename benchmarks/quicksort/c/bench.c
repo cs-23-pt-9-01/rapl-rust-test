@@ -32,8 +32,8 @@ int countChar(char* str, char c){
 }
 
 // helper function for converting string to array of int (comma seperated)
-int* convertToIntArr(char* str){
-    int* arr = malloc(countChar(str,',') * sizeof(int));
+int* convertToIntArr(char* str, int len){
+    int* arr = malloc(len * sizeof(int));
     char* token = strtok(str, ",");
     int i = 0;
     while (token != NULL) {
@@ -75,8 +75,8 @@ int main(int argc, char *argv[]) {
     RemoveChars(inputRaw, '[');
     RemoveChars(inputRaw, ']');
 
-    int* sortParam = convertToIntArr(inputRaw);
-    int sortParamLen = sizeof(sortParam) / sizeof(sortParam[0]) + 1;
+    int sortParamLen = countChar(inputRaw,',') + 1;
+    int* sortParam = convertToIntArr(inputRaw, sortParamLen);
 
     int count = atoi(argv[1]);
 
