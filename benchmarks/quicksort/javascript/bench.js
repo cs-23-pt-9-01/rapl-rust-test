@@ -69,6 +69,7 @@ for (let i = 0; i < runCount; i++){
 
     stop();
     
+    // stopping compiler optimizations
     if (sorted.length < 42){
         console.log(sorted);
     }
