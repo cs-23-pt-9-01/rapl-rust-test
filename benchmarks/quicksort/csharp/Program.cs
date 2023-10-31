@@ -42,8 +42,8 @@ for (int i = 0; i < count; i++)
     stop_rapl();
     
     // stopping compiler optimizations
-    if (tobeSorted.Length < 42){
-        foreach (var item in tobeSorted)
+    if (toBeSorted.Length < 42){
+        foreach (var item in toBeSorted)
         {
             Console.Write(item + " ");
         }

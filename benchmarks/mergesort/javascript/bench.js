@@ -12,7 +12,7 @@ const libPath = os.platform() == "win32" ?
     "target\\release\\rapl_lib.dll" :
     "target/release/librapl_lib.so"
 
-// test method
+// test method from Rosetta Code
 function mergeSortInPlaceFast(v) {
     sort(v, 0, v.length, v.slice());
 

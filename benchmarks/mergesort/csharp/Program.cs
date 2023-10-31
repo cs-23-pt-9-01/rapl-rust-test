@@ -33,15 +33,15 @@ var sorter = new MergeSort<uint>();
 // running benchmark
 for (int i = 0; i < count; i++)
 {
-    var tobeSorted = new List<uint>(mergeParam).ToArray();
+    var toBeSorted = new List<uint>(mergeParam).ToArray();
     start_rapl();
 
-    sorter.Sort(tobeSorted);
+    sorter.Sort(toBeSorted);
 
     stop_rapl();
     
-    if (tobeSorted.Length < 42){
-        foreach (var item in tobeSorted)
+    if (toBeSorted.Length < 42){
+        foreach (var item in toBeSorted)
         {
             Console.Write(item + " ");
         }

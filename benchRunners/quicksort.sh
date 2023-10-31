@@ -1,7 +1,8 @@
-Input=`cat benchRunners/mergeSortParam` # getting input from file
-count=1000
 testName="quicksort"
 folder="quicksort"
+count=1000
+Input=`cat benchRunners/mergeSortParam` # getting input from file
+
 
 echo "!!! Starting $testName !!!"
 echo
