@@ -42,7 +42,6 @@ class Bench {
         int loop_count = Integer.parseInt(args[0]);
 
         // Running benchmark
-        // Note that this could potentially be optimized away
         for (int i = 0; i < loop_count; i++) {
             try {
                 start_rapl.invoke();
