@@ -7,7 +7,3 @@ count_params(){
     # Count the number of elements in the comma-separated values
     echo "$array_string" | awk -F',' '{print NF}'
 }
-#mergeInput=`cat mergeSortParam`
-#inputLength=$(count_params $mergeInput)
-
-#echo $inputLength

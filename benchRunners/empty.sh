@@ -5,8 +5,8 @@ folder="empty"
 count=1000
 
 #runbenchmark language testName cmd (input) (inputSize)
-#cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
-#runbenchmark "C" $testName $cmd $mergeInput $inputLength
+#cmd="python3 ./benchmarks/$folder/python/bench.py $count"
+#runbenchmark "Python" $testName "$cmd"
 
 echo "!!! Starting $testName !!!"
 echo
