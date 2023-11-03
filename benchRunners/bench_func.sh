@@ -4,7 +4,6 @@ runbenchmark(){ #Add optionals for $4 and $5
     cmd=$3
     input=$4
     inputSize=$5
-
     echo --- Starting $language ---
     $cmd $input
     sleep 5s
@@ -12,18 +11,3 @@ runbenchmark(){ #Add optionals for $4 and $5
     echo --- $language Done ---
     echo
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

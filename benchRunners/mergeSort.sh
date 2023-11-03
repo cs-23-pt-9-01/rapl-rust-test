@@ -1,5 +1,5 @@
-source count_input_params.sh
-source bench_func.sh
+source ./benchRunners/count_input_params.sh
+source ./benchRunners/bench_func.sh
 
 testName="mergeSort"
 folder="mergesort"
@@ -17,30 +17,30 @@ echo
 
 #   Node
 cmd="node ./benchmarks/$folder/javascript/bench.js $count"
-runbenchmark "Node" $testName $cmd $mergeInput $inputLength
+runbenchmark "Node" $testName "$cmd" "$mergeInput" $inputLength
 
 #   Python
 cmd="python3 ./benchmarks/$folder/python/bench.py $count"
-runbenchmark "Python" $testName $cmd $mergeInput $inputLength
+runbenchmark "Python" $testName "$cmd" "$mergeInput" $inputLength
 
 #   Pypy
 cmd="pypy ./benchmarks/$folder/python/bench.py $count"
-runbenchmark "Pypy" $testName $cmd $mergeInput $inputLength
+runbenchmark "Pypy" $testName "$cmd" "$mergeInput" $inputLength
 
 #   C#
 cmd="dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count" 
-runbenchmark "Csharp" $testName $cmd $mergeInput $inputLength
+runbenchmark "Csharp" $testName "$cmd" "$mergeInput" $inputLength
 
 #   Java
 cmd="java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count"
-runbenchmark "Java" $testName $cmd $mergeInput $inputLength
+runbenchmark "Java" $testName "$cmd" "$mergeInput" $inputLength
 
 #   C
 cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
-runbenchmark "C" $testName $cmd $mergeInput $inputLength
+runbenchmark "C" $testName "$cmd" "$mergeInput" $inputLength
 
 #   C++
 cmd="g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count"
-runbenchmark "Cpp" $testName $cmd $mergeInput $inputLength
+runbenchmark "Cpp" $testName "$cmd" "$mergeInput" $inputLength
 
 echo "!!! Finished $testName !!!"

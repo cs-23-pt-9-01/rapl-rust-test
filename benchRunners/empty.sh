@@ -1,4 +1,4 @@
-source bench_func.sh
+source ./benchRunners/bench_func.sh
 
 testName="empty"
 folder="empty"
@@ -13,31 +13,31 @@ echo
 
 #   C
 cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
-runbenchmark "C" $testName $cmd
+runbenchmark "C" $testName "$cmd"
 
 #   C++
 cmd="g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count"
-runbenchmark "Cpp" $testName $cmd
+runbenchmark "Cpp" $testName "$cmd"
 
 #   Node
 cmd="node ./benchmarks/$folder/javascript/bench.js $count"
-runbenchmark "Node" $testName $cmd
+runbenchmark "Node" $testName "$cmd"
 
 
 #   Python
 cmd="python3 ./benchmarks/$folder/python/bench.py $count"
-runbenchmark "Python" $testName $cmd
+runbenchmark "Python" $testName "$cmd"
 
 #   Pypy
 cmd="pypy ./benchmarks/$folder/python/bench.py $count"
-runbenchmark "Pypy" $testName $cmd
+runbenchmark "Pypy" $testName "$cmd"
 
 #   C#
 cmd="dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count"
-runbenchmark "Csharp" $testName $cmd
+runbenchmark "Csharp" $testName "$cmd"
 
 #   Java
 cmd="java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count"
-runbenchmark "Java" $testName $cmd
+runbenchmark "Java" $testName "$cmd"
 
 echo "!!! Finished $testName !!!"
