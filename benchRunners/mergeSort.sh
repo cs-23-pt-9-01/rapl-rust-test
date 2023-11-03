@@ -36,11 +36,13 @@ cmd="java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benc
 runbenchmark "Java" $testName "$cmd" "$mergeInput" $inputLength
 
 #   C
-cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
+gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release #Compile first
+cmd="./benchmarks/$folder/c/bench $count"
 runbenchmark "C" $testName "$cmd" "$mergeInput" $inputLength
 
 #   C++
-cmd="g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count"
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release #Compile first
+cmd="./benchmarks/$folder/cpp/bench $count"
 runbenchmark "Cpp" $testName "$cmd" "$mergeInput" $inputLength
 
 echo "!!! Finished $testName !!!"
