@@ -1,3 +1,5 @@
+source ./benchRunners/bench_func.sh
+
 testName="quicksort"
 folder="quicksort"
 count=1000

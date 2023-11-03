@@ -1,3 +1,5 @@
+source ./benchRunners/bench_func.sh
+
 testName="fib"
 folder="fibsequence"
 count=1000

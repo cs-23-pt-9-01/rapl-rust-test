@@ -1,3 +1,5 @@
+source ./benchRunners/bench_func.sh
+
 testName="n-body"
 folder="n-body"
 count=1 #Testing only #TODO: change to actually useful number

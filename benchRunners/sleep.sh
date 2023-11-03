@@ -1,3 +1,5 @@
+source ./benchRunners/bench_func.sh
+
 testName="sleep"
 folder="sleep"
 count=1
