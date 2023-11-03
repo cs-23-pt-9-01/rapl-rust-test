@@ -3,7 +3,8 @@
 HOSTNAME="seff_jr"
 IP="192.168.0.5"
 
-# prints -> log.out
+# Command to run on Raspberry PI
+# nohup is used to stop hanging on the session and prints goes to log.out
 COMMAND="nohup bash BenchManagementRaspbPI/logging_manager.sh $1 > log.out"
 
 # Call Raspberry PI with command
