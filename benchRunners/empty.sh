@@ -4,10 +4,6 @@ testName="empty"
 folder="empty"
 count=1000
 
-#runbenchmark language testName cmd (input) (inputSize)
-#cmd="python3 ./benchmarks/$folder/python/bench.py $count"
-#runbenchmark "Python" $testName "$cmd"
-
 echo "!!! Starting $testName !!!"
 echo
 

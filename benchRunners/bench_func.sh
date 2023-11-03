@@ -1,4 +1,4 @@
-runbenchmark(){ #Add optionals for $4 and $5
+runbenchmark(){
     language=$1
     testName=$2
     cmd=$3
@@ -11,3 +11,6 @@ runbenchmark(){ #Add optionals for $4 and $5
     echo --- $language Done ---
     echo
 }
+
+#Structure of runbenchmark call (remember to include this file at the top of bechmark sh file): 
+#runbenchmark language testName cmd (input) (inputSize)

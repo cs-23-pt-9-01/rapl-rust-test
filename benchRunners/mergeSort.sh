@@ -7,11 +7,6 @@ count=1000
 mergeInput=`cat benchRunners/mergeSortParam` # getting input from file
 inputLength=$(count_params $mergeInput)
 
-#runbenchmark language testName cmd (input) (inputSize)
-#cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
-#runbenchmark "C" $testName $cmd $mergeInput $inputLength
-
-
 echo "!!! Starting $testName !!!"
 echo
 
