@@ -12,11 +12,13 @@ echo "!!! Starting $testName !!!"
 echo
 
 #   C
-cmd="gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/c/bench $count"
+gcc benchmarks/$folder/c/bench.c -O3 -o benchmarks/$folder/c/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release 
+cmd="./benchmarks/$folder/c/bench $count"
 runbenchmark "C" $testName "$cmd"
 
 #   C++
-cmd="g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release && ./benchmarks/$folder/cpp/bench $count"
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release
+cmd="./benchmarks/$folder/cpp/bench $count"
 runbenchmark "Cpp" $testName "$cmd"
 
 #   Node
