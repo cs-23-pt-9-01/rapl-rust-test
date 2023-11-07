@@ -10,3 +10,4 @@ if [ "$1" == "start"  || "$1" == "stop" ]; then
 else
     echo Bad input: "$1", expected "start" or "stop"
     exit 1
+fi
