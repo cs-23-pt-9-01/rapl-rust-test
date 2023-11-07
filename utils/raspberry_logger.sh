@@ -5,4 +5,8 @@ PORT=":5000"
 
 #Send http request to raspberry to start or stop logging
 #$1: "start" or "stop"
-curl http://$IP$PORT/$1
+if [ "$1" == "start"  || "$1" == "stop" ]; then
+    curl http://$IP$PORT/$1
+else
+    echo Bad input: "$1", expected "start" or "stop"
+    exit 1
