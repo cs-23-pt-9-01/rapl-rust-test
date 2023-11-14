@@ -2,36 +2,27 @@ use anyhow::Result;
 use rapl_lib::ffi::{start_rapl, stop_rapl};
 use std::{thread, time::Duration};
 
-pub fn bench_test(n: i32) -> i32 {
-    let mut val: i32 = 0;
-    for _ in 0..n {
-        val += 1;
-    }
-    val
-}
-
 fn main() -> Result<()> {
-    // TODO: Logging, multiple cores (maybe only possible to read all cores at once, although Linux seems to have multiple since MSR for each CPU), multiple CPU support (Intel)
-
-    //println!("Bench test: {}", bench_test(1000000000));
-
+    // Call start_rapl() to initialize the RAPL driver on Windows
     start_rapl();
 
-    // Sleep for 1 second
-    thread::sleep(Duration::from_secs(1));
+    loop {
+        // Get a RAPL measurement and write it to the CSV file
+        stop_rapl();
 
-    /*
-    for i in 0..200 {
-        println!("test {}", i);
+        // Sleep for 300 milliseconds
+        thread::sleep(Duration::from_millis(300));
     }
-    */
-
-    stop_rapl();
-
-    Ok(())
 }
 
 /*
+TODO: Logging, multiple cores (maybe only possible to read all cores at once, although Linux seems to have multiple since MSR for each CPU), multiple CPU support (Intel)
+println!("Bench test: {}", bench_test(1000000000));
+
+for i in 0..200 {
+    println!("test {}", i);
+}
+
 TODO: Implement this in the relevant library, or in an external tool
 
 let time_unit = ((output_number & AMD_TIME_UNIT_MASK) >> 16) as f64;
