@@ -11,7 +11,7 @@ fn main() -> Result<()> {
         stop_rapl();
 
         // Sleep for 300 milliseconds
-        thread::sleep(Duration::from_millis(300));
+        thread::sleep(Duration::from_millis(100));
     }
 }
 
