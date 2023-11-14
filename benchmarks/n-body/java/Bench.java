@@ -63,10 +63,20 @@ class Bench {
         public static void N_Body(int n) {
 
             NBodySystem bodies = new NBodySystem();
-            //System.out.printf("%.9f\n", bodies.energy());
+
+            double energy1 = bodies.energy();
+            if(energy1 > 10){
+                System.out.printf("%.9f\n", energy1);
+            }
+
+
             for (int i = 0; i < n; ++i)
                 bodies.advance(0.01);
-            //System.out.printf("%.9f\n", bodies.energy());
+            
+            double energy2 = bodies.energy();
+            if(energy2 > 10){
+                System.out.printf("%.9f\n", energy2);
+            }
         }
 
         final static class NBodySystem {
