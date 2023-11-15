@@ -65,7 +65,7 @@ class Bench {
             NBodySystem bodies = new NBodySystem();
 
             double energy1 = bodies.energy();
-            if(energy1 > 10){
+            if(energy1 > 10){ //should always be false. Used stop the compiler from optimizing it away
                 System.out.printf("%.9f\n", energy1);
             }
 
@@ -74,7 +74,7 @@ class Bench {
                 bodies.advance(0.01);
             
             double energy2 = bodies.energy();
-            if(energy2 > 10){
+            if(energy2 > 10){ //should always be false. Used stop the compiler from optimizing it away
                 System.out.printf("%.9f\n", energy2);
             }
         }

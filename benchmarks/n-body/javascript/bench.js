@@ -167,7 +167,7 @@ function N_Body(n) {
 
 
     let energy1 = energy();
-    if(energy1 > 10){
+    if(energy1 > 10){ //should always be false. Used stop the compiler from optimizing it away
         console.log(energy1.toFixed(9));
     }
 
@@ -176,7 +176,7 @@ function N_Body(n) {
     }
     
     let energy2 = energy();
-    if(energy2 > 10){
+    if(energy2 > 10){ //should always be false. Used stop the compiler from optimizing it away
         console.log(energy2.toFixed(9));
     }
 }
