@@ -207,8 +207,6 @@ public static unsafe class Net60_NBody_AVX_9_3b
 		}
 	}
 
-
-
 	// Modified
 	[SkipLocalsInit]
 	public static void RUN(int iterations)
