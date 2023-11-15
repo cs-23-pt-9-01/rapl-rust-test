@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) { // Modified to work with RAPL and with out be
 
 
         //
-        // Det følgende er ændret
+        // The following has been changed
         //
 
         double energy1 = energy(m, p, v);
