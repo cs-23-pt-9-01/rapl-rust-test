@@ -263,7 +263,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < n; ++i) bodies.advance();
 
         double energy2 = bodies.energy();
-        if (energy2 > 10) //should always be false
+        if (energy2 > 10) //should always be false, but it stops the compiler from removing it
         {
             std::cout << energy2 << std::endl;
         }
