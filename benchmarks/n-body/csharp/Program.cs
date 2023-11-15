@@ -221,7 +221,7 @@ public static unsafe class Net60_NBody_AVX_9_3b
 		InitSystem(mem, out V256d* m, out V256d* p, out V256d* v);
 
 		double energy1 = Energy((double*)mem, p, v);
-		if (energy1 > 10) //Should always be false
+		if (energy1 > 10) //Should always be false, but it stops the compiler from removing it
 		{
 			Console.WriteLine(energy1.ToString("F9"));
 		}
