@@ -255,7 +255,7 @@ int main(int argc, char* argv[]) {
         NBodySystem bodies(0.01);
 
         double energy1 = bodies.energy();
-        if (energy1 > 10) //should always be false
+        if (energy1 > 10) //should always be false, but it stops the compiler from removing it
         {
             std::cout << energy1 << std::endl;
         }
