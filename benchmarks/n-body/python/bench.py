@@ -105,7 +105,7 @@ def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for (r, [vx, vy, vz], m) in bodies:
         e += m * (vx * vx + vy * vy + vz * vz) / 2.
     
-    if (e > 10):    #Changed
+    if (e > 10):    #Changed from original. Should always be false, but it stops the compiler from removing it
         print("%.9f" % e)
 
 
