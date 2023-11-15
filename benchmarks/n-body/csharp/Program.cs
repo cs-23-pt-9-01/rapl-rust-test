@@ -229,7 +229,7 @@ public static unsafe class Net60_NBody_AVX_9_3b
 		Advance(iterations, 0.01, m, p, v);
 
 		double energy2 = Energy((double*)mem, p, v);
-		if (energy2 > 10) //Should always be false
+		if (energy2 > 10) //Should always be false, but it stops the compiler from removing it
 		{
 			Console.WriteLine(energy2.ToString("F9"));
 		}
