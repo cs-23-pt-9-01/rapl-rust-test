@@ -22,5 +22,17 @@ static extern void stop_rapl();
 for (int i = 0; i < count; i++)
 {
     start_rapl();
+
+    const string path = "http://rosettacode.org/favicon.ico";
+
+    byte[] input;
+    using (var client = new WebClient())
+    {
+        input = client.DownloadData(path);
+    }
+
+    var output = Convert.ToBase64String(input);
+    Console.WriteLine(output);
+
     stop_rapl();
 }
