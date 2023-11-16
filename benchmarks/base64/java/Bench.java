@@ -1,15 +1,6 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 
-// OLD:
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 .\benchmarks\empty\java\Bench.java 10
-
-// Testing with Java library path:
-// java -Djava.library.path=./target/release --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks\empty\java\Bench.java 10
-
-// Latest working version:
-// java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/empty/java/Bench.java 10
-
 class Bench {
     public static void main(String[] args) {
         // Find os
@@ -40,17 +31,6 @@ class Bench {
         // Get arguments
         int loop_count = Integer.parseInt(args[0]);
 
-        /*
-        // works without arena as seen below, but not sure if it is correct to do so
-        // the code is commented out here in case it is needed later
-
-        try (Arena arena = Arena.ofConfined()) {
-            start_rapl.invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        */
-
         // Running benchmark
         // Note that this could potentially be optimized away
         // by the compiler due to the fact that the result is not used.
@@ -61,19 +41,13 @@ class Bench {
                 e.printStackTrace();
             }
 
+            // Do something
+
             try {
                 stop_rapl.invoke();
             } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
-
-        /*
-        try (Arena arena = Arena.ofConfined()) {
-            stop_rapl.invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        */
     }
 }
