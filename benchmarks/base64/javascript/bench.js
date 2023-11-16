@@ -13,5 +13,8 @@ const stop = lib.func('void stop_rapl()');
 
 for (let i = 0; i < runCount; i++) {
   start();
+
+  console.log(new Buffer(str).toString('base64'));
+
   stop();
 }
