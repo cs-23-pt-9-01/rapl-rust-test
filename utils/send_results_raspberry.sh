@@ -4,7 +4,7 @@ HOSTNAME="seff_jr"
 IP="192.168.0.5"
 
 # getting time
-time=$(date)
+time=$(date -I)
 
 # adding time to folder name
 mv results results_$time
