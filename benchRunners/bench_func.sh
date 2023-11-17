@@ -12,7 +12,7 @@ runbenchmark(){
     # run benchmark
     $cmd $input
 
-    # waiting for file
+    # waiting to ensure the results have been written to file.
     sleep 5s
 
     #adding input or inputSize, depending on whether inputSize is present.
