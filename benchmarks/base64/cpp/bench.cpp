@@ -3,6 +3,8 @@
 #include <vector>
 #include <iterator>
 
+// Src: https://rosettacode.org/wiki/Base64_encode_data#C++
+
 typedef unsigned char byte;
 using namespace std;
 

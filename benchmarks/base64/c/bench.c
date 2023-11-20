@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Src: https://rosettacode.org/wiki/Base64_encode_data#C
+
 void start_rapl();
 void stop_rapl();
 
