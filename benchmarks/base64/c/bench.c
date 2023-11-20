@@ -246,7 +246,7 @@ int main() {
   }
   float t_decoded = (float)(clock() - t1) / CLOCKS_PER_SEC;
 
-  notify("stop");
+  //notify("stop");
 
   printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
          t_encoded);
