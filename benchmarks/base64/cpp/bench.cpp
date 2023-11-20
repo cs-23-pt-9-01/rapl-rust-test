@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <iterator>
+#include <string>
+#include <algorithm>
 
 typedef unsigned char byte;
 using namespace std;
