@@ -130,6 +130,7 @@ int main() {
   auto s_decoded = 0;
   auto t_decoded = 0.0;
 
+  /*
   notifying_invoke(
       [&]() {
         const auto t = clock();
@@ -145,6 +146,7 @@ int main() {
         t_decoded = (float)(clock() - t1) / CLOCKS_PER_SEC;
       },
       "C++/{} (libcrypto)", COMPILER);
+	*/
 
   cout << fixed;
   cout << "encode " << str.substr(0, 4) << "... to " << str2.substr(0, 4)
