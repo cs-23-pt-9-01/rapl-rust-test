@@ -1,9 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <iterator>
-
-// Src: https://rosettacode.org/wiki/Base64_encode_data#C++
 
 typedef unsigned char byte;
 using namespace std;
@@ -49,20 +46,11 @@ private:
     string char_set;
 };
 
-int main(int argc, char *argv[]) {
-    int count = std::atoi(argv[1]);
-
-    for (int i = 0; i < count; i++) {
-        start_rapl();
-
-        base64 b;
-        basic_ifstream<byte> f( "favicon.ico", ios::binary );
-        string r = b.encode( vector<byte>( ( istreambuf_iterator<byte>( f ) ), istreambuf_iterator<byte>() ) );
-        copy( r.begin(), r.end(), ostream_iterator<char>( cout ) );
-        return 0;
-
-        stop_rapl();
-    }
-
+int main( int argc, char* argv[] )
+{
+    base64 b;
+    basic_ifstream<byte> f( "favicon.ico", ios::binary );
+    string r = b.encode( vector<byte>( ( istreambuf_iterator<byte>( f ) ), istreambuf_iterator<byte>() ) );
+    copy( r.begin(), r.end(), ostream_iterator<char>( cout ) );
     return 0;
 }
