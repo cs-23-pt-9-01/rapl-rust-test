@@ -26,12 +26,12 @@ for (int i = 0; i < count; i++)
     const string path = "http://rosettacode.org/favicon.ico";
 
     byte[] input;
-    using (var client = new WebClient())
+    /*using (var client = new WebClient())
     {
         input = client.DownloadData(path);
-    }
+    }*/
 
-    var output = Convert.ToBase64String(input);
+    var output = Convert.ToBase64String(new byte[] { 0x16, 0x2f, 0x34, 0x3f, 0x46, 0x5f, 0x6a, 0x7f });
     Console.WriteLine(output);
 
     stop_rapl();
