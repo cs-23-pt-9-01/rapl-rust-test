@@ -5,7 +5,7 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
-#include <libnotify.h>
+//#include <libnotify.h>
 
 #ifdef __clang__
 static constexpr auto COMPILER = "clang++";
