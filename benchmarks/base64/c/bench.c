@@ -9,7 +9,7 @@ void stop_rapl();
 
 typedef unsigned long UL;
 
-int main(void) {
+int main(int argc, char *argv[]) {
     int count = atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
