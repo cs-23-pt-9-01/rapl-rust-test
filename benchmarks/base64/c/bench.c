@@ -1,4 +1,3 @@
-#include <libnotify.h>
 #include <assert.h>
 #include <stdarg.h>
 #include <stdbool.h>
