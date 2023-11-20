@@ -17,6 +17,18 @@ g++ benchmarks/$folder/cpp/bench.cpp -O3 -lcrypto -o benchmarks/$folder/cpp/benc
 cmd="./benchmarks/$folder/cpp/bench $count"
 runbenchmark "Cpp" $testName "$cmd"
 
+#   C#
+cmd="dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count"
+runbenchmark "Csharp" $testName "$cmd"
+
+#   Java
+cmd="java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count"
+runbenchmark "Java" $testName "$cmd"
+
+#   Pypy
+cmd="pypy ./benchmarks/$folder/python/bench.py $count"
+runbenchmark "Pypy" $testName "$cmd"
+
 #   Node
 cmd="node ./benchmarks/$folder/javascript/bench.js $count"
 runbenchmark "Node" $testName "$cmd"
@@ -25,16 +37,6 @@ runbenchmark "Node" $testName "$cmd"
 cmd="python3 ./benchmarks/$folder/python/bench.py $count"
 runbenchmark "Python" $testName "$cmd"
 
-#   Pypy
-cmd="pypy ./benchmarks/$folder/python/bench.py $count"
-runbenchmark "Pypy" $testName "$cmd"
 
-#   C#
-cmd="dotnet run --project ./benchmarks/$folder/csharp/Bench.csproj --configuration Release $count"
-runbenchmark "Csharp" $testName "$cmd"
-
-#   Java
-cmd="java --enable-native-access=ALL-UNNAMED --enable-preview --source 21 ./benchmarks/$folder/java/Bench.java $count"
-runbenchmark "Java" $testName "$cmd"
 
 echo "!!! Finished $testName !!!"
