@@ -13,7 +13,7 @@ cmd="./benchmarks/$folder/c/bench $count"
 runbenchmark "C" $testName "$cmd"
 
 #   C++
-g++ benchmarks/$folder/cpp/bench.cpp -O3 -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release
+g++ benchmarks/$folder/cpp/bench.cpp -O3 -lcrypto -o benchmarks/$folder/cpp/bench -L./target/release -lrapl_lib -Wl,-rpath=./target/release
 cmd="./benchmarks/$folder/cpp/bench $count"
 runbenchmark "Cpp" $testName "$cmd"
 
