@@ -1,46 +1,256 @@
+#include <libnotify.h>
+#include <assert.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-// Src: https://rosettacode.org/wiki/Base64_encode_data#C
+#ifdef __clang__
+#define COMPILER "clang"
+#else
+#define COMPILER "gcc"
+#endif
 
-void start_rapl();
-void stop_rapl();
+struct str_s {
+  char* buf;
+  size_t size;
+};
 
-#include <stdio.h>
-#include <unistd.h>
+typedef struct str_s str_t;
 
-typedef unsigned long UL;
+void str_free(str_t* s) {
+  free(s->buf);
+}
 
-int main(int argc, char *argv[]) {
-    int count = atoi(argv[1]);
+str_t format(const char *fmt, ...) {
+  va_list ap;
 
-    for (int i = 0; i < count; i++) {
-        start_rapl();
+  // Determine required size.
+  va_start(ap, fmt);
+  int n = vsnprintf(NULL, 0, fmt, ap);
+  va_end(ap);
 
-        const char *alpha =	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "0123456789+/";
-        unsigned char c[4];
-        UL u, len, w = 0;
+  assert(n >= 0);
 
-        do {
-            c[1] = c[2] = 0;
+  size_t size = (size_t) n + 1; // One extra byte for '\0'
+  char* p = malloc(size);
+  assert(p != NULL);
 
-            if (!(len = read(fileno(stdin), c, 3))) break;
-            u = (UL)c[0]<<16 | (UL)c[1]<<8 | (UL)c[2];
+  va_start(ap, fmt);
+  n = vsnprintf(p, size, fmt, ap);
+  va_end(ap);
 
-            putchar(alpha[u>>18]);
-            putchar(alpha[u>>12 & 63]);
-            putchar(len < 2 ? '=' : alpha[u>>6 & 63]);
-            putchar(len < 3 ? '=' : alpha[u & 63]);
+  if (n < 0) {
+    free(p);
+    assert(false);
+  }
 
-            if (++w == 19) w = 0, putchar('\n');
-        } while (len == 3);
+  return (str_t){
+    .buf = p,
+    .size = size
+  };
+}
 
-        if (w) putchar('\n');
+const char chars[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static char decode_table[256];
 
-        stop_rapl();
+size_t encode_size(size_t size) { return (size_t)(size * 4 / 3.0) + 6; }
+
+size_t decode_size(size_t size) { return (size_t)(size * 3 / 4.0) + 6; }
+
+void init_decode_table() {
+  uint8_t ch = 0;
+  do {
+    char code = -1;
+    if (ch >= 'A' && ch <= 'Z') {
+      code = ch - 0x41;
+    }
+    if (ch >= 'a' && ch <= 'z') {
+      code = ch - 0x47;
+    }
+    if (ch >= '0' && ch <= '9') {
+      code = ch + 0x04;
+    }
+    if (ch == '+' || ch == '-') {
+      code = 0x3E;
+    }
+    if (ch == '/' || ch == '_') {
+      code = 0x3F;
+    }
+    decode_table[ch] = code;
+  } while (ch++ < 0xFF);
+}
+
+#define next_char(x)                                                           \
+  char x = decode_table[(unsigned char)*str++];                                \
+  if (x < 0)                                                                   \
+    return false;
+
+int decode(size_t size, const char *str, size_t *out_size, char *output) {
+  char *out = output;
+  while (size > 0 && (str[size - 1] == '\n' || str[size - 1] == '\r' ||
+                      str[size - 1] == '=')) {
+    size--;
+  }
+  const char *ends = str + size - 4;
+  while (true) {
+    if (str > ends) {
+      break;
+    }
+    while (*str == '\n' || *str == '\r') {
+      str++;
     }
 
-	return 0;
+    if (str > ends) {
+      break;
+    }
+    next_char(a);
+    next_char(b);
+    next_char(c);
+    next_char(d);
+
+    *out++ = (char)(a << 2 | b >> 4);
+    *out++ = (char)(b << 4 | c >> 2);
+    *out++ = (char)(c << 6 | d >> 0);
+  }
+
+  uint8_t mod = (ends - str + 4) % 4;
+  if (mod == 2) {
+    next_char(a);
+    next_char(b);
+    *out++ = (char)(a << 2 | b >> 4);
+  } else if (mod == 3) {
+    next_char(a);
+    next_char(b);
+    next_char(c);
+    *out++ = (char)(a << 2 | b >> 4);
+    *out++ = (char)(b << 4 | c >> 2);
+  }
+
+  *out = '\0';
+  *out_size = out - output;
+  return true;
+}
+
+inline uint32_t to_uint32_t(const char *str) {
+  uint64_t n;
+  memcpy(&n, str, sizeof(n));
+  return n;
+}
+
+void encode(size_t size, const char *str, size_t *out_size, char *output) {
+  char *out = output;
+  const char *ends = str + (size - size % 3);
+  uint64_t n;
+  while (str != ends) {
+    uint32_t n = __builtin_bswap32(to_uint32_t(str));
+    *out++ = chars[(n >> 26) & 63];
+    *out++ = chars[(n >> 20) & 63];
+    *out++ = chars[(n >> 14) & 63];
+    *out++ = chars[(n >> 8) & 63];
+    str += 3;
+  }
+  int pd = size % 3;
+  if (pd == 1) {
+    n = (uint64_t)*str << 16;
+    *out++ = chars[(n >> 18) & 63];
+    *out++ = chars[(n >> 12) & 63];
+    *out++ = '=';
+    *out++ = '=';
+  } else if (pd == 2) {
+    n = (uint64_t)*str++ << 16;
+    n |= (uint64_t)*str << 8;
+    *out++ = chars[(n >> 18) & 63];
+    *out++ = chars[(n >> 12) & 63];
+    *out++ = chars[(n >> 6) & 63];
+    *out++ = '=';
+  }
+  *out = '\0';
+  *out_size = out - output;
+}
+
+size_t b64_encode(char *dst, const char *src, size_t src_size) {
+  size_t encoded_size;
+  encode(src_size, src, &encoded_size, dst);
+  return encoded_size;
+}
+
+size_t b64_decode(char *dst, const char *src, size_t src_size) {
+  size_t decoded_size;
+  if (!decode(src_size, src, &decoded_size, dst)) {
+    fputs("error when decoding", stderr);
+    exit(EXIT_FAILURE);
+  }
+  return decoded_size;
+}
+
+int main() {
+  init_decode_table();
+
+  const char *fixtures[][2] = {{"hello", "aGVsbG8="}, {"world", "d29ybGQ="}};
+  const size_t num_fixtures = sizeof(fixtures) / sizeof(fixtures[0]);
+  for (size_t i = 0; i < num_fixtures; ++i) {
+    const char *src = fixtures[i][0];
+    size_t src_len = strlen(src);
+
+    const char *dst = fixtures[i][1];
+    size_t dst_len = strlen(dst);
+
+    char encoded[encode_size(src_len)];
+    size_t encoded_size = b64_encode(encoded, src, src_len);
+    if (dst_len != encoded_size || strncmp(encoded, dst, encoded_size)) {
+      __attribute__((__cleanup__(str_free))) str_t fmt =
+	format("%%.%lds != %%.%lds\n", encoded_size, dst_len);
+      fprintf(stderr, fmt.buf, encoded, dst);
+      exit(EXIT_FAILURE);
+    }
+
+    char decoded[decode_size(dst_len)];
+    size_t decoded_size = b64_decode(decoded, dst, dst_len);
+    if (src_len != decoded_size || strncmp(decoded, src, decoded_size)) {
+      __attribute__((__cleanup__(str_free))) str_t fmt =
+	format("%%.%lds != %%.%lds\n", decoded_size, src_len);
+      fprintf(stderr, fmt.buf, decoded, src);
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  const int STR_SIZE = 131072;
+  const int TRIES = 8192;
+
+  char str[STR_SIZE];
+  memset(str, 'a', STR_SIZE);
+  char str2[encode_size(STR_SIZE)];
+  size_t str2_size = b64_encode(str2, str, STR_SIZE);
+  char str3[decode_size(str2_size)];
+  b64_decode(str3, str2, str2_size);
+
+  notify_with_pid("C/" COMPILER);
+
+  int s_encoded = 0;
+  clock_t t = clock();
+  for (int i = 0; i < TRIES; i++) {
+    char str2[encode_size(STR_SIZE)];
+    s_encoded += b64_encode(str2, str, STR_SIZE);
+  }
+  float t_encoded = (float)(clock() - t) / CLOCKS_PER_SEC;
+
+  int s_decoded = 0;
+  clock_t t1 = clock();
+  for (int i = 0; i < TRIES; i++) {
+    char str3[decode_size(str2_size)];
+    s_decoded += b64_decode(str3, str2, str2_size);
+  }
+  float t_decoded = (float)(clock() - t1) / CLOCKS_PER_SEC;
+
+  notify("stop");
+
+  printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
+         t_encoded);
+  printf("decode %.4s... to %.4s...: %d, %.2f\n", str2, str3, s_decoded,
+         t_decoded);
 }
