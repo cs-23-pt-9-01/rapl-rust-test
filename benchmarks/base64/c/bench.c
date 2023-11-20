@@ -228,7 +228,7 @@ int main() {
   char str3[decode_size(str2_size)];
   b64_decode(str3, str2, str2_size);
 
-  notify_with_pid("C/" COMPILER);
+  //notify_with_pid("C/" COMPILER);
 
   int s_encoded = 0;
   clock_t t = clock();
