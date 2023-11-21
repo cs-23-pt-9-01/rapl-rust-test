@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void start_rapl(){
-    printf("start\n");
-}
-void stop_rapl(){
-    printf("stop\n");
-}
+void start_rapl();
+void stop_rapl();
 
 // test method
 long long int fibb(long long int a){

@@ -5,12 +5,8 @@
 #include <iostream>
 
 extern "C" {
-    void start_rapl(){
-        std::cout << "Start RAPL" << std::endl;
-    }
-    void stop_rapl(){
-        std::cout << "Stop RAPL" << std::endl;
-    }
+    void start_rapl();
+    void stop_rapl();
 }
 
 // test method
