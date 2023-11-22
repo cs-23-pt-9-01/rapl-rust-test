@@ -12,5 +12,6 @@ dll = cdll.LoadLibrary(lib_path)
 
 for i in range(test_count):
     dll.start_rapl()
-    print(base64.b64encode(urlopen('http://rosettacode.org/favicon.ico').read()))
+    str = "testy"
+    print(base64.b64encode(str))
     dll.stop_rapl()
