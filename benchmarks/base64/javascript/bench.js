@@ -15,11 +15,11 @@ const STR_SIZE = 131072;
 const TRIES = 8192;
 
 for (let i = 0; i < runCount; i++) {
-  start();
-
   const b = Buffer.from("a".repeat(STR_SIZE));
   const str2 = b.toString('base64');
   const str3 = Buffer.from(str2, 'base64');
+
+  start();
 
   var s_encoded = 0;
   const start = new Date();
@@ -44,9 +44,6 @@ for (let i = 0; i < runCount; i++) {
     str2.substring(0, 4),
     str3.toString('utf8', 0, 4),
     s_decoded, t_decoded));
-
-  //var str = "testy";
-  //console.log(Buffer.from(str).toString('base64'));
 
   stop();
 }
