@@ -98,6 +98,11 @@ bool operator==(const bio_string &lhs, const bio_string &rhs) {
   return lhs.substr() == rhs.substr();
 }
 
+extern "C" {
+    void start_rapl();
+    void stop_rapl();
+}
+
 int main() {
   const auto STR_SIZE = 131072;
   const auto TRIES = 8192;
@@ -105,6 +110,13 @@ int main() {
   const bio_string str("a", STR_SIZE);
   const auto str2 = str.base64_encode();
   const auto str3 = str2.base64_decode();
+
+  int count = std::atoi(argv[1]);
+
+  for (int i = 0; i < count; i++) {
+      start_rapl();
+      stop_rapl();
+  }
 
   cout << fixed;
   cout << "encode " << str.substr(0, 4) << "... to " << str2.substr(0, 4)
