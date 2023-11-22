@@ -103,7 +103,7 @@ extern "C" {
     void stop_rapl();
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   const auto STR_SIZE = 131072;
   const auto TRIES = 8192;
 
@@ -118,10 +118,10 @@ int main() {
       stop_rapl();
   }
 
-  cout << fixed;
-  cout << "encode " << str.substr(0, 4) << "... to " << str2.substr(0, 4)
-       << "...: " << s_encoded << ", " << setprecision(2) << t_encoded << endl;
+  //cout << fixed;
+  //cout << "encode " << str.substr(0, 4) << "... to " << str2.substr(0, 4)
+  //     << "...: " << s_encoded << ", " << setprecision(2) << t_encoded << endl;
 
-  cout << "decode " << str2.substr(0, 4) << "... to " << str3.substr(0, 4)
-       << "...: " << s_decoded << ", " << setprecision(2) << t_decoded << endl;
+  //cout << "decode " << str2.substr(0, 4) << "... to " << str3.substr(0, 4)
+  //     << "...: " << s_decoded << ", " << setprecision(2) << t_decoded << endl;
 }
