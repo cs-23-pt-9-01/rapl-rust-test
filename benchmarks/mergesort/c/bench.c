@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
         stop_rapl();
 
         // stopping compiler optimization
-        if (mergeParamCopy[mergeParamLen - 1] > 42){
+        if (mergeParamCopy[mergeParamLen - 1] < 42){
             for (int j = 0; j < mergeParamLen; j++) {
                 printf("%d\n", mergeParamCopy[j]);
             }
