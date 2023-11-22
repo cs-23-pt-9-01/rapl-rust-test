@@ -4,12 +4,8 @@
 
 using namespace std;
 extern "C" {
-    void start_rapl(){
-        std::cout << "start_rapl" << std::endl;
-    }
-    void stop_rapl(){
-        std::cout << "stop_rapl" << std::endl;
-    }
+    void start_rapl();
+    void stop_rapl();
 }
 
 #include <iterator>
