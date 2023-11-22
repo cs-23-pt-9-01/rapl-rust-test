@@ -187,36 +187,11 @@ size_t b64_decode(char *dst, const char *src, size_t src_size) {
   return decoded_size;
 }
 
-int main() {
+void start_rapl();
+void stop_rapl();
+
+int main(int argc, char *argv[]) {
   init_decode_table();
-
-  const char *fixtures[][2] = {{"hello", "aGVsbG8="}, {"world", "d29ybGQ="}};
-  const size_t num_fixtures = sizeof(fixtures) / sizeof(fixtures[0]);
-  /*for (size_t i = 0; i < num_fixtures; ++i) {
-    const char *src = fixtures[i][0];
-    size_t src_len = strlen(src);
-
-    const char *dst = fixtures[i][1];
-    size_t dst_len = strlen(dst);
-
-    char encoded[encode_size(src_len)];
-    size_t encoded_size = b64_encode(encoded, src, src_len);
-    if (dst_len != encoded_size || strncmp(encoded, dst, encoded_size)) {
-      __attribute__((__cleanup__(str_free))) str_t fmt =
-	format("%%.%lds != %%.%lds\n", encoded_size, dst_len);
-      fprintf(stderr, fmt.buf, encoded, dst);
-      exit(EXIT_FAILURE);
-    }
-
-    char decoded[decode_size(dst_len)];
-    size_t decoded_size = b64_decode(decoded, dst, dst_len);
-    if (src_len != decoded_size || strncmp(decoded, src, decoded_size)) {
-      __attribute__((__cleanup__(str_free))) str_t fmt =
-	format("%%.%lds != %%.%lds\n", decoded_size, src_len);
-      fprintf(stderr, fmt.buf, decoded, src);
-      exit(EXIT_FAILURE);
-    }
-  }*/
 
   const int STR_SIZE = 131072;
   const int TRIES = 8192;
@@ -247,6 +222,11 @@ int main() {
   float t_decoded = (float)(clock() - t1) / CLOCKS_PER_SEC;
 
   //notify("stop");
+
+  for (int i = 0; i < count; i++) {
+      start_rapl();
+      stop_rapl();
+  }
 
   printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
          t_encoded);
