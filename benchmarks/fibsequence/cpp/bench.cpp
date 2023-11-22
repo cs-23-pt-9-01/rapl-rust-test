@@ -9,7 +9,7 @@ extern "C" {
     void stop_rapl();
 }
 
-// test method
+// test method from Rosetta code
 unsigned int fibonacci(unsigned int n) {
     if (n == 0) return 0;
     std::vector<int> v(n+1);

@@ -4,7 +4,7 @@
 void start_rapl();
 void stop_rapl();
 
-// test method
+// test method (our own implementation)
 long long int fibb(long long int a){
     if (a <= 1){
         return a;

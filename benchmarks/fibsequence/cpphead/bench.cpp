@@ -9,7 +9,7 @@ extern "C" {
     void stop_rapl();
 }
 
-// test method
+// test method (our own implementation)
 unsigned long long int fibonacci(unsigned long long int n) {
     if (n <= 1){
         return n;
