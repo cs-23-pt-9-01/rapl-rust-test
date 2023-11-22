@@ -223,13 +223,15 @@ int main(int argc, char *argv[]) {
 
   //notify("stop");
 
+  int count = atoi(argv[1]);
+
   for (int i = 0; i < count; i++) {
       start_rapl();
       stop_rapl();
   }
 
-  printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
-         t_encoded);
-  printf("decode %.4s... to %.4s...: %d, %.2f\n", str2, str3, s_decoded,
-         t_decoded);
+  //printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
+  //       t_encoded);
+  //printf("decode %.4s... to %.4s...: %d, %.2f\n", str2, str3, s_decoded,
+  //       t_decoded);
 }
