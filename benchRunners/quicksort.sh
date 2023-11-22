@@ -4,7 +4,7 @@ source ./benchRunners/bench_func.sh
 testName="quicksort"
 folder="quicksort"
 count=1000
-input=`cat benchRunners/mergeSortParam` # getting input from file
+input="benchRunners/mergeSortParam" # getting input from file
 inputLength=$(count_params $input)
 
 echo "!!! Starting $testName !!!"
