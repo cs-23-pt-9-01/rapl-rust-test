@@ -5,7 +5,7 @@ testName="mergeSort"
 folder="mergesort"
 count=1000
 mergeInput="benchRunners/mergeSortParam" # getting input from file
-inputLength=$(count_params $mergeInput)
+inputLength=$(count_params `cat $mergeInput`)
 
 echo "!!! Starting $testName !!!"
 echo
