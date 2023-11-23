@@ -4,7 +4,6 @@ import java.util.Base64;
 
 class Bench {
     final static int STR_SIZE = 131072;
-    final static int TRIES = 8192;
 
     final static Base64.Decoder dec = Base64.getDecoder();
     final static Base64.Encoder enc = Base64.getEncoder();
