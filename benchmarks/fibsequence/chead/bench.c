@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 
         // stopping compiler optimization
         if (result < 42){
+            printf("%lld\n", result);
             printf("%u\n", result);
         }
     }
