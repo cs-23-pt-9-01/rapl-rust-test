@@ -194,7 +194,6 @@ int main(int argc, char *argv[]) {
   init_decode_table();
 
   const int STR_SIZE = 131072;
-  const int TRIES = 8192;
 
   char str[STR_SIZE];
   memset(str, 'a', STR_SIZE);

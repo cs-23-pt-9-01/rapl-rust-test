@@ -105,7 +105,6 @@ extern "C" {
 
 int main(int argc, char *argv[]) {
   const auto STR_SIZE = 131072;
-  const auto TRIES = 8192;
 
   const bio_string str("a", STR_SIZE);
   
