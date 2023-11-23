@@ -203,35 +203,14 @@ int main(int argc, char *argv[]) {
   char str3[decode_size(str2_size)];
   b64_decode(str3, str2, str2_size);
 
-  //notify_with_pid("C/" COMPILER);
-
-  int s_encoded = 0;
-  clock_t t = clock();
-  for (int i = 0; i < TRIES; i++) {
-    char str2[encode_size(STR_SIZE)];
-    s_encoded += b64_encode(str2, str, STR_SIZE);
-  }
-  float t_encoded = (float)(clock() - t) / CLOCKS_PER_SEC;
-
-  int s_decoded = 0;
-  clock_t t1 = clock();
-  for (int i = 0; i < TRIES; i++) {
-    char str3[decode_size(str2_size)];
-    s_decoded += b64_decode(str3, str2, str2_size);
-  }
-  float t_decoded = (float)(clock() - t1) / CLOCKS_PER_SEC;
-
-  //notify("stop");
-
   int count = atoi(argv[1]);
 
   for (int i = 0; i < count; i++) {
       start_rapl();
+
+      size_t str2_size = b64_encode(str2, str, STR_SIZE);
+      b64_decode(str3, str2, str2_size);
+
       stop_rapl();
   }
-
-  //printf("encode %.4s... to %.4s...: %d, %.2f\n", str, str2, s_encoded,
-  //       t_encoded);
-  //printf("decode %.4s... to %.4s...: %d, %.2f\n", str2, str3, s_decoded,
-  //       t_decoded);
 }
