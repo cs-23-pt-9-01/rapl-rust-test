@@ -108,13 +108,15 @@ int main(int argc, char *argv[]) {
   const auto TRIES = 8192;
 
   const bio_string str("a", STR_SIZE);
-  const auto str2 = str.base64_encode();
-  const auto str3 = str2.base64_decode();
-
+  
   int count = std::atoi(argv[1]);
 
   for (int i = 0; i < count; i++) {
       start_rapl();
+
+      const auto str2 = str.base64_encode();
+      const auto str3 = str2.base64_decode();
+
       stop_rapl();
   }
 
