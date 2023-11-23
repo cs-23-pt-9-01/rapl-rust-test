@@ -20,14 +20,18 @@ static extern int start_rapl();
 [DllImport(pathToLib)]
 static extern void stop_rapl();
 
+const int STR_SIZE = 131072;
+const int TRIES = 8192;
+
+var str1 = Encoding.UTF8.GetBytes(new String('a', STR_SIZE));
+var str2 = Convert.ToBase64String(str1);
+var str3 = Convert.FromBase64String(str2);
+
 for (int i = 0; i < count; i++)
 {
-    const int STR_SIZE = 131072;
-    const int TRIES = 8192;
+ 
+    
 
-    var str1 = Encoding.UTF8.GetBytes(new String('a', STR_SIZE));
-    var str2 = Convert.ToBase64String(str1);
-    var str3 = Convert.FromBase64String(str2);
 
     var runtime = Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET Core";
 
