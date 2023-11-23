@@ -21,8 +21,6 @@ static extern int start_rapl();
 static extern void stop_rapl();
 
 const int STR_SIZE = 131072;
-const int TRIES = 8192;
-
 var str1 = Encoding.UTF8.GetBytes(new String('a', STR_SIZE));
 var str2 = Convert.ToBase64String(str1);
 
