@@ -10,7 +10,7 @@ extern "C" {
 }
 
 // test method (our own implementation)
-unsigned long long int fibonacci(unsigned long long int n) {
+unsigned int fibonacci(unsigned int n) {
     if (n <= 1){
         return n;
     }
@@ -18,12 +18,12 @@ unsigned long long int fibonacci(unsigned long long int n) {
 }
 
 int main(int argc, char *argv[]) {
-    int fib_param = std::atoi(argv[2]);
+    unsigned int fib_param = std::atoi(argv[2]);
     int count = std::atoi(argv[1]);
 
     for (int i = 0; i < count; i++) {
         start_rapl();
-        unsigned long long int result = fibonacci(fib_param);
+        unsigned int result = fibonacci(fib_param);
 
         stop_rapl();
 
