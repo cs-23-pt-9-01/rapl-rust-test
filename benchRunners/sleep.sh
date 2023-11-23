@@ -2,7 +2,7 @@ source ./benchRunners/bench_func.sh
 
 testName="sleep"
 folder="sleep"
-count=1
+count=20
 sleep_time=5
 
 echo "!!! Starting $testName !!!"

@@ -13,7 +13,7 @@ cmd="node ./benchmarks/$folder/javascript/bench.js $count"
 runbenchmark "Node" $testName "$cmd" "$fibInput"
 
 #   Python
-cmd="python3 ./benchmarks/$folder/python/bench.py $count"
+cmd="python3 ./benchmarks/$folder/python/bench.py 20" # custom count for python !!! 
 runbenchmark "Python" $testName "$cmd" "$fibInput"
 
 #   Pypy

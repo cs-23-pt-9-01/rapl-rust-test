@@ -2,7 +2,7 @@ source ./benchRunners/bench_func.sh
 
 testName="n-body"
 folder="n-body"
-count=1 #Testing only #TODO: change to actually useful number
+count=100
 body_count=50000000
 
 echo "!!! Starting $testName !!!"
@@ -23,7 +23,7 @@ cmd="node ./benchmarks/$folder/javascript/bench.js $count"
 runbenchmark "Node" $testName "$cmd" "$body_count"
 
 #   Python
-cmd="python3 ./benchmarks/$folder/python/bench.py $count"
+cmd="python3 ./benchmarks/$folder/python/bench.py 50" # custom count for python !!!
 runbenchmark "Python" $testName "$cmd" "$body_count"
 
 #   Pypy
