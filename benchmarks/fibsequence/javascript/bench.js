@@ -15,21 +15,21 @@ function fib(n) {
 }
 
 // loading library
-const koffi = require('koffi');
-const lib = koffi.load(libPath);
+//const koffi = require('koffi');
+//const lib = koffi.load(libPath);
 
 // loading functions
-const start = lib.func('int start_rapl()');
-const stop = lib.func('void stop_rapl()');
+//const start = lib.func('int start_rapl()');
+//const stop = lib.func('void stop_rapl()');
 
 // running benchmark
 for (let i = 0; i < runCount; i++) {
-  start();
+ // start();
 
   let result = fib(fibParam);
 
-  stop();
-  if (result < 42){
+  //stop();
+  if (result > 42){
       console.log(result);
   }
 }

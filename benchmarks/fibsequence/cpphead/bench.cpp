@@ -5,8 +5,12 @@
 #include <iostream>
 
 extern "C" {
-    void start_rapl();
-    void stop_rapl();
+    void start_rapl(){
+        std::cout << "start_rapl" << std::endl;
+    }
+    void stop_rapl(){
+        std::cout << "stop_rapl" << std::endl;
+    }
 }
 
 // test method (our own implementation)
@@ -28,7 +32,7 @@ int main(int argc, char *argv[]) {
         stop_rapl();
 
         // stopping compiler optimization
-        if (result < 42){
+        if (result > 42){
             std::cout << "Result: " << result << std::endl;
         }
     }
